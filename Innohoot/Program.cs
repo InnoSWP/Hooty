@@ -1,8 +1,20 @@
+using Innohoot.DataLayer;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddScoped<IDBRepository, DBRepository>();
+	// add service here
+
+builder.Services.AddDbContext<ApplicationContext>(options =>
+{
+	options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
+});
 
 var app = builder.Build();
 
