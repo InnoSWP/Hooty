@@ -4,6 +4,8 @@ import { Route } from 'react-router';
 import './css/App.css'
 import {Layout} from "./components/Layout";
 import {LoginPage} from "./components/LoginPage";
+import {QuizListPage} from "./components/QuizListPage";
+import {PlayPage} from "./components/play/PlayPage";
 
 export function App(props) {
     
