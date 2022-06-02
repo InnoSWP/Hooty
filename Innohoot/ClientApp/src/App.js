@@ -1,24 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route } from 'react-router';
-import { Layout } from './components/Layout';
-import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
-import { Meme } from './components/Meme';
 
-import './custom.css'
+import './css/App.css'
+import {Layout} from "./components/Layout";
+import {LoginPage} from "./components/LoginPage";
 
-export default class App extends Component {
-  static displayName = App.name;
-
-  render () {
+export function App(props) {
+    
+    const [authStatus, setAuthStatus] = React.useState(false);
+    
+    let fetchAuth = () => {
+        //TODO: fetch auth from server   
+    }
+    fetchAuth();
+    
     return (
       <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
-        <Route path={'/meme'} component={Meme} />
+          <Route path={"/"} component={authStatus ? QuizListPage : LoginPage} />
+          <Route path={"/play"} component={PlayPage} />
       </Layout>
     );
-  }
 }
