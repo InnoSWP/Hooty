@@ -7,3 +7,5 @@ Figma mock desing: https://www.figma.com/file/AjKFGAM427VxVgmcJG98JK/"Kahoot"?no
 Postman api design will be added later
 
 List of user stories: https://docs.google.com/spreadsheets/d/1iS98-b7rY-gZpskWgOHlMwetyJxSE3MYCwDO8CZbjpM/edit?usp=sharing
+
+Usecase diagram: https://drive.google.com/file/d/1WrKosptPksgHVzXg4KeCSUCwKx8UR1UF/view?usp=sharing
