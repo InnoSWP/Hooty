@@ -2,7 +2,9 @@
 It is analog of kahoot/mentimeter. Web-based aplication for creating interactive polls and quizes with ability integrating in presentation.
 
 # Assigment 2 links
-Figma mock desing: https://www.figma.com/file/AjKFGAM427VxVgmcJG98JK/"Kahoot"?node-id=0%3A1
+Figma desktop mock desing: https://www.figma.com/file/AjKFGAM427VxVgmcJG98JK/"Kahoot"?node-id=0%3A1
+
+Figma mobile mock design: https://www.figma.com/file/VZwY3ES51k337gbrBDOH5A/Hooty---Mobile?node-id=0%3A1
 
 Postman api design will be added later
 
