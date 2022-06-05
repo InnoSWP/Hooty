@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Innohoot.DataLayer.Services.Implementations
 {
-	public class PollService
+	public class PollService : IPollService
 	{
 		private readonly IDBRepository _db;
 		public PollService(IDBRepository repository)

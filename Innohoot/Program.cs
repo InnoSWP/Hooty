@@ -1,4 +1,5 @@
 using Innohoot.DataLayer;
+using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.Hubs;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,8 @@ builder.Services.AddSignalR();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IDBRepository, DBRepository>();
-	// add service here
+// add service here
+builder.Services.AddTransient<IPollService, PollService>();
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {

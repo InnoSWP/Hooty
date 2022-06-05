@@ -6,10 +6,10 @@ namespace Innohoot.Models.ElementsForPA
 	/// <summary>
 	///  record of every given answer
 	/// </summary>
-	public class PollRecord:IEntity
+	public class VoteRecord:IEntity
 	{
 		public Guid Id { get; set; }
 		public string ParticipantName { get; set; }
-		public Option ChosenOption { get; set; }
+		public Option? ChosenOption { get; set; }
 	}
 }

@@ -18,7 +18,7 @@ namespace Innohoot.Models.Activity
 		public TimeSpan? Duration { get; set; }
 		public bool Available { get; set; } = false;
 		public List<Poll> Polls { get; set; }
-		public List<PollRecord> Records { get; set; }
+		public List<VoteRecord> Records { get; set; }
 
 	}
 }
