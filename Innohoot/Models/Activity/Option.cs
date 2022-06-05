@@ -2,8 +2,9 @@
 {
 	public class Option:IEntity
 	{
-		public string Name { get; set; }
-		public Poll Poll { get; set; }
 		public Guid Id { get; set; }
+		public string Name { get; set; }
+		public Guid PollId { get; set; }
+		public Poll Poll { get; set; }
 	}
 }
