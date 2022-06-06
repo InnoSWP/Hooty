@@ -1,15 +1,18 @@
 using Innohoot.DataLayer;
+using Innohoot.DataLayer.Services.Implementations;
+using Innohoot.Hubs;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
-
+builder.Services.AddSignalR();
+builder.Services.AddControllers();
 
 builder.Services.AddScoped<IDBRepository, DBRepository>();
-	// add service here
+// add service here
+builder.Services.AddTransient<IPollService, PollService>();
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {
@@ -34,6 +37,6 @@ app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller}/{action=Index}/{id?}");
 
-app.MapFallbackToFile("index.html"); ;
-
+app.MapFallbackToFile("index.html");
+app.MapHub<PollHub>("/pollVoting");
 app.Run();
