@@ -1,5 +1,11 @@
 ﻿import React from "react";
 
-export default function PlayPage(props) {
+export function PlayPage(props) {
     
+    return (
+        <>
+            aaa
+        </>
+    )
+
 }
