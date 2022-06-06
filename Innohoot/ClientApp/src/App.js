@@ -7,7 +7,7 @@ import {LoginPage} from "./components/LoginPage";
 import {QuizListPage} from "./components/QuizListPage";
 import {PlayPage} from "./components/play/PlayPage";
 
-export function App(props) {
+export default function App(props) {
     
     const [authStatus, setAuthStatus] = React.useState(false);
     

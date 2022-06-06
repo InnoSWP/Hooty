@@ -2,7 +2,7 @@
 import {Input} from "./Input";
 import {SubmitButton} from "./SubmitButton";
 
-export function LoginForm(props) {
+export default function LoginForm(props) {
     
     const [state, setState] = React.useState({
         login: "",

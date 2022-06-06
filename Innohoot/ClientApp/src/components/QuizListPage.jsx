@@ -1,5 +1,5 @@
 ﻿import React from "react";
 
-export function QuizListPage(props) {
+export default function QuizListPage(props) {
     
 }

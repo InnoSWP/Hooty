@@ -1,6 +1,6 @@
 ﻿import React from "react";
 
-export function Layout(props) {
+export default function Layout(props) {
     
     return (
         <div className={"layout"}>

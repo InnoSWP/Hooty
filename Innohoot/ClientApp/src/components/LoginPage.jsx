@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import {LoginForm} from "./forms/LoginForm";
 
-export function LoginPage(props) {
+export default function LoginPage(props) {
     
     return (
         <div className={""}>
