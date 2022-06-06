@@ -1,4 +1,4 @@
-﻿using Innohoot.Models;
+using Innohoot.Models;
 using Innohoot.Models.Activity;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +6,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 {
 	public abstract class CRUDService<T> where T : class, IEntity 
 	{
-		private readonly IDBRepository _db;
+		protected readonly IDBRepository _db;
 		public CRUDService(IDBRepository repository)
 		{
 			_db = repository;
