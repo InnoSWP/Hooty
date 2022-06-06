@@ -7,7 +7,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 	{
 		public SessionService(IDBRepository repository) : base(repository) { }
 
-		public async Task<List<Session>?> GetAllPollsByUserId(Guid userId)
+		public async Task<List<Session>?> GetAllSessionsByUserId(Guid userId)
 		{
 			return await _db.GetAll<Session>().Where(session => session.UserId.Equals(userId)).ToListAsync();
 		}

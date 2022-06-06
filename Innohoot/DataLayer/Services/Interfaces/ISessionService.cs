@@ -4,7 +4,7 @@ namespace Innohoot.DataLayer.Services.Implementations;
 
 public interface ISessionService
 {
-	Task<List<Session>?> GetAllPollsByUserId(Guid userId);
+	Task<List<Session>?> GetAllSessionsByUserId(Guid userId);
 	Task<Guid> Create(Session entity);
 	Task Delete(Guid entityId);
 	Task<Session?> Get(Guid entityId);
