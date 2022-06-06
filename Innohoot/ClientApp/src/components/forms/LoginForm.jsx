@@ -1,8 +1,8 @@
 ﻿import React from "react";
-import {Input} from "./Input";
-import {SubmitButton} from "./SubmitButton";
+import Input from "./Input";
+import SubmitButton from "./SubmitButton";
 
-export default function LoginForm(props) {
+export function LoginForm(props) {
     
     const [state, setState] = React.useState({
         login: "",
