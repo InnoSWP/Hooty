@@ -1,4 +1,5 @@
 ﻿using Innohoot.Models.Activity;
+using Innohoot.Models.ElementsForPA;
 using Innohoot.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +9,7 @@ namespace Innohoot.DataLayer
 	{
 		public DbSet<User> Users { get; set; }
 		public DbSet<Poll> Polls { get; set; }
-		public DbSet<Question> Questions { get; set; }
+		public DbSet<VoteRecord> VoteRecords { get; set; }
 		public DbSet<Option> Options { get; set; }
 		public DbSet<Session> Sessions { get; set; }
 
