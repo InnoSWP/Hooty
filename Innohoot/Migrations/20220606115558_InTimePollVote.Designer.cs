@@ -3,6 +3,7 @@ using System;
 using Innohoot.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Innohoot.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20220606115558_InTimePollVote")]
+    partial class InTimePollVote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +37,14 @@ namespace Innohoot.Migrations
                     b.Property<Guid>("PollId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("QuestionId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PollId");
+
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("Options");
                 });
@@ -68,6 +75,17 @@ namespace Innohoot.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Polls");
+                });
+
+            modelBuilder.Entity("Innohoot.Models.Activity.Question", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("Innohoot.Models.Activity.Session", b =>
@@ -127,7 +145,7 @@ namespace Innohoot.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.ToTable("VoteRecords");
+                    b.ToTable("VoteRecord");
                 });
 
             modelBuilder.Entity("Innohoot.Models.Identity.User", b =>
@@ -152,6 +170,10 @@ namespace Innohoot.Migrations
                         .HasForeignKey("PollId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Innohoot.Models.Activity.Question", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionId");
 
                     b.Navigation("Poll");
                 });
@@ -198,6 +220,11 @@ namespace Innohoot.Migrations
             modelBuilder.Entity("Innohoot.Models.Activity.Poll", b =>
                 {
                     b.Navigation("Options");
+                });
+
+            modelBuilder.Entity("Innohoot.Models.Activity.Question", b =>
+                {
+                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("Innohoot.Models.Activity.Session", b =>
