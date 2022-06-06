@@ -1,6 +1,6 @@
 ﻿import React from "react";
 
-export function SubmitButton(props) {
+export default function SubmitButton(props) {
     
     // ???
     return (

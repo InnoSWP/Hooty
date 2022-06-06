@@ -1,6 +1,6 @@
 ﻿import React from "react";
 
-export function Sidebar(props) {
+export default function Sidebar(props) {
     
     //TODO: sidebar
     return (

@@ -1,11 +1,9 @@
 ﻿import React from "react";
 
-export function PlayPage(props) {
+export default function HistoryPage(props) {
     
     return (
         <>
-            aaa
         </>
     )
-
 }

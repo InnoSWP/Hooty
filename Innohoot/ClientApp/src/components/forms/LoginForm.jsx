@@ -1,6 +1,6 @@
 ﻿import React from "react";
-import {Input} from "./Input";
-import {SubmitButton} from "./SubmitButton";
+import Input from "./Input";
+import SubmitButton from "./SubmitButton";
 
 export function LoginForm(props) {
     

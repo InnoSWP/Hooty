@@ -1,6 +1,6 @@
 ﻿import React from "react";
 
-export function Input(props) {
+export default function Input(props) {
     
     // ???
     return (
