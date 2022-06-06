@@ -11,6 +11,7 @@ namespace Innohoot.Controllers
 	/// <summary>
 	/// Controller for voting by participant 
 	/// </summary>
+	[Route("[controller]")]
 	public class VoteController : Controller
 	{
 		private readonly IPollService _pollService;

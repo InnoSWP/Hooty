@@ -13,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IDBRepository, DBRepository>();
 // add service here
 builder.Services.AddTransient<IPollService, PollService>();
+builder.Services.AddTransient<ISessionService, SessionService>();
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {
