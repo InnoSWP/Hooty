@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Innohoot.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Innohoot.DataLayer
 {
@@ -60,6 +61,9 @@ namespace Innohoot.DataLayer
 			return await _db.SaveChangesAsync();
 		}
 
-
+		public async Task<IDbContextTransaction> BeginTransaction()
+		{
+			return await _db.Database.BeginTransactionAsync();
+		}
 	}
 }
