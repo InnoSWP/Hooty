@@ -9,7 +9,8 @@ builder.Services.AddControllersWithViews();
 
 
 builder.Services.AddScoped<IDBRepository, DBRepository>();
-	// add service here
+// add service here
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {
