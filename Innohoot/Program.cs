@@ -11,14 +11,7 @@ builder.Services.AddSignalR();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IDBRepository, DBRepository>();
-<<<<<<< Updated upstream
-// add service here
-builder.Services.AddTransient<IPollService, PollService>();
-builder.Services.AddTransient<ISessionService, SessionService>();
-=======
-<<<<<<< Updated upstream
-	// add service here
-=======
+
 // add service here
 builder.Services.AddTransient<IPollService, PollService>();
 builder.Services.AddTransient<ISessionService, SessionService>();
@@ -27,6 +20,9 @@ builder.Services.AddTransient<IVoteRecordService, VoteRecordService>();
 builder.Services.AddTransient<IOptionService, OptionService>();
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
+// add service here
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
+
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {
