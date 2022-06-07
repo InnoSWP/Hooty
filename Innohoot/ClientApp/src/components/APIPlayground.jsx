@@ -20,7 +20,7 @@ export default function APIPlayground(props) {
             body: JSON.stringify(parsedDetails.body)
         } : {})
             .then(
-                (result) => {return result.json()},
+                (result) => {return result.text()},
                 (err) =>  {return err}
             )
             .then(
