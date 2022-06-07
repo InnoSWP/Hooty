@@ -16,13 +16,7 @@ namespace Innohoot.Models.Activity
 		public DateTime? StarTime	{ get; set; }
 		public TimeSpan? Duration { get; set; }
 		public bool Available { get; set; } = false;
-<<<<<<< Updated upstream
-		public List<Poll> Polls { get; set; }
-		public List<PollRecord> Records { get; set; }
-=======
 		public PollCollection PollCollection { get; set; }
 		public List<VoteRecord> VoteRecords { get; set; }
->>>>>>> Stashed changes
-
 	}
 }
