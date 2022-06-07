@@ -12,13 +12,11 @@ namespace Innohoot.Models.Activity
 		public Guid UserId { get; set; }
 		public User User { get; set; }
 		public string Name { get; set; }
-		public string? Description { get; set; }
 		public DateTime Created { get; set; }
 		public DateTime? StarTime	{ get; set; }
 		public TimeSpan? Duration { get; set; }
 		public bool Available { get; set; } = false;
-		public List<Poll> Polls { get; set; }
+		public PollCollection PollCollection { get; set; }
 		public List<VoteRecord> VoteRecords { get; set; }
-
 	}
 }
