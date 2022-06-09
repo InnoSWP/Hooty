@@ -3,7 +3,7 @@ using Innohoot.Models.Identity;
 
 namespace Innohoot.Models.ElementsForPA
 {
-	public class PollCollection
+	public class PollCollection:IEntity
 	{
 		public Guid Id { get; set; }
 		public Guid UserId { get; set; }
