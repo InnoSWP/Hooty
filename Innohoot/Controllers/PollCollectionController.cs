@@ -1,29 +1,28 @@
 ﻿using Innohoot.DataLayer;
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
-using Innohoot.Models.Activity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
 {
 	[Route("[controller]")]
 	[ApiController]
-	public class PollController:Controller
+	public class PollCollectionController:Controller
 	{
 		private readonly IPollService _pollService;
-		private readonly ISessionService _sessionService;
+		private readonly IPollCollectionService _pollCollectionService;
 		private readonly IDBRepository _db;
 
-		public PollController(IPollService pollService, ISessionService sessionService, IDBRepository db)
+		public PollCollectionController(IPollService pollService, IPollCollectionService pollCollectionService, IDBRepository db)
 		{
 			_pollService = pollService;
-			_sessionService = sessionService;
+			_pollCollectionService = pollCollectionService;
 			_db = db;
 		}
 		[HttpPost]
-		public async Task<IActionResult> Create(PollDTO pollDTO)
+		public async Task<IActionResult> Create(PollCollectionDTO pollCollectionDTO)
 		{
-			return Ok(await _pollService.Create(pollDTO));
+			return Ok(await _pollCollectionService.Create(pollCollectionDTO));
 		}
 		[HttpPut]
 		public async Task<IActionResult> Update(PollDTO pollDTO)
