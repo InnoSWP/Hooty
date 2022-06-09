@@ -16,6 +16,7 @@ namespace Innohoot.DataLayer
 			public Task<T> Delete<T>(Guid id) where T : class, IEntity;
 			public Task<int> Save();
 			public Task<IDbContextTransaction> BeginTransaction();
+			public ApplicationContext Context { get; }
 		}
     
 }

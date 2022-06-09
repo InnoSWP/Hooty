@@ -11,5 +11,10 @@ namespace Innohoot.DataLayer.Services.Implementations
 		{
 			return await _db.GetAll<Session>().Where(session => session.UserId.Equals(userId)).ToListAsync();
 		}
+
+		public Task<Guid> Create(Session entity)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

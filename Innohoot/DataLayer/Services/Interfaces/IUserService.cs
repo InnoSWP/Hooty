@@ -1,11 +1,12 @@
-﻿using Innohoot.Models.Identity;
+﻿using Innohoot.DTO;
 
 namespace Innohoot.DataLayer.Services.Implementations;
 
 public interface IUserService
 {
-	Task<Guid> Create(User entity);
-	Task Delete(Guid entityId);
-	Task<User?> Get(Guid entityId);
-	Task Update(User entity);
+	Task<Guid> Create(UserDTO userDTO);
+	Task Delete(Guid Id);
+	Task<UserDTO?> Get(Guid Id);
+	Task Update(UserDTO userDTO);
+	Task<List<PollCollectionDTO>> GetAllPollUser();
 }

@@ -11,5 +11,10 @@ namespace Innohoot.DataLayer.Services.Implementations
 		{
 			return await _db.GetAll<VoteRecord>().Where(v => v.ChosenOption.Equals(optionId)).ToListAsync();
 		}
+
+		public Task<Guid> Create(VoteRecord entity)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

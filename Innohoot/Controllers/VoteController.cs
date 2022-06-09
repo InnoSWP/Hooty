@@ -25,7 +25,7 @@ namespace Innohoot.Controllers
 			_sessionService = sessionService;
 			_db = context;
 		}
-
+/*
 		[HttpPut]
 		public async Task<IActionResult> AddVoteRecord(VoteRecord voteRecord)
 		{
@@ -68,6 +68,6 @@ namespace Innohoot.Controllers
 
 			//return new JsonResult(JsonConvert.SerializeObject(result));
 			return new JsonResult(result);
-		}
+		}*/
 	}
 }

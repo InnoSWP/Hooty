@@ -65,5 +65,7 @@ namespace Innohoot.DataLayer
 		{
 			return await _db.Database.BeginTransactionAsync();
 		}
+
+		public ApplicationContext Context => _db;
 	}
 }
