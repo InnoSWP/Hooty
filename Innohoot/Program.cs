@@ -18,6 +18,7 @@ builder.Services.AddTransient<ISessionService, SessionService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IVoteRecordService, VoteRecordService>();
 builder.Services.AddTransient<IOptionService, OptionService>();
+builder.Services.AddTransient<IPollCollectionService, PollCollectionService>();
 
 builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
