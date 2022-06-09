@@ -1,3 +1,4 @@
+using Innohoot.DTO;
 using Innohoot.Models;
 using Innohoot.Models.Activity;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 		}
 		public async Task<Guid> Create(T entity)
 		{
-			await _db.Add(entity);
+			await _db.Add<T>(entity);
 			await _db.Save();
 			return entity.Id;
 		}
