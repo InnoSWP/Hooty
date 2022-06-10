@@ -7,7 +7,7 @@ public interface IOptionService
 {
 	public Task<Guid> Create(OptionDTO optionDTO);
 	public Task Update(OptionDTO optionDTO);
-	public Task Delete(Guid optionId);
-	public Task<Option?> Get(Guid optionId);
-	public Task<List<Option>> GetAllOptionsByPollId(Guid pollId);
+	public Task Delete(Guid Id);
+	public Task<OptionDTO?> Get(Guid Id);
+	public Task<List<OptionDTO>> GetAllOptionsByPollId(Guid pollId);
 }

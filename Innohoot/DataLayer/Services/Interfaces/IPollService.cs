@@ -7,7 +7,7 @@ public interface IPollService
 {
 	Task<Guid> Create(PollDTO pollDTO);
 	Task Update(PollDTO pollDTO);
-	Task Delete(Guid pollId);
-	Task<Poll?> Get(Guid pollId);
-	Task<List<Poll>> GetAllPollsByPollCollectionId(Guid userId);
+	Task Delete(Guid Id);
+	Task<PollDTO?> Get(Guid Id);
+	Task<List<PollDTO>> GetAllPollsByPollCollectionId(Guid pollCollectionId);
 }
