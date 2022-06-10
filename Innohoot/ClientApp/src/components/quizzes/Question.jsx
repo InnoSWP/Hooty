@@ -7,10 +7,10 @@ export default function Question(props) {
     const [question, setQuestion] = React.useState(props.params)
     
     const renderAnswers = () => {
-        return question.answers.map((el, i) => (
-            <div key={i} style={{border: "1px solid black"}}>
+        return question.answers.map((el) => (
+            <div key={el.uuid} style={{border: "1px solid black"}}>
                 <input type="checkbox" 
-                       id={`${props.index}-${i}`} 
+                       id={el.uuid} 
                        name={props.index} 
                        checked={el.correct} 
                        onChange={(event) => handleAnswerChange[0](event, el)} 
