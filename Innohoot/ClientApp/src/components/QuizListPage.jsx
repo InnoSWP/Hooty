@@ -2,18 +2,45 @@
 import Quiz from "./quizzes/Quiz";
 
 import { v4 as uuidv4 } from 'uuid';
+import {UserContext} from "../context/UserContext";
+
 
 export default function QuizListPage(props) {
     
-    const [quizList, setQuizList] = React.useState([]);
+    const [quizList, setQuizList] = React.useState([])
+    const userContext = React.useContext(UserContext)
     
     React.useEffect(() => {
-        let url = ""
+        let url = `/Users/pollCollection?Id=${userContext.userId}`
         
-        fetch("")
+        fetch(url)
             .then(res => res.json())
             .then((data) => {
-                
+                let mappedQuizList = data.PollsCollections.map((pollCollectionDTO) => {
+                    return {
+                        uuid: pollCollectionDTO.Id,
+                        quiz_name: pollCollectionDTO.Name,
+                        questions: pollCollectionDTO.Polls.map((pollDTO) => {
+                            return {
+                                uuid: pollDTO.Id,
+                                quiz_name: pollDTO.Name,
+                                questions: pollDTO.map((poll) => {
+                                    return {
+                                        uuid: poll.Id,
+                                        question_text: poll.Name,
+                                        answers: poll.Options.map((option) => {
+                                            return {
+                                                uuid: option.Id,
+                                                answer_text: option.Name,
+                                                correct: true
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
             })
     }, [])
     
