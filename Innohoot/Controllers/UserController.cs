@@ -7,15 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
 {
-	[Route("[controller]")]
+	[Route("Users")]
 	[ApiController]
-	public class UsersController:Controller
+	public class UserController:Controller
 	{
 		private readonly IUserService _userService;
 		private readonly IPollCollectionService _pollCollectionService;
 		private readonly IDBRepository _db;
 
-		public UsersController(IUserService userService, IPollCollectionService pollCollectionService, IDBRepository db)
+		public UserController(IUserService userService, IPollCollectionService pollCollectionService, IDBRepository db)
 		{
 			_userService = userService;
 			_pollCollectionService = pollCollectionService;
