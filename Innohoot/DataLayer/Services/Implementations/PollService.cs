@@ -39,18 +39,27 @@ namespace Innohoot.DataLayer.Services.Implementations
 			await _db.Update(poll);
 			await _db.Save();
 		}
-		public async Task Delete(Guid pollId)
+		public async Task Delete(Guid Id)
 		{
-			await _db.Delete<Poll>(pollId);
+			await _db.Delete<Poll>(Id);
 			await _db.Save();
 		}
-		public async Task<Poll?> Get(Guid pollId)
+		public async Task<PollDTO?> Get(Guid Id)
 		{
-			return await _db.Get<Poll>(pollId).FirstOrDefaultAsync();
+			var poll = await _db.Get<Poll>(Id).FirstOrDefaultAsync();
+			return _mapper.Map<PollDTO>(poll);
 		}
-		public async Task<List<Poll>> GetAllPollsByPollCollectionId(Guid pollCollectionId)
+		public async Task<List<PollDTO>> GetAllPollsByPollCollectionId(Guid pollCollectionId)
 		{
-			return await _db.GetAll<Poll>().Where(x => x.PollCollectionId.Equals(pollCollectionId)).ToListAsync();
+			List<Poll> polls = await _db.GetAll<Poll>().Where(x => x.PollCollectionId.Equals(pollCollectionId)).ToListAsync();
+			List<PollDTO> result = new List<PollDTO>();
+
+			foreach (var poll in polls)
+			{
+				var pollDTO = _mapper.Map<PollDTO>(poll);
+				result.Add(pollDTO);
+			}
+			return result;
 		}
 	}
 }
