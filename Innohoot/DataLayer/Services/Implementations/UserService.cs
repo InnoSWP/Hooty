@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+
+using Innohoot.DataLayer.Services.Interfaces;
 using Innohoot.DTO;
 using Innohoot.Models.ElementsForPA;
 using Innohoot.Models.Identity;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Innohoot.DataLayer.Services.Implementations
 {
-	public class UserService : IUserService
+	public class UserService:IUserService
 	{
 		protected readonly IMapper _mapper;
 		protected readonly IDBRepository _db;
@@ -28,28 +31,15 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task Delete(Guid Id)
 		{
-			await _db.Delete<PollCollection>(Id);
+			await _db.Delete<User>(Id);
 			await _db.Save();
 		}
 
 		public async Task<UserDTO?> Get(Guid Id)
 		{
-			return null;
+			var user = await _db.Get<User>(Id).FirstOrDefaultAsync();
+			return _mapper.Map<UserDTO>(user);
 		}
 
-		public async Task Update(UserDTO userDTO)
-		{
-			var pollCollection = _mapper.Map<PollCollection>(userDTO);
-			pollCollection.User = new User() {Id = pollCollection.Id};
-			_db.Context.Entry(pollCollection.User).State = EntityState.Unchanged;
-
-			await _db.Update(pollCollection);
-			await _db.Save();
-		}
-
-		public async Task<List<PollCollectionDTO>> GetAllPollUser()
-		{
-			return null;
-		}
 	}
 }
