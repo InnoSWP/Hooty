@@ -44,7 +44,7 @@ namespace Innohoot.Controllers
 			await _pollCollectionService.Delete(Id);
 			return NoContent();
 		}
-		[HttpGet ("PollCollections")]
+		[HttpGet ("Polls")]
 		public async Task<IActionResult> GetAllPollsByPollCollectionId(Guid Id)
 		{
 			return Ok(await _pollService.GetAllPollsByPollCollectionId(Id));
