@@ -7,6 +7,16 @@ export default function QuizListPage(props) {
     
     const [quizList, setQuizList] = React.useState([]);
     
+    React.useEffect(() => {
+        let url = ""
+        
+        fetch("")
+            .then(res => res.json())
+            .then((data) => {
+                
+            })
+    }, [])
+    
     const renderQuizList = () => {
         return quizList.map(
             (quiz) => <Quiz params={quiz} changeHandler={handleChange} key={quiz.uuid} deleteHandler={deleteQuiz} submit={submit} />
