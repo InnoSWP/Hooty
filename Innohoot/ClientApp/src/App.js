@@ -7,19 +7,19 @@ import QuizListPage from "./components/QuizListPage";
 import {PlayPage} from "./components/play/PlayPage";
 import APIPlaygroundPage from "./components/APIPlaygroundPage";
 
-export default class App extends Component {
-    static displayName = App.name;
+import {UserContext} from "./context/UserContext";
 
-    render() {
+export default function App(props) {
+    const userContext = React.useContext(UserContext)
+    
         return (
             <Layout>
                 <Routes>
                     <Route path='/' element={<LoginPage />}/>
                     <Route path='/play' element={<PlayPage />}/>
                     <Route path='/apidebug' element={<APIPlaygroundPage />} />
-                    <Route path='/quizlist' element={<QuizListPage/>} />
+                    <Route path='/quizlist' element={<QuizListPage />} />
                 </Routes>
             </Layout>
         );
-    }
 }
