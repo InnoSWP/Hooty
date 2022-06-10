@@ -34,7 +34,7 @@ namespace Innohoot.Controllers
 			return Ok(await _userService.Get(Id));
 		}
 
-		[HttpGet("pollCollection")]
+		[HttpGet("PollCollections")]
 		public async Task<List<PollCollectionDTO>> GetAllPollCollectionByUserId(Guid Id)
 		{
 			return await _pollCollectionService.GetAllPollCollectionByUserId(Id);
