@@ -17,6 +17,7 @@ export default class App extends Component {
                     <Route path='/' element={<LoginPage />}/>
                     <Route path='/play' element={<PlayPage />}/>
                     <Route path='/apidebug' element={<APIPlaygroundPage />} />
+                    <Route path='/quizlist' element={<QuizListPage/>} />
                 </Routes>
             </Layout>
         );
