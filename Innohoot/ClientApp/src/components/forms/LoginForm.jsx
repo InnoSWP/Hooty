@@ -16,6 +16,7 @@ export function LoginForm(props) {
         event.preventDefault()
         let url = "https://localhost:7006/Users"
         
+        
         fetch(url, {
             method: "POST",
             headers: {
@@ -30,6 +31,8 @@ export function LoginForm(props) {
                 console.log(data)
                 userContext.updateUserId(data)
             })
+
+        console.log(userContext)
     }
     
     let handleChange = (event) => {

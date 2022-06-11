@@ -1,6 +1,10 @@
 ﻿import React from 'react';
 
-export const UserContext = React.createContext({
+export let defaultUserContext = {
     userId: "",
-    updateUserId: (val) => {this.userId = val}
-})
+    updateUserId (val) {
+        this.userId = val
+    }
+}
+
+export const UserContext = React.createContext(defaultUserContext)
