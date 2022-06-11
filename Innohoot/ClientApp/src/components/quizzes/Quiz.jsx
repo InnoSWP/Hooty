@@ -75,7 +75,11 @@ export default function Quiz(props) {
             marginBottom: "20px"
         }}>
             <div>
-                <button onClick={props.submit}>Save</button>
+                <button onClick={() => props.submit({
+                    quiz_name: quizName,
+                    questions: questions,
+                    uuid: props.params.uuid
+                })}>Save</button>
                 <button onClick={() => props.deleteHandler(props.params)}>- Quiz</button>
             </div>
             <div>
