@@ -7,4 +7,4 @@ export let defaultUserContext = {
     }
 }
 
-export const UserContext = React.createContext(defaultUserContext)
+export const UserContext = React.createContext()

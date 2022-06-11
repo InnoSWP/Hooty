@@ -10,7 +10,6 @@ import APIPlaygroundPage from "./components/APIPlaygroundPage";
 import {UserContext, defaultUserContext} from "./context/UserContext";
 
 export default function App(props) {
-    const userContext = React.useContext(UserContext)
     
         return (
             <Layout>

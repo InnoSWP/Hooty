@@ -2,6 +2,7 @@
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import {UserContext} from "../../context/UserContext";
+import {useNavigate} from "react-router";
 
 
 export function LoginForm(props) {
@@ -9,6 +10,7 @@ export function LoginForm(props) {
     const [state, setState] = React.useState({
         id: ""
     });
+    const navigate = useNavigate();
     
     const userContext = React.useContext(UserContext)
     
@@ -30,8 +32,9 @@ export function LoginForm(props) {
             .then(data => {
                 console.log(data)
                 userContext.updateUserId(data)
+                navigate("/quizlist")
             })
-
+        
         console.log(userContext)
     }
     

@@ -9,9 +9,12 @@ export default function QuizListPage(props) {
     
     const [quizList, setQuizList] = React.useState([])
     const userContext = React.useContext(UserContext)
+    console.log(userContext)
+    
+    const user = "5f7d9001-2689-4d95-9c03-f7ea475df90b"
     
     React.useEffect(() => {
-        let url = `https://localhost:7006/Users/PollCollections?Id=${userContext.userId}`
+        let url = `https://localhost:7006/Users/PollCollections?Id=${user}`
         
         fetch(url)
             .then(res => res.json())
@@ -80,7 +83,7 @@ export default function QuizListPage(props) {
                 "Content-Type": "application/json;charset=utf-8"
             },
             body: JSON.stringify({
-                "UserId": userContext.userId,
+                "UserId": user,
                 "Name": newQuiz.quiz_name,
                 "Polls": newQuiz.questions.map((question) => {
                     return {
@@ -138,7 +141,7 @@ export default function QuizListPage(props) {
             },
             body: JSON.stringify({
                 "Id": quiz.uuid,
-                "UserId": userContext.userId,
+                "UserId": user,
                 "Name": quiz.quiz_name,
                 "Polls": quiz.questions.map((question) => {
                     return {
