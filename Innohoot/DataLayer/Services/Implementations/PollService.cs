@@ -51,7 +51,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 		}
 		public async Task<List<PollDTO>> GetAllPollsByPollCollectionId(Guid pollCollectionId)
 		{
-			List<Poll> polls = await _db.GetAll<Poll>().Where(x => x.PollCollectionId.Equals(pollCollectionId)).ToListAsync();
+			List<Poll> polls = await _db.Get<Poll>(x => x.PollCollectionId.Equals(pollCollectionId)).Include(p => p.Options).ToListAsync();
 			List<PollDTO> result = new List<PollDTO>();
 
 			foreach (var poll in polls)

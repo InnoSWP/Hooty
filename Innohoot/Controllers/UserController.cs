@@ -2,13 +2,15 @@
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DataLayer.Services.Interfaces;
 using Innohoot.DTO;
-
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
 {
 	[Route("Users")]
 	[ApiController]
+	[EnableCors("CorsPolicy")]
+
 	public class UserController:Controller
 	{
 		private readonly IUserService _userService;
@@ -34,7 +36,7 @@ namespace Innohoot.Controllers
 			return Ok(await _userService.Get(Id));
 		}
 
-		[HttpGet("pollCollection")]
+		[HttpGet("PollCollections")]
 		public async Task<List<PollCollectionDTO>> GetAllPollCollectionByUserId(Guid Id)
 		{
 			return await _pollCollectionService.GetAllPollCollectionByUserId(Id);
