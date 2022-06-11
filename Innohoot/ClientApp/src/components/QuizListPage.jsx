@@ -19,6 +19,7 @@ export default function QuizListPage(props) {
         fetch(url)
             .then(res => res.json())
             .then((data) => {
+                console.log(data)
                 let mappedQuizList = data.PollsCollections.map((pollCollectionDTO) => {
                     return {
                         uuid: pollCollectionDTO.Id,
