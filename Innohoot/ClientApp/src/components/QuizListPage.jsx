@@ -44,6 +44,8 @@ export default function QuizListPage(props) {
                         })
                     }
                 })
+                
+                setQuizList(mappedQuizList)
             })
     }, [])
     
