@@ -14,14 +14,16 @@ export function LoginForm(props) {
     
     let handleSubmit = (event) => {
         event.preventDefault()
-        let url = "/Users"
+        let url = "https://localhost:7006/Users"
         
         fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8"
             },
-            body: state.id
+            body: JSON.stringify({
+                "Name": state.id
+            })
         })
             .then(res => res.json())
             .then(data => {
