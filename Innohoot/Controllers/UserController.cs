@@ -2,13 +2,15 @@
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DataLayer.Services.Interfaces;
 using Innohoot.DTO;
-
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
 {
 	[Route("Users")]
 	[ApiController]
+	[EnableCors("CorsPolicy")]
+
 	public class UserController:Controller
 	{
 		private readonly IUserService _userService;

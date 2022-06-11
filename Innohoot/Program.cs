@@ -5,8 +5,25 @@ using Innohoot.Hubs;
 
 using Microsoft.EntityFrameworkCore;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", b =>
+	{
+		b.AllowAnyOrigin()
+			.AllowAnyMethod()
+			.AllowAnyHeader();
+	})
+);
+
+
+/*builder.Services.AddCors(options =>
+{
+	options.AddPolicy("CorsPolicy",
+		b => b.WithOrigins("*"));
+});
+*/
 // Add services to the container.
 
 builder.Services.AddSignalR();
@@ -43,6 +60,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseCors("CorsPolicy");
 
 app.MapControllerRoute(
 	name: "default",
