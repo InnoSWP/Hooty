@@ -32,9 +32,9 @@ export function LoginForm(props) {
             .then(data => {
                 console.log(data)
                 userContext.updateUserId(data)
-                navigate("/quizlist")
+                
             })
-        
+        navigate("/quizlist")
         console.log(userContext)
     }
     
