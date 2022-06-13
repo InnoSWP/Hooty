@@ -27,18 +27,12 @@ export default function QuizListPage(props) {
                         questions: pollCollectionDTO.polls.map((pollDTO) => {
                             return {
                                 uuid: pollDTO.id,
-                                quiz_name: pollDTO.name,
-                                questions: pollDTO.map((poll) => {
+                                question_text: pollDTO.name,
+                                answers: pollDTO.options.map((option) => {
                                     return {
-                                        uuid: poll.id,
-                                        question_text: poll.name,
-                                        answers: poll.options.map((option) => {
-                                            return {
-                                                uuid: option.id,
-                                                answer_text: option.name,
-                                                correct: true
-                                            }
-                                        })
+                                        uuid: option.id,
+                                        answer_text: option.name,
+                                        correct: true
                                     }
                                 })
                             }
