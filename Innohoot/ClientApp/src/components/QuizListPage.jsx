@@ -116,7 +116,9 @@ export default function QuizListPage(props) {
         
         let deleteQuizUrl = `https://localhost:7006/PollCollections?Id=${quiz.uuid}`
         
-        fetch(deleteQuizUrl)
+        fetch(deleteQuizUrl, {
+            method: "DELETE"
+        })
             .then(res => res.json())
             .then(data => {
                 console.log(data)
