@@ -97,6 +97,7 @@ export default function QuizListPage(props) {
             .then(res => res.json())
             .then(data => {
                 console.log(data)
+                newQuiz.uuid = data
                 newQuizList.push(newQuiz)
                 setQuizList([...newQuizList])
             })
