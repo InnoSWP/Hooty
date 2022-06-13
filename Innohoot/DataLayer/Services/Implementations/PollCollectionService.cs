@@ -46,11 +46,11 @@ namespace Innohoot.DataLayer.Services.Implementations
 			pollCollection.User = new User() { Id = pollCollection.UserId};
 			_db.Context.Entry(pollCollection.User).State = EntityState.Unchanged;
 
-			foreach (var pollDTO in pollCollectionDTO.Polls)
+			/*foreach (var pollDTO in pollCollectionDTO.Polls)
 			{
 				pollCollection.Polls.Add(new Poll() {Id = pollDTO.Id });
-			}
-			_db.Context.Entry(pollCollection.Polls).State = EntityState.Unchanged;
+			}*/
+			//_db.Context.Entry(pollCollection.Polls).State = EntityState.Unchanged;
 
 			/*		var polls = pollCollection.Polls;
 					foreach (var poll in polls)
