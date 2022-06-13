@@ -42,8 +42,29 @@ namespace Innohoot.DataLayer.Services.Implementations
 		public async Task Update(PollCollectionDTO pollCollectionDTO)
 		{
 			var pollCollection = _mapper.Map<PollCollection>(pollCollectionDTO);
-			pollCollection.User = new User() { Id = pollCollection.UserId };
+
+			pollCollection.User = new User() { Id = pollCollection.UserId};
 			_db.Context.Entry(pollCollection.User).State = EntityState.Unchanged;
+
+			foreach (var pollDTO in pollCollectionDTO.Polls)
+			{
+				pollCollection.Polls.Add(new Poll() {Id = pollDTO.Id });
+			}
+			_db.Context.Entry(pollCollection.Polls).State = EntityState.Unchanged;
+
+			/*		var polls = pollCollection.Polls;
+					foreach (var poll in polls)
+					{
+						poll.PollCollection = new PollCollection() {Id = poll.PollCollectionId};
+						_db.Context.Entry(poll.PollCollection).State = EntityState.Unchanged;
+
+						var options = poll.Options;
+						foreach (var option in options)
+						{
+							option.Poll = new Poll() {Id = option.PollId};
+							_db.Context.Entry(option.Poll).State = EntityState.Unchanged;
+						}
+					}*/
 
 			await _db.Update(pollCollection);
 			await _db.Save();
