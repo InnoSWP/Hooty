@@ -12,8 +12,6 @@ export function LoginForm(props) {
     });
     const navigate = useNavigate();
     
-    const userContext = React.useContext(UserContext)
-    
     let handleSubmit = (event) => {
         event.preventDefault()
         let url = "https://localhost:7006/Users"
@@ -31,11 +29,11 @@ export function LoginForm(props) {
             .then(res => res.json())
             .then(data => {
                 console.log(data)
-                userContext.updateUserId(data)
-                
+                UserContext.setUserId(data)
+
+                navigate("/quizlist")
+                console.log(UserContext.getUserId())
             })
-        navigate("/quizlist")
-        console.log(userContext)
     }
     
     let handleChange = (event) => {

@@ -7,20 +7,16 @@ import QuizListPage from "./components/QuizListPage";
 import {PlayPage} from "./components/play/PlayPage";
 import APIPlaygroundPage from "./components/APIPlaygroundPage";
 
-import {UserContext, defaultUserContext} from "./context/UserContext";
-
 export default function App(props) {
     
         return (
             <Layout>
-                <UserContext.Provider value={defaultUserContext}>
-                    <Routes>
-                        <Route path='/' element={<LoginPage />}/>
-                        <Route path='/play' element={<PlayPage />}/>
-                        <Route path='/apidebug' element={<APIPlaygroundPage />} />
-                        <Route path='/quizlist' element={<QuizListPage />} />
-                    </Routes>
-                </UserContext.Provider>
+                <Routes>
+                    <Route path='/' element={<LoginPage />}/>
+                    <Route path='/play' element={<PlayPage />}/>
+                    <Route path='/apidebug' element={<APIPlaygroundPage />} />
+                    <Route path='/quizlist' element={<QuizListPage />} />
+                </Routes>
             </Layout>
         );
 }
