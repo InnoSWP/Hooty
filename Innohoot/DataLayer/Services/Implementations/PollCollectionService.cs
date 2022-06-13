@@ -3,6 +3,7 @@ using Innohoot.DTO;
 using Innohoot.Models.Activity;
 using Innohoot.Models.ElementsForPA;
 using Innohoot.Models.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
 namespace Innohoot.DataLayer.Services.Implementations
@@ -46,6 +47,16 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 			await _db.Update(pollCollection);
 			await _db.Save();
+		}
+
+		public async Task UpdatePatch(Guid Id, JsonPatchDocument pollCollectionJsonPatchDocument)
+		{
+			var pollCollection = await _db.Get<PollCollection>(Id).FirstOrDefaultAsync();
+			if (pollCollection is not null)
+			{
+				pollCollectionJsonPatchDocument.ApplyTo(pollCollection);
+				await _db.Save();
+			}
 		}
 
 		public async Task<List<PollCollectionDTO>> GetAllPollCollectionByUserId(Guid userId)
