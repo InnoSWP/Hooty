@@ -85,9 +85,11 @@ export default function QuizListPage(props) {
                 "Polls": newQuiz.questions.map((question) => {
                     return {
                         "Name": question.question_text,
+                        "Id": question.uuid,
                         "Options": question.answers.map((answer) => {
                             return {
-                                "Name": answer.answer_text
+                                "Name": answer.answer_text,
+                                "Id": answer.uuid
                             }
                         })
                     }
@@ -146,9 +148,11 @@ export default function QuizListPage(props) {
                 "Polls": quiz.questions.map((question) => {
                     return {
                         "Name": question.question_text,
+                        "Id": question.uuid,
                         "Options": question.answers.map((answer) => {
                             return {
-                                "Name": answer.answer_text
+                                "Name": answer.answer_text,
+                                "Id": answer.uuid
                             }
                         })
                     }
