@@ -89,6 +89,7 @@ export default function QuizListPage(props) {
                         "Options": question.answers.map((answer) => {
                             return {
                                 "Name": answer.answer_text,
+                                "pollId": question.uuid,
                                 "Id": answer.uuid
                             }
                         })
@@ -148,10 +149,12 @@ export default function QuizListPage(props) {
                 "Polls": quiz.questions.map((question) => {
                     return {
                         "Name": question.question_text,
+                        "pollCollectionId": quiz.uuid,
                         "Id": question.uuid,
                         "Options": question.answers.map((answer) => {
                             return {
                                 "Name": answer.answer_text,
+                                "pollId": question.uuid,
                                 "Id": answer.uuid
                             }
                         })
