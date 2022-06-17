@@ -1,6 +1,6 @@
 ﻿import React from "react";
-import {LoginForm} from "./forms/LoginForm";
-import {UserContext} from "../context/UserContext";
+import {UserContext} from "../../context/UserContext";
+import {LoginForm} from "./LoginForm";
 
 export function LoginPage(props) {
     

@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import {Route, Routes, Switch} from 'react-router';
 
 import Layout from "./components/Layout";
-import {LoginPage} from "./components/LoginPage";
 import QuizListPage from "./components/QuizListPage";
 import {PlayPage} from "./components/play/PlayPage";
 import APIPlaygroundPage from "./components/APIPlaygroundPage";
+import HostPage from "./components/play/HostPage";
+import {LoginPage} from "./components/forms/LoginPage";
 
 export default function App(props) {
     
@@ -13,7 +14,8 @@ export default function App(props) {
             <Layout>
                 <Routes>
                     <Route path='/' element={<LoginPage />}/>
-                    <Route path='/play' element={<PlayPage />}/>
+                    <Route path='/play/*' element={<HostPage />}/>
+                    <Route path='/host/*' element={<PlayPage />}/>
                     <Route path='/apidebug' element={<APIPlaygroundPage />} />
                     <Route path='/quizlist' element={<QuizListPage />} />
                 </Routes>

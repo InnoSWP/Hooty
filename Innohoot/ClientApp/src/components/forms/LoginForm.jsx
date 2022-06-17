@@ -4,12 +4,12 @@ import SubmitButton from "./SubmitButton";
 import {UserContext} from "../../context/UserContext";
 import {useNavigate} from "react-router";
 
-import { Hashes } from 'jshashes';
+import Hashes from 'jshashes';
 
 
 export function LoginForm(props) {
     
-    const sha = new Hashes.SHA256()
+    const sha = new Hashes.SHA256
     
     const [state, setState] = React.useState({
         id: ""

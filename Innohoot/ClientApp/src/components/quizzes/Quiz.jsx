@@ -2,12 +2,16 @@
 import Question from "./Question";
 
 import { v4 as uuidv4 } from 'uuid';
+import {UserContext} from "../../context/UserContext";
+import {useNavigate} from "react-router";
 
 
 export default function Quiz(props) {
     
     const [questions, setQuestions] = React.useState(props.params.questions)
     const [quizName, setQuizName] = React.useState(props.params.quiz_name)
+    
+    const navigate = useNavigate()
     
     const renderQuestionList = () => {
         return questions.map((question) => <Question params={question} changeHandler={handleChange} key={question.uuid} deleteHandler={deleteQuestion} />)
@@ -68,7 +72,14 @@ export default function Quiz(props) {
     }
     
     const playQuiz = (id) => {
+        let url = `https://localhost/?pollCollectionId=${props.params.uuid}&userId=${UserContext.getUserId()}`
         
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                navigate(`/host/${data}`)
+            })
     }
     
     
