@@ -41,5 +41,9 @@ namespace Innohoot.DataLayer.Services.Implementations
 			return _mapper.Map<UserDTO>(user);
 		}
 
+		public Task Update(UserDTO userDTO)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
