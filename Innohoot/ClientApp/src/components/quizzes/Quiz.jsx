@@ -3,6 +3,7 @@ import Question from "./Question";
 
 import { v4 as uuidv4 } from 'uuid';
 
+
 export default function Quiz(props) {
     
     const [questions, setQuestions] = React.useState(props.params.questions)
@@ -66,6 +67,10 @@ export default function Quiz(props) {
         })
     }
     
+    const playQuiz = (id) => {
+        
+    }
+    
     
     return (
         <div style={{
@@ -75,6 +80,7 @@ export default function Quiz(props) {
             marginBottom: "20px"
         }}>
             <div>
+                <button onClick={() => playQuiz(props.params.uuid)}>Play</button>
                 <button onClick={() => props.submit({
                     quiz_name: quizName,
                     questions: questions,
