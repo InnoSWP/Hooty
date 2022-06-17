@@ -3,9 +3,9 @@
 export function PlayPage(props) {
     
     return (
-        <>
-            aaa
-        </>
+        <div>
+            
+        </div>
     )
 
 }
