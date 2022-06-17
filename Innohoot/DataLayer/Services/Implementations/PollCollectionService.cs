@@ -5,6 +5,7 @@ using Innohoot.Models.Activity;
 using Innohoot.Models.ElementsForPA;
 using Innohoot.Models.Identity;
 
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
 namespace Innohoot.DataLayer.Services.Implementations
@@ -49,9 +50,12 @@ namespace Innohoot.DataLayer.Services.Implementations
 			var pollCollectionInDB = await _db.Get<PollCollection>(pollCollectionDTO.Id)
 				.Include(pc => pc.Polls)
 				.ThenInclude(p => p.Options)
-				.FirstOrDefaultAsync();
+				.FirstAsync();
 
 			var pollCollection = _mapper.Map<PollCollection>(pollCollectionDTO);
+
+			#region Polls updating/adding/deleting
+
 			_db.Context.Entry(pollCollectionInDB).CurrentValues.SetValues(pollCollection);
 
 			var pollsInDb = pollCollectionInDB.Polls;
@@ -63,7 +67,8 @@ namespace Innohoot.DataLayer.Services.Implementations
 				{
 					_db.Context.Entry(pollInDB).CurrentValues.SetValues(poll);
 
-					#region Options
+					#region Options updating/adding/deleting
+
 					var optionsInDB = pollInDB.Options;
 					foreach (var optionInDB in optionsInDB)
 					{
@@ -72,7 +77,6 @@ namespace Innohoot.DataLayer.Services.Implementations
 						if (option is not null)
 						{
 							_db.Context.Entry(optionInDB).CurrentValues.SetValues(option);
-
 						}
 						else
 							await _db.Delete(optionInDB);
@@ -80,11 +84,15 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 					foreach (var option in poll.Options)
 					{
-						if (pollInDB.Options.All(p => p.Id != poll.Id))
+						if (pollInDB.Options.All(o => o.Id != option.Id))
+						{
+							await _db.Add(option);
 							pollInDB.Options.Add(option);
-					}
-					#endregion
+						}
 
+					}
+
+					#endregion
 				}
 				else
 					await _db.Delete(pollInDB);
@@ -94,8 +102,14 @@ namespace Innohoot.DataLayer.Services.Implementations
 			foreach (var poll in pollCollection.Polls)
 			{
 				if (pollCollectionInDB.Polls.All(p => p.Id != poll.Id))
+				{
+					await _db.Add(poll);
 					pollCollectionInDB.Polls.Add(poll);
+				}
 			}
+
+			#endregion
+
 
 			await _db.Save();
 		}
@@ -112,7 +126,11 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task<List<PollCollectionDTO>> GetAllPollCollectionByUserId(Guid userId)
 		{
-			List<PollCollection> collections = await _db.GetAll<PollCollection>().Where(x => x.UserId.Equals(userId)).ToListAsync();
+			List<PollCollection> collections = await _db.GetAll<PollCollection>()
+				.Where(x => x.UserId.Equals(userId))
+				.Include(pc => pc.Polls)
+				.ThenInclude(p => p.Options).ToListAsync();
+
 			List<PollCollectionDTO> result = new List<PollCollectionDTO>();
 
 			foreach (var pollCollection in collections)
