@@ -80,6 +80,9 @@ namespace Innohoot.Migrations
                     b.Property<TimeSpan?>("Duration")
                         .HasColumnType("interval");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -134,14 +137,14 @@ namespace Innohoot.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ChosenOptionId")
+                    b.Property<Guid>("ChosenOptionId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ParticipantName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("SessionId")
+                    b.Property<Guid>("SessionId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -224,13 +227,19 @@ namespace Innohoot.Migrations
                 {
                     b.HasOne("Innohoot.Models.Activity.Option", "ChosenOption")
                         .WithMany()
-                        .HasForeignKey("ChosenOptionId");
+                        .HasForeignKey("ChosenOptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Innohoot.Models.Activity.Session", null)
+                    b.HasOne("Innohoot.Models.Activity.Session", "Session")
                         .WithMany("VoteRecords")
-                        .HasForeignKey("SessionId");
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ChosenOption");
+
+                    b.Navigation("Session");
                 });
 
             modelBuilder.Entity("Innohoot.Models.Activity.Poll", b =>
