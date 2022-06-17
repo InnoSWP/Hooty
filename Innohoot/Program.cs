@@ -29,6 +29,8 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", b =>
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
 
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<IDBRepository, DBRepository>();
 
 // add service here
@@ -54,6 +56,8 @@ if (!app.Environment.IsDevelopment())
 {
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
