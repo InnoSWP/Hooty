@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Innohoot.DataLayer.Services.Implementations
 {
-	public class UserService:IUserService
+	public class UserService : IUserService
 	{
 		protected readonly IMapper _mapper;
 		protected readonly IDBRepository _db;
@@ -26,6 +26,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 			await _db.Add(user);
 			await _db.Save();
+
 			return user.Id;
 		}
 
@@ -39,6 +40,17 @@ namespace Innohoot.DataLayer.Services.Implementations
 		{
 			var user = await _db.Get<User>(Id).FirstOrDefaultAsync();
 			return _mapper.Map<UserDTO>(user);
+		}
+
+		/// <summary>
+		/// Searches for a user by username and password hash.
+		/// </summary>
+		/// <param name="userDTO"></param>
+		/// <returns>Returns the user ID, if found. If not found, it returns null.</returns>
+		public async Task<Guid?> GetId(UserDTO userDTO)
+		{
+			var user = await _db.Get<User>(u => u.Login == userDTO.Login && u.PasswordHash == userDTO.PasswordHash).FirstOrDefaultAsync();
+			return user?.Id;
 		}
 
 	}

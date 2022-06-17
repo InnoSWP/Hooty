@@ -27,13 +27,37 @@ namespace Innohoot.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(UserDTO userDTO)
 		{
-			return Ok(await _userService.Create(userDTO));
+			try
+			{
+				Guid userId = await _userService.Create(userDTO);
+				return Ok(userId);
+			}
+			catch
+			{
+				return BadRequest("Login is used already");
+			}
+		}
+
+		[HttpPost("Login")]
+		public async Task<IActionResult> Login(UserDTO userDTO)
+		{
+			var userId = await _userService.GetId(userDTO);
+
+			if (userId is null)
+				return BadRequest("Login or password is invalid");
+
+			return Ok(userId);
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Get(Guid Id)
+		public async Task<IActionResult> Get(Guid userId)
 		{
-			return Ok(await _userService.Get(Id));
+			var userDTO = await _userService.Get(userId);
+
+			if (userDTO is null)
+				return BadRequest("User Id is wrong");
+
+			return Ok(userDTO);
 		}
 
 		[HttpGet("PollCollections")]
