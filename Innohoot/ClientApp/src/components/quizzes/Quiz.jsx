@@ -72,13 +72,13 @@ export default function Quiz(props) {
     }
     
     const playQuiz = (id) => {
-        let url = `https://localhost/?pollCollectionId=${props.params.uuid}&userId=${UserContext.getUserId()}`
+        let url = `https://localhost:7006/Sessions/active?pollCollectionId=${props.params.uuid}&userId=${UserContext.getUserId()}`
         
         fetch(url)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
-                navigate(`/host/${data}`)
+                navigate(`/host/${data}#${props.params.uuid}`)
             })
     }
     
@@ -91,7 +91,7 @@ export default function Quiz(props) {
             marginBottom: "20px"
         }}>
             <div>
-                <button onClick={() => playQuiz(props.params.uuid)}>Play</button>
+                <button onClick={() => playQuiz(props.params.uuid)} disabled={props.params.questions.length === 0 }>Play</button>
                 <button onClick={() => props.submit({
                     quiz_name: quizName,
                     questions: questions,
