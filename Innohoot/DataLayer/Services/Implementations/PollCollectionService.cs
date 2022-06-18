@@ -21,7 +21,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 		{
 			var pollCollection = _mapper.Map<PollCollection>(pollCollectionDTO);
 
-			pollCollection.User = new User() {Id = pollCollection.UserId};
+			pollCollection.User = new User() { Id = pollCollection.UserId };
 			_db.Context.Entry(pollCollection.User).State = EntityState.Unchanged;
 
 			await _db.Add(pollCollection);
@@ -35,7 +35,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 		}
 		public async Task<PollCollectionDTO?> Get(Guid Id)
 		{
-			var pollCollection = await _db.Get<PollCollection>(Id).FirstOrDefaultAsync();
+			var pollCollection = await _db.Get<PollCollection>(Id).Include(x => x.Polls).ThenInclude(x => x.Options).FirstOrDefaultAsync();
 			return _mapper.Map<PollCollectionDTO>(pollCollection);
 		}
 		public async Task Update(PollCollectionDTO pollCollectionDTO)
@@ -50,7 +50,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task<List<PollCollectionDTO>> GetAllPollCollectionByUserId(Guid userId)
 		{
-			List<PollCollection> collections =  await _db.Get<PollCollection>(x => x.UserId.Equals(userId)).Include(px=>px.Polls).ThenInclude(p => p.Options).ToListAsync();
+			List<PollCollection> collections = await _db.Get<PollCollection>(x => x.UserId.Equals(userId)).Include(px => px.Polls).ThenInclude(p => p.Options).ToListAsync();
 			List<PollCollectionDTO> result = new List<PollCollectionDTO>();
 
 			foreach (var pollCollection in collections)

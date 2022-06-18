@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Innohoot.DataLayer.Services.Implementations
 {
-	public class UserService:IUserService
+	public class UserService : IUserService
 	{
 		protected readonly IMapper _mapper;
 		protected readonly IDBRepository _db;
