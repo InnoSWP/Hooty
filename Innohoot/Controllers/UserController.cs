@@ -7,14 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
 {
-	[Route("Users")]
+	[Route("[controller]s")]
 	[ApiController]
 	[EnableCors("CorsPolicy")]
 
-	public class UserController:Controller
+	public class UserController : Controller
 	{
 		private readonly IUserService _userService;
 		private readonly IPollCollectionService _pollCollectionService;
+		private readonly IPollService _pollService;
+		private readonly ISessionService _sessionService;
 		private readonly IDBRepository _db;
 
 		public UserController(IUserService userService, IPollCollectionService pollCollectionService, IDBRepository db)
@@ -66,5 +68,6 @@ namespace Innohoot.Controllers
 			return new JsonResult(await _pollCollectionService.GetAllPollCollectionByUserId(Id));
 			//return await _pollCollectionService.GetAllPollCollectionByUserId(Id);
 		}
+
 	}
 }

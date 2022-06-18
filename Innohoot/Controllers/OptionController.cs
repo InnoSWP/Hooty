@@ -1,14 +1,12 @@
-﻿using Innohoot.DataLayer;
-using Innohoot.DataLayer.Services.Implementations;
+﻿using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace Innohoot.Controllers
 {
+	[Route("[controller]s")]
 	[ApiController]
-	[Route("Options")]
-	public class OptionController:Controller
+	public class OptionController : Controller
 	{
 		private readonly IOptionService _optionService;
 
@@ -20,7 +18,7 @@ namespace Innohoot.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(OptionDTO optionDto)
 		{
-			return Ok( await _optionService.Create(optionDto));
+			return Ok(await _optionService.Create(optionDto));
 		}
 	}
 }

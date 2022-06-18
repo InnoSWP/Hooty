@@ -1,9 +1,6 @@
-using System.Runtime.Serialization.Json;
 using Innohoot.DataLayer;
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DataLayer.Services.Interfaces;
-using Innohoot.Hubs;
-using System.Text.Json;
 
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -30,8 +27,21 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", b =>
 // Add services to the container.
 
 builder.Services.AddSignalR();
-builder.Services.AddControllers().AddNewtonsoftJson().AddJsonOptions(options =>
+
+builder.Services.AddControllers().AddNewtonsoftJson(x =>
+{
+	x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+}).AddJsonOptions(options =>
 	options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
+/*.AddJsonOptions(x =>
+	x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);*/
+
+
+
+/*builder.Services.AddNewtonsoftJson(options =>
+	options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);*/
 
 builder.Services.AddSwaggerGen();
 
@@ -75,5 +85,4 @@ app.MapControllerRoute(
 	pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html");
-app.MapHub<PollHub>("/pollVoting");
 app.Run();

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 
 using Innohoot.DTO;
-using Innohoot.Models.Activity;
 using Innohoot.Models.ElementsForPA;
 using Innohoot.Models.Identity;
 
@@ -41,7 +40,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task<PollCollectionDTO?> Get(Guid Id)
 		{
-			var pollCollection = await _db.Get<PollCollection>(Id).FirstOrDefaultAsync();
+			var pollCollection = await _db.Get<PollCollection>(Id).Include(x => x.Polls).ThenInclude(x => x.Options).FirstOrDefaultAsync();
 			return _mapper.Map<PollCollectionDTO>(pollCollection);
 		}
 
@@ -126,10 +125,10 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task<List<PollCollectionDTO>> GetAllPollCollectionByUserId(Guid userId)
 		{
-			List<PollCollection> collections = await _db.GetAll<PollCollection>()
-				.Where(x => x.UserId.Equals(userId))
-				.Include(pc => pc.Polls)
-				.ThenInclude(p => p.Options).ToListAsync();
+			List<PollCollection> collections = await _db.Get<PollCollection>(x => x.UserId.Equals(userId))
+			.Include(px => px.Polls)
+			.ThenInclude(p => p.Options)
+			.ToListAsync();
 
 			List<PollCollectionDTO> result = new List<PollCollectionDTO>();
 

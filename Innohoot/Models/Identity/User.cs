@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using Innohoot.Models.Activity;
+﻿using Innohoot.Models.Activity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Innohoot.Models.Identity
 {

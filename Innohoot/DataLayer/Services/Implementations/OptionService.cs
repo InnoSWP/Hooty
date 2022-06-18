@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Innohoot.DataLayer.Services.Implementations
 {
-	public class OptionService:IOptionService
+	public class OptionService : IOptionService
 	{
 		protected readonly IMapper _mapper;
 		protected readonly IDBRepository _db;
@@ -19,9 +19,9 @@ namespace Innohoot.DataLayer.Services.Implementations
 		{
 			var option = _mapper.Map<Option>(optionDTO);
 			//at this moment option.Poll = null
-			option.Poll = new Poll(){Id = option.PollId };
+			option.Poll = new Poll() { Id = option.PollId };
 			_db.Context.Entry(option.Poll).State = EntityState.Unchanged;
- 
+
 			await _db.Add(option);
 			await _db.Save();
 
@@ -31,7 +31,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 		{
 			var option = _mapper.Map<Option>(optionDTO);
 
-			option.Poll = new Poll() {Id = option.PollId};
+			option.Poll = new Poll() { Id = option.PollId };
 			_db.Context.Entry(option.Poll).State = EntityState.Unchanged;
 
 			await _db.Update(option);

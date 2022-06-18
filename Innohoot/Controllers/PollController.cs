@@ -1,24 +1,26 @@
-﻿using Innohoot.DataLayer;
-using Innohoot.DataLayer.Services.Implementations;
+﻿using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
-using Innohoot.Models.Activity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
 {
-	[Route("[controller]")]
+	[Route("[controller]s")]
 	[ApiController]
-	public class PollController:Controller
+	public class PollController : Controller
 	{
 		private readonly IPollService _pollService;
 		private readonly ISessionService _sessionService;
-		private readonly IDBRepository _db;
 
-		public PollController(IPollService pollService, ISessionService sessionService, IDBRepository db)
+		public PollController(IPollService pollService, ISessionService sessionService)
 		{
 			_pollService = pollService;
 			_sessionService = sessionService;
-			_db = db;
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Get(Guid Id)
+		{
+			return Ok(await _pollService.Get(Id));
 		}
 		[HttpPost]
 		public async Task<IActionResult> Create(PollDTO pollDTO)
@@ -37,6 +39,37 @@ namespace Innohoot.Controllers
 		{
 			await _pollService.Delete(Id);
 			return NoContent();
+		}
+
+		[HttpPut("{id}/Active")]
+		public async Task<IActionResult> SetSessionActivePoll(Guid Id)
+		{
+			var result = await _pollService.MakePollActive(Id);
+
+			if (result)
+			{
+				return Ok();
+			}
+
+			else
+			{
+				return Problem("No such poll or session");
+			}
+		}
+
+		[HttpGet("active")]
+		public async Task<IActionResult> GetSessionActivePoll(Guid sessionId)
+		{
+			var session = await _sessionService.Get(sessionId);
+			var pollId = session.ActivePollId;
+
+			if (pollId is not null)
+			{
+				var poll = await _pollService.Get((Guid)pollId);
+				return Ok(poll);
+			}
+			//have no active poll
+			else return NoContent();
 		}
 	}
 }

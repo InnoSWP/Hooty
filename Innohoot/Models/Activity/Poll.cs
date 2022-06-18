@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Innohoot.Models.ElementsForPA;
-using Innohoot.Models.Identity;
+﻿using Innohoot.Models.ElementsForPA;
+using System.ComponentModel.DataAnnotations;
 
 namespace Innohoot.Models.Activity
 {
@@ -12,7 +11,7 @@ namespace Innohoot.Models.Activity
 		[Required]
 		public Guid PollCollectionId { get; set; }
 		[Required]
-		public PollCollection PollCollection { get; set; } 
+		public PollCollection PollCollection { get; set; }
 		public List<Option> Options { get; set; }
 	}
 }

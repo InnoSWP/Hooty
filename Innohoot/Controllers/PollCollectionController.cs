@@ -1,27 +1,22 @@
 ﻿using Innohoot.DataLayer;
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
-using Microsoft.AspNetCore.Mvc;
-
-using System.Collections.Generic;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
 {
-	[Route("PollCollections")]
+	[Route("[controller]s")]
 	[ApiController]
-	public class PollCollectionController:Controller
+	public class PollCollectionController : Controller
 	{
 		private readonly IPollService _pollService;
 		private readonly IPollCollectionService _pollCollectionService;
-		private readonly IDBRepository _db;
 
 		public PollCollectionController(IPollService pollService, IPollCollectionService pollCollectionService, IDBRepository db)
 		{
 			_pollService = pollService;
 			_pollCollectionService = pollCollectionService;
-			_db = db;
 		}
 		[HttpGet]
 		public async Task<IActionResult> Get(Guid Id)
@@ -46,14 +41,14 @@ namespace Innohoot.Controllers
 			await _pollCollectionService.Delete(Id);
 			return NoContent();
 		}
-		[HttpGet ("Polls")]
+		[HttpGet("Polls")]
 		public async Task<IActionResult> GetAllPollsByPollCollectionId(Guid Id)
 		{
 			return Ok(await _pollService.GetAllPollsByPollCollectionId(Id));
 		}
 
 		[HttpPatch("{Id}")]
-		public async Task<IActionResult> Update([FromRoute]Guid Id, [FromBody]JsonPatchDocument pollCollectionJsonPatchDocument)
+		public async Task<IActionResult> Update([FromRoute] Guid Id, [FromBody] JsonPatchDocument pollCollectionJsonPatchDocument)
 		{
 			await _pollCollectionService.UpdatePatch(Id, pollCollectionJsonPatchDocument);
 			return NoContent();

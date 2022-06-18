@@ -2,9 +2,8 @@
 using Innohoot.DTO;
 using Innohoot.Models.Activity;
 using Innohoot.Models.ElementsForPA;
-using Innohoot.Models.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Innohoot.DataLayer.Services.Implementations
 {
@@ -22,7 +21,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 		{
 			var poll = _mapper.Map<Poll>(pollDTO);
 			//at this moment poll.User = null
-			poll.PollCollection = new PollCollection() { Id = poll.PollCollectionId};
+			poll.PollCollection = new PollCollection() { Id = poll.PollCollectionId };
 			_db.Context.Entry(poll.PollCollection).State = EntityState.Unchanged;
 
 			await _db.Add(poll);
@@ -46,9 +45,15 @@ namespace Innohoot.DataLayer.Services.Implementations
 		}
 		public async Task<PollDTO?> Get(Guid Id)
 		{
-			var poll = await _db.Get<Poll>(Id).FirstOrDefaultAsync();
+			var poll = await _db.Get<Poll>(Id).Include(x => x.Options).FirstOrDefaultAsync();
 			return _mapper.Map<PollDTO>(poll);
 		}
+
+		public Task<List<PollDTO>> Get(Expression<Func<Poll, bool>> selector)
+		{
+			throw new NotImplementedException();
+		}
+
 		public async Task<List<PollDTO>> GetAllPollsByPollCollectionId(Guid pollCollectionId)
 		{
 			List<Poll> polls = await _db.Get<Poll>(x => x.PollCollectionId.Equals(pollCollectionId)).Include(p => p.Options).ToListAsync();
@@ -60,6 +65,32 @@ namespace Innohoot.DataLayer.Services.Implementations
 				result.Add(pollDTO);
 			}
 			return result;
+		}
+
+		/// <summary>
+		/// Set to User Active Session Active Poll
+		/// </summary>
+		/// <param name="pollId"></param>
+		/// <returns></returns>
+		public async Task<bool> MakePollActive(Guid pollId)
+		{
+			var poll = await _db.Get<Poll>(pollId).FirstOrDefaultAsync();
+			if (poll is not null)
+			{
+				var pollCollection = await _db.Get<PollCollection>(poll.PollCollectionId).FirstOrDefaultAsync();
+				var session = await _db.Get<Session>(i => i.UserId == pollCollection.UserId && i.IsActive && i.PollCollection.Polls.Contains(poll)).FirstOrDefaultAsync();
+				if (session is not null)
+				{
+					session.ActivePoll = poll;
+					await _db.Update(session);
+					await _db.Save();
+					return true;
+				}
+
+				return false;
+			}
+
+			return false;
 		}
 	}
 }
