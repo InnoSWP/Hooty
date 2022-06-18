@@ -1,0 +1,9 @@
+{
+  "timeZone": "Europe/Moscow",
+  "dependencies": {},
+  "exceptionLogging": "STACKDRIVER",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/script.container.ui"
+  ],
+  "runtimeVersion": "V8"
+}
