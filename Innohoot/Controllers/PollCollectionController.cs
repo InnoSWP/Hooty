@@ -7,19 +7,17 @@ using System.Collections.Generic;
 
 namespace Innohoot.Controllers
 {
-	[Route("PollCollections")]
+	[Route("[controller]s")]
 	[ApiController]
-	public class PollCollectionController:Controller
+	public class PollCollectionController : Controller
 	{
 		private readonly IPollService _pollService;
 		private readonly IPollCollectionService _pollCollectionService;
-		private readonly IDBRepository _db;
 
 		public PollCollectionController(IPollService pollService, IPollCollectionService pollCollectionService, IDBRepository db)
 		{
 			_pollService = pollService;
 			_pollCollectionService = pollCollectionService;
-			_db = db;
 		}
 		[HttpGet]
 		public async Task<IActionResult> Get(Guid Id)
@@ -44,7 +42,7 @@ namespace Innohoot.Controllers
 			await _pollCollectionService.Delete(Id);
 			return NoContent();
 		}
-		[HttpGet ("Polls")]
+		[HttpGet("Polls")]
 		public async Task<IActionResult> GetAllPollsByPollCollectionId(Guid Id)
 		{
 			return Ok(await _pollService.GetAllPollsByPollCollectionId(Id));
