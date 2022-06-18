@@ -6,6 +6,7 @@ namespace Innohoot.DTO
 	{
 		public Guid Id { get; set; }
 		public string ParticipantName { get; set; }
-		public Guid ChosenOption { get; set; }
+		public Guid OptionId { get; set; }
+		public Guid SessionId { get; set; }
 	}
 }
