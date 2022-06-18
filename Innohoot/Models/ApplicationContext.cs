@@ -12,6 +12,7 @@ namespace Innohoot.DataLayer
 		public DbSet<VoteRecord> VoteRecords { get; set; }
 		public DbSet<Option> Options { get; set; }
 		public DbSet<Session> Sessions { get; set; }
+		public DbSet<PollCollection> PollCollections { get; set; }
 
 		public ApplicationContext(DbContextOptions options) : base(options)
 		{
