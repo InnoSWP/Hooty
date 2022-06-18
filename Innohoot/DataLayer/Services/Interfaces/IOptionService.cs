@@ -1,5 +1,4 @@
 ﻿using Innohoot.DTO;
-using Innohoot.Models.Activity;
 
 namespace Innohoot.DataLayer.Services.Implementations;
 

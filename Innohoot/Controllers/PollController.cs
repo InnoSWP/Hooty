@@ -1,7 +1,5 @@
-﻿using Innohoot.DataLayer;
-using Innohoot.DataLayer.Services.Implementations;
+﻿using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
-using Innohoot.Models.Activity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers

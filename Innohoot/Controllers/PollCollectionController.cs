@@ -1,11 +1,8 @@
 ﻿using Innohoot.DataLayer;
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
-using Microsoft.AspNetCore.Mvc;
-
-using System.Collections.Generic;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
 {
@@ -51,7 +48,7 @@ namespace Innohoot.Controllers
 		}
 
 		[HttpPatch("{Id}")]
-		public async Task<IActionResult> Update([FromRoute]Guid Id, [FromBody]JsonPatchDocument pollCollectionJsonPatchDocument)
+		public async Task<IActionResult> Update([FromRoute] Guid Id, [FromBody] JsonPatchDocument pollCollectionJsonPatchDocument)
 		{
 			await _pollCollectionService.UpdatePatch(Id, pollCollectionJsonPatchDocument);
 			return NoContent();

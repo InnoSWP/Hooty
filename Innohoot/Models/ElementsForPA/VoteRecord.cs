@@ -1,7 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Innohoot.Models.Activity;
-using Innohoot.Models.Identity;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Innohoot.Models.Activity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Innohoot.Models.ElementsForPA
 {

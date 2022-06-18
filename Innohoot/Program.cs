@@ -1,10 +1,6 @@
-using System.Text.Json.Serialization;
-using System.Runtime.Serialization.Json;
 using Innohoot.DataLayer;
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DataLayer.Services.Interfaces;
-using Innohoot.Hubs;
-using System.Text.Json;
 
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -89,5 +85,4 @@ app.MapControllerRoute(
 	pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html");
-app.MapHub<PollHub>("/pollVoting");
 app.Run();

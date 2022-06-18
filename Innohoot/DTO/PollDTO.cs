@@ -1,7 +1,4 @@
-﻿using Innohoot.Models.Activity;
-using Innohoot.Models.Identity;
-
-namespace Innohoot.DTO
+﻿namespace Innohoot.DTO
 {
 	public class PollDTO
 	{

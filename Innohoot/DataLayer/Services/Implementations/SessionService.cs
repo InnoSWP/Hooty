@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Innohoot.DTO;
 using Innohoot.Models.Activity;
-using Innohoot.Models.ElementsForPA;
 using Innohoot.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,7 +29,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task<SessionDTO?> Get(Guid Id)
 		{
-			var session = await _db.Get<Session>(x => x.Id==Id).Include(x => x.ActivePoll).FirstOrDefaultAsync();
+			var session = await _db.Get<Session>(x => x.Id == Id).Include(x => x.ActivePoll).FirstOrDefaultAsync();
 			return _mapper.Map<SessionDTO>(session);
 		}
 

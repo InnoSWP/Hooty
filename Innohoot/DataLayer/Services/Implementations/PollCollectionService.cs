@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 
 using Innohoot.DTO;
-using Innohoot.Models.Activity;
 using Innohoot.Models.ElementsForPA;
 using Innohoot.Models.Identity;
 
@@ -130,7 +129,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 			.Include(px => px.Polls)
 			.ThenInclude(p => p.Options)
 			.ToListAsync();
-			
+
 			List<PollCollectionDTO> result = new List<PollCollectionDTO>();
 
 			foreach (var pollCollection in collections)

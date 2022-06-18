@@ -11,7 +11,7 @@ namespace Innohoot.Controllers
 	[ApiController]
 	[EnableCors("CorsPolicy")]
 
-	public class UserController:Controller
+	public class UserController : Controller
 	{
 		private readonly IUserService _userService;
 		private readonly IPollCollectionService _pollCollectionService;

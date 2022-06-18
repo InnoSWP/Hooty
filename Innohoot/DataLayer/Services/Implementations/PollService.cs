@@ -1,11 +1,9 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Innohoot.DTO;
 using Innohoot.Models.Activity;
 using Innohoot.Models.ElementsForPA;
-using Innohoot.Models.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Innohoot.DataLayer.Services.Implementations
 {
@@ -74,7 +72,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 		/// </summary>
 		/// <param name="pollId"></param>
 		/// <returns></returns>
-		public async Task MakePollActive(Guid pollId)
+		public async Task<bool> MakePollActive(Guid pollId)
 		{
 			var poll = await _db.Get<Poll>(pollId).FirstOrDefaultAsync();
 			if (poll is not null)
@@ -86,8 +84,13 @@ namespace Innohoot.DataLayer.Services.Implementations
 					session.ActivePoll = poll;
 					await _db.Update(session);
 					await _db.Save();
+					return true;
 				}
+
+				return false;
 			}
+
+			return false;
 		}
 	}
 }

@@ -1,12 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using Innohoot.DataLayer;
-using Innohoot.DataLayer.Services.Implementations;
+﻿using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
-using Innohoot.Models.Activity;
-using Innohoot.Models.ElementsForPA;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace Innohoot.Controllers
 {

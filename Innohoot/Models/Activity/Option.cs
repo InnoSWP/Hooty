@@ -2,7 +2,7 @@
 
 namespace Innohoot.Models.Activity
 {
-	public class Option:IEntity
+	public class Option : IEntity
 	{
 		public Guid Id { get; set; }
 		[Required]

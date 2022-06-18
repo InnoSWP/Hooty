@@ -1,6 +1,4 @@
-﻿using Innohoot.Models.Activity;
-
-namespace Innohoot.DTO
+﻿namespace Innohoot.DTO
 {
 	public class VoteRecordDTO
 	{

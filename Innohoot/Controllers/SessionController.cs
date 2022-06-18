@@ -1,5 +1,4 @@
-﻿using Innohoot.DataLayer;
-using Innohoot.DataLayer.Services.Implementations;
+﻿using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DataLayer.Services.Interfaces;
 using Innohoot.DTO;
 using Microsoft.AspNetCore.Mvc;
