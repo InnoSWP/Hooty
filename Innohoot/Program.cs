@@ -1,9 +1,12 @@
+using System.Runtime.Serialization.Json;
 using Innohoot.DataLayer;
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DataLayer.Services.Interfaces;
 using Innohoot.Hubs;
+using System.Text.Json;
 
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -27,7 +30,8 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", b =>
 // Add services to the container.
 
 builder.Services.AddSignalR();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson().AddJsonOptions(options =>
+	options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 builder.Services.AddSwaggerGen();
 

@@ -4,6 +4,8 @@ using Innohoot.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Collections.Generic;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Innohoot.Controllers
 {
@@ -48,6 +50,13 @@ namespace Innohoot.Controllers
 		public async Task<IActionResult> GetAllPollsByPollCollectionId(Guid Id)
 		{
 			return Ok(await _pollService.GetAllPollsByPollCollectionId(Id));
+		}
+
+		[HttpPatch("{Id}")]
+		public async Task<IActionResult> Update([FromRoute]Guid Id, [FromBody]JsonPatchDocument pollCollectionJsonPatchDocument)
+		{
+			await _pollCollectionService.UpdatePatch(Id, pollCollectionJsonPatchDocument);
+			return NoContent();
 		}
 	}
 }

@@ -1,10 +1,17 @@
-﻿import React from 'react';
+﻿
+let localStorageKey = "hootyUserId"
 
-export let defaultUserContext = {
-    userId: "",
-    updateUserId (val) {
-        this.userId = val
+export let UserContext = {
+    getUserId: () => {
+        let userId = localStorage.getItem(localStorageKey)
+        
+        if (userId === null) {
+            console.log("no userID")
+        }
+        
+        return userId
+    },
+    setUserId: (newUserId) => {
+        localStorage.setItem(localStorageKey, newUserId)
     }
 }
-
-export const UserContext = React.createContext()

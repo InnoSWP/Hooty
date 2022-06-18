@@ -61,9 +61,10 @@ namespace Innohoot.Controllers
 		}
 
 		[HttpGet("PollCollections")]
-		public async Task<List<PollCollectionDTO>> GetAllPollCollectionByUserId(Guid Id)
+		public async Task<IActionResult> GetAllPollCollectionByUserId(Guid Id)
 		{
-			return await _pollCollectionService.GetAllPollCollectionByUserId(Id);
+			return new JsonResult(await _pollCollectionService.GetAllPollCollectionByUserId(Id));
+			//return await _pollCollectionService.GetAllPollCollectionByUserId(Id);
 		}
 	}
 }
