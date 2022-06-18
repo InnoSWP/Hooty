@@ -1,8 +1,10 @@
 using System.Text.Json.Serialization;
+using System.Runtime.Serialization.Json;
 using Innohoot.DataLayer;
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DataLayer.Services.Interfaces;
 using Innohoot.Hubs;
+using System.Text.Json;
 
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -33,7 +35,8 @@ builder.Services.AddSignalR();
 builder.Services.AddControllers().AddNewtonsoftJson(x =>
 {
 	x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-}); ;
+}).AddJsonOptions(options =>
+	options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 /*.AddJsonOptions(x =>
 	x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);*/
@@ -43,6 +46,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(x =>
 /*builder.Services.AddNewtonsoftJson(options =>
 	options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );*/
+
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IDBRepository, DBRepository>();
 
@@ -69,6 +74,8 @@ if (!app.Environment.IsDevelopment())
 {
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

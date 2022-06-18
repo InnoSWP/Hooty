@@ -14,31 +14,25 @@ export default function QuizListPage(props) {
     const user = "5f7d9001-2689-4d95-9c03-f7ea475df90b"
     
     React.useEffect(() => {
-        let url = `https://localhost:7006/Users/PollCollections?Id=${user}`
+        let url = `https://localhost:7006/Users/PollCollections?Id=${UserContext.getUserId()}`
         
         fetch(url)
             .then(res => res.json())
             .then((data) => {
                 console.log(data)
-                let mappedQuizList = data.PollsCollections.map((pollCollectionDTO) => {
+                let mappedQuizList = data.map((pollCollectionDTO) => {
                     return {
-                        uuid: pollCollectionDTO.Id,
-                        quiz_name: pollCollectionDTO.Name,
-                        questions: pollCollectionDTO.Polls.map((pollDTO) => {
+                        uuid: pollCollectionDTO.id,
+                        quiz_name: pollCollectionDTO.name,
+                        questions: pollCollectionDTO.polls.map((pollDTO) => {
                             return {
-                                uuid: pollDTO.Id,
-                                quiz_name: pollDTO.Name,
-                                questions: pollDTO.map((poll) => {
+                                uuid: pollDTO.id,
+                                question_text: pollDTO.name,
+                                answers: pollDTO.options.map((option) => {
                                     return {
-                                        uuid: poll.Id,
-                                        question_text: poll.Name,
-                                        answers: poll.Options.map((option) => {
-                                            return {
-                                                uuid: option.Id,
-                                                answer_text: option.Name,
-                                                correct: true
-                                            }
-                                        })
+                                        uuid: option.id,
+                                        answer_text: option.name,
+                                        correct: true
                                     }
                                 })
                             }
@@ -46,7 +40,7 @@ export default function QuizListPage(props) {
                     }
                 })
                 
-                setQuizList(mappedQuizList)
+                setQuizList([...mappedQuizList])
             })
     }, [])
     
@@ -86,14 +80,17 @@ export default function QuizListPage(props) {
                 "Content-Type": "application/json;charset=utf-8"
             },
             body: JSON.stringify({
-                "UserId": user,
+                "UserId": UserContext.getUserId(),
                 "Name": newQuiz.quiz_name,
                 "Polls": newQuiz.questions.map((question) => {
                     return {
                         "Name": question.question_text,
+                        "Id": question.uuid,
                         "Options": question.answers.map((answer) => {
                             return {
-                                "Name": answer.answer_text
+                                "Name": answer.answer_text,
+                                "pollId": question.uuid,
+                                "Id": answer.uuid
                             }
                         })
                     }
@@ -103,6 +100,7 @@ export default function QuizListPage(props) {
             .then(res => res.json())
             .then(data => {
                 console.log(data)
+                newQuiz.uuid = data
                 newQuizList.push(newQuiz)
                 setQuizList([...newQuizList])
             })
@@ -121,7 +119,9 @@ export default function QuizListPage(props) {
         
         let deleteQuizUrl = `https://localhost:7006/PollCollections?Id=${quiz.uuid}`
         
-        fetch(deleteQuizUrl)
+        fetch(deleteQuizUrl, {
+            method: "DELETE"
+        })
             .then(res => res.json())
             .then(data => {
                 console.log(data)
@@ -144,14 +144,18 @@ export default function QuizListPage(props) {
             },
             body: JSON.stringify({
                 "Id": quiz.uuid,
-                "UserId": user,
+                "UserId": UserContext.getUserId(),
                 "Name": quiz.quiz_name,
                 "Polls": quiz.questions.map((question) => {
                     return {
                         "Name": question.question_text,
+                        "pollCollectionId": quiz.uuid,
+                        "Id": question.uuid,
                         "Options": question.answers.map((answer) => {
                             return {
-                                "Name": answer.answer_text
+                                "Name": answer.answer_text,
+                                "pollId": question.uuid,
+                                "Id": answer.uuid
                             }
                         })
                     }
@@ -168,6 +172,7 @@ export default function QuizListPage(props) {
         <div style={{
             margin: "20px"
         }}>
+            <p>Your id: {UserContext.getUserId()}</p>
             <div>
                 {renderQuizList()}
             </div>
