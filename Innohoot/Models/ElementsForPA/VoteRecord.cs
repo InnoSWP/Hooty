@@ -1,15 +1,21 @@
-﻿using Innohoot.Models.Activity;
+﻿using System.ComponentModel.DataAnnotations;
+using Innohoot.Models.Activity;
 using Innohoot.Models.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Innohoot.Models.ElementsForPA
 {
 	/// <summary>
 	///  record of every given answer
 	/// </summary>
-	public class VoteRecord:IEntity
+	public class VoteRecord : IEntity
 	{
 		public Guid Id { get; set; }
+		[Required]
 		public string ParticipantName { get; set; }
-		public Option? ChosenOption { get; set; }
+		public Guid OptionId { get; set; }
+		public Option Option { get; set; }
+		public Guid SessionId { get; set; }
+		public Session Session { get; set; }
 	}
 }
