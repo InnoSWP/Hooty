@@ -13,6 +13,8 @@ export default function HostQuestion (props) {
                 console.log(data)
                 setResults({...data.voteDistribution})
             })
+        
+        setTimeout(getResults, 1000)
     }
     
     const mapResults = () => {
@@ -27,7 +29,7 @@ export default function HostQuestion (props) {
     }
     
     React.useEffect(() => {
-        
+        getResults()
     }, [])
     
     return (
