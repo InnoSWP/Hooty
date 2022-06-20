@@ -48,7 +48,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 			_db.Context.ChangeTracker.Clear();
 			if (sessionDTO.IsActive)
 			{
-				var otherActiveSession = await _db.Get<Session>(x => x.IsActive).ToListAsync();
+				var otherActiveSession = await _db.Get<Session>(x => x.IsActive && x.UserId == sessionDTO.UserId).ToListAsync();
 				if (otherActiveSession.Count > 0)
 					return new Guid();
 			}
