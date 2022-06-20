@@ -122,9 +122,8 @@ export default function QuizListPage(props) {
         fetch(deleteQuizUrl, {
             method: "DELETE"
         })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data)
+            .then(res => {
+
                 newQuizList.splice(index, 1)
 
                 setQuizList([...newQuizList])

@@ -4,7 +4,11 @@ export function PlayPage(props) {
 
     const sessionId = document.location.pathname.replace("/play/", "")
     
-    const [poll, setPoll] = React.useState()
+    const [poll, setPoll] = React.useState({
+        id: 0,
+        name: "",
+        options: []
+    })
     const [isAnswered, setIsAnswered] = React.useState(false)
     const [currentAnswer, setCurrentAnswer] = React.useState()
     const [participantName, setParticipantName] = React.useState(null)
@@ -24,13 +28,16 @@ export function PlayPage(props) {
         setTimeout(getPoll, 1000)
     }
     
-    const submitAnswer = (optionId) => {
+    const submitAnswer = () => {
         let url = `https://localhost:7006/Votes`
         fetch(url, {
             method: "PUT",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
             body: JSON.stringify({
                 participantName: participantName,
-                optionId: optionId,
+                optionId: currentAnswer,
                 id: poll.id,
                 sessionId: sessionId
             })
@@ -47,21 +54,31 @@ export function PlayPage(props) {
     }
     
     const renderOptions = () => {
-        return poll.options.map((option) => {
-            return (
+        return (
+            <>
+                {
+                    poll.options?.map((option) => {
+                        return (
+                            <div>
+                                <label htmlFor={option.id}>
+                                    <input type="radio"
+                                           name={poll.id}
+                                           id={option.id}
+                                           value={option.id}
+                                           onChange={handleChange}
+                                    />
+                                    {option.name}
+                                </label>
+                            </div>
+                        )
+                    })
+                }
                 <div>
-                    <label htmlFor={option.id}>
-                        <input type="radio" 
-                               name={poll.id} 
-                               id={option.id} 
-                               value={option.id} 
-                               onChange={handleChange} 
-                        />
-                        {option.name}
-                    </label>
+                    <button onClick={submitAnswer}>Submit</button>
                 </div>
-            )
-        })
+            </>
+            
+        )
     }
     
     React.useEffect(() => {
@@ -87,6 +104,7 @@ export function PlayPage(props) {
         return (
             <div>
                 <label htmlFor="name-form">
+                    Name: 
                     <input type="text" 
                            id="name-form"
                            value={participantName} 

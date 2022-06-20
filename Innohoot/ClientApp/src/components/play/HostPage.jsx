@@ -23,15 +23,16 @@ export default function HostPage(props) {
     
     const nextPoll = () => {
         let nextPollIndex = currentPollIndex + 1
-        
-        
+
+        console.log(quiz)
         let nextPollId = quiz.polls[nextPollIndex].id
+        console.log(nextPollId)
+        
         let url = `https://localhost:7006/Polls/${nextPollId}/active`
         fetch(url, {method: "PUT"})
-            .then(res => res.json())
-            .then(data => {
-                console.log(data)
+            .then(res => {
                 setCurrentPollIndex(nextPollIndex)
+                console.log(`aaa: ${currentPollIndex}  ${ currentPollIndex < 0? "-1" : quiz.polls[currentPollIndex].id}`)
             })
     }
     
@@ -39,7 +40,7 @@ export default function HostPage(props) {
         <>
             {
                 currentPollIndex === -1 ? 
-                    <PreQuiz code={"abcde"} nextPoll={nextPoll} /> : 
+                    <PreQuiz code={"abcde"} nextPoll={nextPoll} debugUrl={`https://localhost:44402/play/${sessionId}`}/> : 
                     <HostQuestion params={quiz.polls[currentPollIndex]} nextPoll={nextPoll} />
             }
         </>
