@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Innohoot.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220617183528_userchanged")]
-    partial class userchanged
+    [Migration("20220620083334_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,14 +73,17 @@ namespace Innohoot.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("Available")
-                        .HasColumnType("boolean");
+                    b.Property<Guid?>("ActivePollId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<TimeSpan?>("Duration")
                         .HasColumnType("interval");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -96,6 +99,8 @@ namespace Innohoot.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivePollId");
 
                     b.HasIndex("PollCollectionId");
 
@@ -127,7 +132,7 @@ namespace Innohoot.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PollCollection");
+                    b.ToTable("PollCollections");
                 });
 
             modelBuilder.Entity("Innohoot.Models.ElementsForPA.VoteRecord", b =>
@@ -136,19 +141,19 @@ namespace Innohoot.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ChosenOptionId")
+                    b.Property<Guid>("OptionId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ParticipantName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("SessionId")
+                    b.Property<Guid>("SessionId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChosenOptionId");
+                    b.HasIndex("OptionId");
 
                     b.HasIndex("SessionId");
 
@@ -198,6 +203,10 @@ namespace Innohoot.Migrations
 
             modelBuilder.Entity("Innohoot.Models.Activity.Session", b =>
                 {
+                    b.HasOne("Innohoot.Models.Activity.Poll", "ActivePoll")
+                        .WithMany()
+                        .HasForeignKey("ActivePollId");
+
                     b.HasOne("Innohoot.Models.ElementsForPA.PollCollection", "PollCollection")
                         .WithMany()
                         .HasForeignKey("PollCollectionId")
@@ -209,6 +218,8 @@ namespace Innohoot.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ActivePoll");
 
                     b.Navigation("PollCollection");
 
@@ -228,15 +239,21 @@ namespace Innohoot.Migrations
 
             modelBuilder.Entity("Innohoot.Models.ElementsForPA.VoteRecord", b =>
                 {
-                    b.HasOne("Innohoot.Models.Activity.Option", "ChosenOption")
+                    b.HasOne("Innohoot.Models.Activity.Option", "Option")
                         .WithMany()
-                        .HasForeignKey("ChosenOptionId");
+                        .HasForeignKey("OptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Innohoot.Models.Activity.Session", null)
+                    b.HasOne("Innohoot.Models.Activity.Session", "Session")
                         .WithMany("VoteRecords")
-                        .HasForeignKey("SessionId");
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ChosenOption");
+                    b.Navigation("Option");
+
+                    b.Navigation("Session");
                 });
 
             modelBuilder.Entity("Innohoot.Models.Activity.Poll", b =>
