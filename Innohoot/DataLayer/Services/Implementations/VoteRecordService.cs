@@ -34,7 +34,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 		}
 		public async Task<List<VoteRecord>> GiveVotesBySessionId(Guid sessionId)
 		{
-			return await _db.Get<VoteRecord>(x => x.Session.Id == sessionId).ToListAsync();
+			return await _db.Get<VoteRecord>(x => x.Session.Id == sessionId).Include(x => x.Option).ThenInclude(y => y.Poll).ToListAsync();
 		}
 		public async Task<List<VoteRecord>> GiveVotesBySessionAndPollId(Guid sessionId, Guid pollId)
 		{
