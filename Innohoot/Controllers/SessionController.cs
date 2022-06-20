@@ -74,10 +74,17 @@ namespace Innohoot.Controllers
 		public async Task<IActionResult> CloseSession(Guid sessionId)
 		{
 			var sessionDTO = await _sessionService.Get(sessionId);
-			sessionDTO.IsActive = false;
-			sessionDTO.ActivePollId = null;
-			await _sessionService.Update(sessionDTO);
-			return Ok();
+			if (sessionDTO is not null)
+			{
+				sessionDTO.IsActive = false;
+				sessionDTO.ActivePollId = null;
+				await _sessionService.Update(sessionDTO);
+				return Ok();
+			}
+			else
+			{
+				return Problem("No such Session");
+			}
 		}
 
 	}
