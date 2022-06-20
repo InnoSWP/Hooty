@@ -70,7 +70,7 @@ namespace Innohoot.Controllers
 			}
 			else return Problem();
 		}
-		[HttpPost("close")]
+		[HttpPut("{sessionId}close")]
 		public async Task<IActionResult> CloseSession(Guid sessionId)
 		{
 			var sessionDTO = await _sessionService.Get(sessionId);
