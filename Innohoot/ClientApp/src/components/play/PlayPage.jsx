@@ -22,10 +22,11 @@ export function PlayPage(props) {
                 if (data.id !== poll.id) {
                     setIsAnswered(false)
                     setPoll({...data})
+                    setTimeout(getPoll, 1000)
                 }
             })
         
-        setTimeout(getPoll, 1000)
+        
     }
     
     const submitAnswer = () => {
