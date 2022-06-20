@@ -51,18 +51,18 @@ namespace Innohoot.DataLayer.Services.Implementations
 			var activeSession = await _db.Get<Session>(sessionId).FirstOrDefaultAsync();
 			if (activeSession is not null)
 			{
-				var poll = await _db.Get<Poll>(x => x.Id == pollId).Include(x => x.Options).ThenInclude(y => y.Poll).FirstOrDefaultAsync();
+				var activePoll = await _db.Get<Poll>(x => x.Id == pollId).Include(x => x.Options).FirstOrDefaultAsync();
 				var voteRecords = await _db.Get<VoteRecord>(x => x.Session.Id == activeSession.Id && x.Option.Poll.Id == pollId)?.ToListAsync();
 				var voteResultDTO = new VoteResultDTO();
 
-				voteResultDTO.VoteDistribution = poll.Options?.ToDictionary(i => i.Id, i => 0);
+				voteResultDTO.VoteDistribution = activePoll.Options?.ToDictionary(i => i.Id, i => 0);
 
 				foreach (var vote in voteRecords)
 				{
 					voteResultDTO.VoteDistribution[vote.Option.Id] += 1;
 				}
 
-				voteResultDTO.PollId = poll.Id;
+				voteResultDTO.PollId = activePoll.Id;
 				return voteResultDTO;
 			}
 			return null;
