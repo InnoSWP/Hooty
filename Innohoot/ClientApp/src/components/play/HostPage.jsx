@@ -41,7 +41,7 @@ export default function HostPage(props) {
             {
                 currentPollIndex === -1 ? 
                     <PreQuiz code={"abcde"} nextPoll={nextPoll} debugUrl={`https://localhost:44402/play/${sessionId}`}/> : 
-                    <HostQuestion params={quiz.polls[currentPollIndex]} nextPoll={nextPoll} />
+                    <HostQuestion params={quiz.polls[currentPollIndex]} nextPoll={nextPoll} sessionId={sessionId} />
             }
         </>
     )
