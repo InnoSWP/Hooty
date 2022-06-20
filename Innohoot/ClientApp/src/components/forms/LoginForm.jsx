@@ -31,7 +31,11 @@ export function LoginForm(props) {
                 "PasswordHash": sha.hex(state.password)
             })
         })
-            .then(res => res.json())
+            .then(
+                res => res.json(),
+                res => {
+                    alert(res.text())
+                })
             .then(data => {
                 console.log(data)
                 UserContext.setUserId(data)

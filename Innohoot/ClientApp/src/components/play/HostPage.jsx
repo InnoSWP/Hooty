@@ -11,15 +11,37 @@ export default function HostPage(props) {
     const [currentPollIndex, setCurrentPollIndex] = React.useState(-1)
     
     React.useEffect(() => {
+        console.log("aboba")
+        fetchQuiz()
+    }, [])
+    
+    const fetchQuiz = () => {
         let url = `https://localhost:7006/PollCollections?Id=${pollCollectionId}`
         fetch(url)
-            .then(res => res.json())
+            .then(
+                res => res.json()
+            )
             .then(data => {
                 console.log(data)
                 setQuiz({...data})
+                
+                fetchActiveSession()
             })
-    }, [])
+    }
     
+    const fetchActiveSession = () => {
+        let url = `https://localhost:7006/Sessions/${sessionId}`
+        fetch(url)
+            .then(
+                res => res.json(),
+                res => {
+                    alert(res.text())
+                })
+            .then(data => {
+                console.log(data)
+                setCurrentPollIndex(quiz.polls.findIndex((poll) => poll.id === data.activePoll))
+            })
+    }
     
     const nextPoll = () => {
         let nextPollIndex = currentPollIndex + 1
@@ -33,6 +55,8 @@ export default function HostPage(props) {
             .then(res => {
                 setCurrentPollIndex(nextPollIndex)
                 console.log(`aaa: ${currentPollIndex}  ${ currentPollIndex < 0? "-1" : quiz.polls[currentPollIndex].id}`)
+            }, res => {
+                alert(res.text())
             })
     }
     

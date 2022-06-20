@@ -4,19 +4,25 @@ import {UserContext} from "../../context/UserContext";
 export default function HostQuestion (props) {
     
     const [results, setResults] = React.useState([])
+    const [currentPollId, setCurrentPollId] = React.useState(0)
     const [timer, setTimer] = React.useState(null)
-    
+
     const getResultsCallback = () => {
-        console.log(props.params)
         let url = `https://localhost:7006/Votes/voteresult?sessionId=${props.sessionId}&pollId=${props.params.id}`
         fetch(url)
-            .then(res => res.json())
+            .then(
+                res => res.json()
+            )
             .then(data => {
-                console.log(data)
                 setResults({...data.voteDistribution})
-                setTimeout(getResultsCallback, 1000)
+                console.log(`${props.params.id} ${data.pollId}`)
+                setCurrentPollId(data.pollId)
+                let timerId = setTimeout(getResultsCallback, 1000)
+                setTimer(timerId)
             })
+
     }
+    
     
     const mapResults = () => {
         return props.params.options.map((el) => {
@@ -30,8 +36,14 @@ export default function HostQuestion (props) {
     }
     
     React.useEffect(() => {
-        getResultsCallback()
+        
+        getResultsCallback(props.params.id)
     }, [props.params.id])
+
+    if (props.params.id !== currentPollId && timer !== null) {
+        clearTimeout(timer)
+        setTimer(null)
+    }
     
     return (
         <div>

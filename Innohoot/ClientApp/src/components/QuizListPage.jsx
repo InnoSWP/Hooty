@@ -97,7 +97,11 @@ export default function QuizListPage(props) {
                 })
             })
         })
-            .then(res => res.json())
+            .then(
+                res => res.json(),
+                res => {
+                    alert(res.text())
+                })
             .then(data => {
                 console.log(data)
                 newQuiz.uuid = data
@@ -127,6 +131,8 @@ export default function QuizListPage(props) {
                 newQuizList.splice(index, 1)
 
                 setQuizList([...newQuizList])
+            }, res => {
+                alert(res.text())
             })
         
         
@@ -161,7 +167,11 @@ export default function QuizListPage(props) {
                 })
             })
         })
-            .then(res => res.json())
+            .then(
+                res => res.json(),
+                res => {
+                    alert(res.text())
+                })
             .then(data => {
                 console.log(data)
             })

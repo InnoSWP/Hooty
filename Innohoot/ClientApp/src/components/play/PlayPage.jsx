@@ -9,21 +9,26 @@ export function PlayPage(props) {
         name: "",
         options: []
     })
-    const [isAnswered, setIsAnswered] = React.useState(false)
+    const [isAnswered, setIsAnswered] = React.useState()
     const [currentAnswer, setCurrentAnswer] = React.useState()
     const [participantName, setParticipantName] = React.useState(null)
+    const [participantNameBuffer, setParticipantNameBuffer] = React.useState(null)
     
     const getPoll = () => {
         let url = `https://localhost:7006/polls/active?sessionId=${sessionId}`
         fetch(url)
-            .then(res => res.json())
+            .then(
+                res => res.json(), 
+                res => {
+                alert(res.text())
+            })
             .then(data => {
                 console.log(data)
                 if (data.id !== poll.id) {
                     setIsAnswered(false)
                     setPoll({...data})
-                    setTimeout(getPoll, 1000)
                 }
+                setTimeout(getPoll, 1000)
             })
         
         
@@ -43,7 +48,11 @@ export function PlayPage(props) {
                 sessionId: sessionId
             })
         })
-            .then(res => res.json())
+            .then(
+                res => res.json(), 
+                res => {
+                alert(res.text())
+            })
             .then(data => {
                 console.log(data)
                 setIsAnswered(true)
@@ -53,6 +62,11 @@ export function PlayPage(props) {
     const handleChange = (event) => {
         setCurrentAnswer(event.target.value)
     }
+    
+    const handleNameChange = [
+        (event) => setParticipantNameBuffer(event.target.value),
+        () => setParticipantName(participantNameBuffer)
+    ]
     
     const renderOptions = () => {
         return (
@@ -84,6 +98,7 @@ export function PlayPage(props) {
     
     React.useEffect(() => {
         getPoll()
+        setIsAnswered(false)
     }, [])
     
     const renderQuestion = () => {
@@ -109,9 +124,10 @@ export function PlayPage(props) {
                     <input type="text" 
                            id="name-form"
                            value={participantName} 
-                           onChange={(event) => {setParticipantName(event.target.value)}} 
+                           onChange={handleNameChange[0]} 
                     />
                 </label>
+                <button onClick={handleNameChange[1]}>Save</button>
             </div>
         )
     }
