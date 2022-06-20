@@ -21,7 +21,7 @@ namespace Innohoot.Controllers
 			_userService = userService;
 		}
 
-		[HttpGet]
+		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid Id)
 		{
 			return Ok(await _sessionService.Get(Id));
