@@ -50,14 +50,14 @@ namespace Innohoot.Controllers
 		/// </summary>
 		/// <param name="pollCollectionId"></param>
 		/// <returns></returns>
-		[HttpGet("active")]
+		[HttpGet("start")]
 		public async Task<IActionResult> StartSession(Guid pollCollectionId)
 		{
 			var pollCollectionDTO = await _pollCollectionService.Get(pollCollectionId);
 
 			if (pollCollectionDTO is not null)
 			{
-				var session = await _sessionService.Create(new SessionDTO()
+				var sessionId = await _sessionService.Create(new SessionDTO()
 				{
 					UserId = pollCollectionDTO.UserId,
 					Name = pollCollectionDTO.Name,
@@ -66,9 +66,18 @@ namespace Innohoot.Controllers
 					IsActive = true
 				});
 
-				return Ok(session);
+				return Ok(sessionId);
 			}
 			else return Problem();
+		}
+		[HttpPost("close")]
+		public async Task<IActionResult> CloseSession(Guid sessionId)
+		{
+			var sessionDTO = await _sessionService.Get(sessionId);
+			sessionDTO.IsActive = false;
+			sessionDTO.ActivePollId = null;
+			await _sessionService.Update(sessionDTO);
+			return Ok();
 		}
 
 	}

@@ -40,7 +40,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task<PollCollectionDTO?> Get(Guid Id)
 		{
-			var pollCollection = await _db.Get<PollCollection>(Id).Include(x => x.Polls).ThenInclude(x => x.Options).FirstOrDefaultAsync();
+			var pollCollection = await _db.Get<PollCollection>(Id).Include(z => z.User).Include(x => x.Polls).ThenInclude(x => x.Options).FirstOrDefaultAsync();
 			return _mapper.Map<PollCollectionDTO>(pollCollection);
 		}
 

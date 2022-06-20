@@ -46,6 +46,12 @@ namespace Innohoot.DataLayer.Services.Implementations
 		public async Task<Guid> Create(SessionDTO sessionDTO)
 		{
 			_db.Context.ChangeTracker.Clear();
+			if (sessionDTO.IsActive)
+			{
+				var otherActiveSession = await _db.Get<Session>(x => x.IsActive).ToListAsync();
+				if (otherActiveSession.Count > 0)
+					return new Guid();
+			}
 
 			var session = _mapper.Map<Session>(sessionDTO);
 			session.ActivePoll = null;
