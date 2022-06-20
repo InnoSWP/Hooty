@@ -6,7 +6,7 @@ export default function HostQuestion (props) {
     const [results, setResults] = React.useState([])
     const [timer, setTimer] = React.useState(null)
     
-    const getResultsCallback = React.useCallback(() => {
+    const getResultsCallback = () => {
         console.log(props.params)
         let url = `https://localhost:7006/Votes/voteresult?sessionId=${props.sessionId}&pollId=${props.params.id}`
         fetch(url)
@@ -14,8 +14,9 @@ export default function HostQuestion (props) {
             .then(data => {
                 console.log(data)
                 setResults({...data.voteDistribution})
+                setTimeout(getResultsCallback, 1000)
             })
-    }, [props.params.id, props.sessionId])
+    }
     
     const mapResults = () => {
         return props.params.options.map((el) => {
@@ -29,11 +30,7 @@ export default function HostQuestion (props) {
     }
     
     React.useEffect(() => {
-        if (timer !== null) {
-            clearInterval(timer)
-        }
-        let newTimer = setInterval(getResultsCallback, 1000)
-        setTimer(newTimer)
+        getResultsCallback()
     }, [props.params.id])
     
     return (
