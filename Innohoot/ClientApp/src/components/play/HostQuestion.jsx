@@ -8,14 +8,14 @@ export default function HostQuestion (props) {
     
     const getResultsCallback = React.useCallback(() => {
         console.log(props.params)
-        let url = `https://localhost:7006/Votes/voteresult?userId=${UserContext.getUserId()}&pollId=${props.params.id}`
+        let url = `https://localhost:7006/Votes/voteresult?sessionId=${props.sessionId}&pollId=${props.params.id}`
         fetch(url)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
                 setResults({...data.voteDistribution})
             })
-    }, [props.params.id, UserContext])
+    }, [props.params.id, props.sessionId])
     
     const mapResults = () => {
         return props.params.options.map((el) => {
