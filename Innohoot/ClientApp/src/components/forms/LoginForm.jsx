@@ -1,22 +1,22 @@
 ﻿import React from "react";
-import Input from "./Input";
 import SubmitButton from "./SubmitButton";
-import {UserContext} from "../../context/UserContext";
-import {useNavigate} from "react-router";
+import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router";
 
 import Hashes from 'jshashes';
 
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 export function LoginForm(props) {
-    
     const sha = new Hashes.SHA256
-    
+
     const [state, setState] = React.useState({
         id: ""
     })
     const [isProcessing, setIsProcessing] = React.useState(false)
     const navigate = useNavigate();
-    
+
     let handleSubmit = (event) => {
         event.preventDefault()
         let url = `${props.url}`
@@ -52,29 +52,51 @@ export function LoginForm(props) {
                 alert(reason)
             })
     }
-    
+
     let handleNameChange = (event) => {
         let newState = state
         newState.name = event.target.value
-        
-        setState({...newState});
+
+        setState({ ...newState });
     }
-    
+
     let handlePasswordChange = (event) => {
         let newState = state
         newState.password = event.target.value
-        
-        setState({...newState})
+
+        setState({ ...newState })
     }
-    
+
     return (
-        <form action="" className={"login-form"} onSubmit={handleSubmit}>
-            <div className={"form-wrapper"}>
-                <div className={"form-header"}>{props.formName}</div>
-                <Input changeHandler={handleNameChange} type={"text"} name={"name"} state={state.name} />
-                <Input changeHandler={handlePasswordChange} type={"password"} name={"password"} state={state.password} />
-                <SubmitButton /> {isProcessing? <span>Wait...</span> : null}
-            </div>
-        </form>
-    )
+        <>
+            <form action="" className={"login-form"} onSubmit={handleSubmit}>
+                <InputGroup className="mb-2">
+                    <InputGroup.Text id="basic-addon1"></InputGroup.Text>
+                    <Form.Control
+                        placeholder="Username"
+                        aria-label="Username"
+                        aria-describedby="basic-addon1"
+                        onChange={handleNameChange}
+                        state={state.name}
+                    />
+                </InputGroup>
+
+                <InputGroup className="mb-2">
+                    <InputGroup.Text id="basic-addon1"></InputGroup.Text>
+                    <Form.Control
+                        placeholder="Password"
+                        aria-label="Password"
+                        type="password"
+                        aria-describedby="basic-addon1"
+                        onChange={handlePasswordChange}
+                        state={state.password}
+                    />
+                </InputGroup>
+
+                <div className="d-grid gap-2">
+                    <SubmitButton variant="primary" size="lg"/>
+                </div>
+            </form>
+        </>
+    );
 }

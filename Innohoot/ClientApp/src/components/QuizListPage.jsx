@@ -2,18 +2,23 @@
 import Quiz from "./quizzes/Quiz";
 
 import { v4 as uuidv4 } from 'uuid';
-import {UserContext} from "../context/UserContext";
+import { UserContext } from "../context/UserContext";
+import WebNavbar from "./WebNavbar";
 
+import Container from "react-bootstrap/esm/Container";
+import Card from "react-bootstrap/esm/Card";
+import Button from "react-bootstrap/esm/Button";
+
+import "../css/App.css";
 
 export default function QuizListPage(props) {
-    
     const [quizList, setQuizList] = React.useState([])
     const userContext = React.useContext(UserContext)
     console.log(userContext)
     
     React.useEffect(() => {
         let url = `https://localhost:7006/Users/PollCollections?Id=${UserContext.getUserId()}`
-        
+
         fetch(url)
             .then(res => res.json())
             .then((data) => {
@@ -37,17 +42,17 @@ export default function QuizListPage(props) {
                         })
                     }
                 })
-                
+
                 setQuizList([...mappedQuizList])
             })
     }, [])
-    
+
     const renderQuizList = () => {
         return quizList.map(
             (quiz) => <Quiz params={quiz} changeHandler={handleChange} key={quiz.uuid} deleteHandler={deleteQuiz} submit={submitUpdate} />
         )
     }
-    
+
     const handleChange = (quiz) => {
         let newQuizList = quizList
         let index = newQuizList.findIndex((el) => el.uuid === quiz.uuid)
@@ -56,22 +61,21 @@ export default function QuizListPage(props) {
             console.log("no element found")
             return
         }
-        
+
         newQuizList[index] = quiz
         setQuizList([...newQuizList])
     }
-    
+
     const addQuiz = () => {
         let newQuizList = quizList
         let newQuiz = {
             uuid: uuidv4(),
-            quiz_name: "new quiz",
+            quiz_name: "New quiz name",
             questions: []
         }
-        
-        
+
         const createQuizUrl = "https://localhost:7006/PollCollections"
-        
+
         fetch(createQuizUrl, {
             method: "POST",
             headers: {
@@ -113,13 +117,11 @@ export default function QuizListPage(props) {
             .then(data => {
                 console.log(data)
                 newQuiz.uuid = data
-                newQuizList.push(newQuiz)
-                setQuizList([...newQuizList])
+
+                setQuizList([newQuiz, ...newQuizList])
             })
-        
-        
     }
-    
+
     const deleteQuiz = (quiz) => {
         let newQuizList = quizList
         let index = newQuizList.findIndex((el) => el.uuid === quiz.uuid)
@@ -128,9 +130,9 @@ export default function QuizListPage(props) {
             console.log("no element found")
             return
         }
-        
+
         let deleteQuizUrl = `https://localhost:7006/PollCollections?Id=${quiz.uuid}`
-        
+
         fetch(deleteQuizUrl, {
             method: "DELETE"
         })
@@ -142,12 +144,9 @@ export default function QuizListPage(props) {
             }, res => {
                 alert(res.text())
             })
-        
-        
     }
-    
-    const submitUpdate = (quiz) => {
 
+    const submitUpdate = (quiz) => {
         const updateQuizUrl = "https://localhost:7006/PollCollections"
 
         fetch(updateQuizUrl, {
@@ -184,18 +183,23 @@ export default function QuizListPage(props) {
                 console.log(data)
             })
     }
-    
+
     return (
-        <div style={{
-            margin: "20px"
-        }}>
-            <p>Your id: {UserContext.getUserId()}</p>
-            <div>
-                {renderQuizList()}
-            </div>
-            <div>
-                <button onClick={addQuiz}>+ Quiz</button>
-            </div>
-        </div>
+        <>
+            <WebNavbar message="Quiz List 🦉 Hooty"></WebNavbar>
+            <Container style={{ maxWidth: "1000px" }}>
+                <Card style={{ margin: "20px" }}>
+                    <Card.Header >
+                        <Button onClick={addQuiz} variant="outline-success"> + Add quiz</Button>
+                    </Card.Header>
+
+                    <Card.Body>
+                        { renderQuizList() }
+                    </Card.Body>
+                    
+                    <Card.Footer className="text-center text-muted">userID: {UserContext.getUserId()}</Card.Footer>
+                </Card>
+            </Container>
+        </>
     )
 }

@@ -1,9 +1,13 @@
 ﻿import React from "react";
+import Button from 'react-bootstrap/Button';
 
 export default function SubmitButton(props) {
-    
-    // ???
     return (
-        <input type="submit" className={"submit-button"} />
+        <Button
+            variant="outline-primary"
+            type="submit"
+            className={"submit-button"}>
+            Sign in
+        </Button>
     )
 }
