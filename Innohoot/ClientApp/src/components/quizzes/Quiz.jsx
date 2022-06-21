@@ -123,6 +123,7 @@ export default function Quiz(props) {
                         placeholder="New quiz name"
                         aria-label="New quiz name"
                         value={quizName}
+                        state={quizName}
                         onChange={handleQuizNameChange}
                         type="text"
                     />

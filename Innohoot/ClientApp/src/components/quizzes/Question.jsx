@@ -107,7 +107,7 @@ export default function Question(props) {
                     <InputGroup className="mb-2">
                         <Button
                             onClick={addAnswer}
-                            variant="outline-secondary">Add an answer...</Button>
+                            variant="outline-secondary">Add an answer</Button>
 
                         <Form.Control
                             type="text"

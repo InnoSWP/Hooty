@@ -1,6 +1,8 @@
 ﻿import React from "react";
 import {UserContext} from "../../context/UserContext";
 
+import ProgressBar from "react-bootstrap/ProgressBar"
+
 export default function HostQuestion (props) {
     
     const [results, setResults] = React.useState([])
@@ -33,14 +35,23 @@ export default function HostQuestion (props) {
             })
 
     }
-    
+
+    const countAllAnswers = () => {
+        return Object.keys(results).reduce((prev, curr) => {
+            prev += results[curr]
+            return prev
+        }, 0)
+
+    }
     
     const mapResults = () => {
+        let allAnswers = countAllAnswers()
+
         return props.params.options.map((el) => {
             return (
-                <div>
-                    <span>{el.name}: </span>
-                    <span>{results[el.id]}</span>
+                <div align="left">
+                    <h3>{el.name}: </h3>
+                    <ProgressBar now={ (results[el.id] / allAnswers) * 100} />
                 </div>
             )
         })
@@ -58,11 +69,8 @@ export default function HostQuestion (props) {
     
     return (
         <div>
-            <h2>{props.params.name}</h2>
-            <button onClick={props.nextPoll}>Next</button>
-            <div>
-                {mapResults()}
-            </div>
+            <h1> { props.params.name } </h1>
+            <div> { mapResults() } </div>
         </div>
     )
 }

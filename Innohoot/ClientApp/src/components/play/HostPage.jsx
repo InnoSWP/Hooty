@@ -1,7 +1,14 @@
 ﻿import React from "react";
-import PreQuiz from "./PreQuiz";
 import HostQuestion from "./HostQuestion";
 import {useNavigate} from "react-router";
+
+import WebNavbar from "../WebNavbar"
+
+import Container from "react-bootstrap/esm/Container";
+import Card from "react-bootstrap/esm/Card";
+import Button from "react-bootstrap/esm/Button";
+
+import "../../css/App.css";
 
 export default function HostPage(props) {
     
@@ -102,13 +109,40 @@ export default function HostPage(props) {
             })
     }
     
+    const isPreQuiz = () => {
+        return currentPollIndex === -1;
+    }
+    
     return (
         <>
-            {
-                currentPollIndex === -1 ? 
-                    <PreQuiz code={code} nextPoll={nextPoll} debugUrl={`https://localhost:44402/play/${sessionId}`}/> : 
-                    <HostQuestion params={quiz.polls[currentPollIndex]} nextPoll={nextPoll} sessionId={sessionId} />
-            }
+            <WebNavbar message="Host Page 🦉 Hooty"></WebNavbar>
+            <Container style={{ maxWidth: "1000px" }}>
+                <Card style={{ margin: "20px" }}>
+                    <Card.Header>
+                        { isPreQuiz() ?
+                            <Button
+                                onClick={nextPoll}
+                                variant="outline-success">Start quiz</Button>
+                                :
+                            <Button
+                                onClick={nextPoll}
+                                variant="outline-primary">Next question</Button>
+                        }
+                    </Card.Header>
+
+                    <Card.Body className="text-center">
+                        { isPreQuiz() ?
+                            <a href={`https://localhost:44402/play/${sessionId}`}>
+                                { <h1>Code: {code}</h1> }
+                            </a>
+                            :
+                            <HostQuestion params={quiz.polls[currentPollIndex]} sessionId={sessionId} />
+                        }
+                    </Card.Body>
+                    
+                    <Card.Footer className="text-center text-muted"></Card.Footer>
+                </Card>
+            </Container>
         </>
     )
 }

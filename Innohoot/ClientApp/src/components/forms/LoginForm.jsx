@@ -70,6 +70,8 @@ export function LoginForm(props) {
     return (
         <>
             <form action="" className={"login-form"} onSubmit={handleSubmit}>
+                <h3>{props.label}</h3>
+
                 <InputGroup className="mb-2">
                     <InputGroup.Text id="basic-addon1"></InputGroup.Text>
                     <Form.Control
@@ -94,7 +96,7 @@ export function LoginForm(props) {
                 </InputGroup>
 
                 <div className="d-grid gap-2">
-                    <SubmitButton variant="primary" size="lg"/>
+                    <SubmitButton label={props.label} variant="primary" size="lg"/>
                 </div>
             </form>
         </>

@@ -7,7 +7,7 @@ export default function SubmitButton(props) {
             variant="outline-primary"
             type="submit"
             className={"submit-button"}>
-            Sign in
+            {props.label}
         </Button>
     )
 }
