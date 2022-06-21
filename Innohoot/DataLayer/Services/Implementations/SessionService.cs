@@ -59,8 +59,8 @@ namespace Innohoot.DataLayer.Services.Implementations
 			var session = _mapper.Map<Session>(sessionDTO);
 			session.ActivePoll = null;
 
-			session.User = new User() { Id = session.UserId };
-			_db.Context.Entry(session.User).State = EntityState.Unchanged;
+			//session.User = new User() { Id = session.UserId };
+			//_db.Context.Entry(session.User).State = EntityState.Unchanged;
 
 			await _db.Add(session);
 			await _db.Save();
