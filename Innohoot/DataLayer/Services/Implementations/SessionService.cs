@@ -30,7 +30,10 @@ namespace Innohoot.DataLayer.Services.Implementations
 		public async Task<SessionDTO?> Get(Guid Id)
 		{
 			var session = await _db.Get<Session>(x => x.Id == Id).Include(x => x.ActivePoll).FirstOrDefaultAsync();
-			return _mapper.Map<SessionDTO>(session);
+			var result = _mapper.Map<SessionDTO>(session);
+
+			_db.Context.ChangeTracker.Clear();
+			return result;
 		}
 
 		public async Task Update(SessionDTO sessionDTO)
@@ -45,13 +48,19 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task<Guid> Create(SessionDTO sessionDTO)
 		{
-			_db.Context.ChangeTracker.Clear();
+
+			if (sessionDTO.IsActive)
+			{
+				var otherActiveSession = await _db.Get<Session>(x => x.IsActive && x.UserId == sessionDTO.UserId).ToListAsync();
+				if (otherActiveSession.Count > 0)
+					return new Guid();
+			}
 
 			var session = _mapper.Map<Session>(sessionDTO);
 			session.ActivePoll = null;
 
-			session.User = new User() { Id = session.UserId };
-			_db.Context.Entry(session.User).State = EntityState.Unchanged;
+			//session.User = new User() { Id = session.UserId };
+			//_db.Context.Entry(session.User).State = EntityState.Unchanged;
 
 			await _db.Add(session);
 			await _db.Save();

@@ -27,6 +27,8 @@ namespace Innohoot.DataLayer.Services.Implementations
 			pollCollection.User = new User() { Id = pollCollection.UserId };
 			_db.Context.Entry(pollCollection.User).State = EntityState.Unchanged;
 
+			pollCollection.Created = DateTime.Now.ToUniversalTime();
+
 			await _db.Add(pollCollection);
 			await _db.Save();
 			return pollCollection.Id;
@@ -40,7 +42,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task<PollCollectionDTO?> Get(Guid Id)
 		{
-			var pollCollection = await _db.Get<PollCollection>(Id).Include(x => x.Polls).ThenInclude(x => x.Options).FirstOrDefaultAsync();
+			var pollCollection = await _db.Get<PollCollection>(Id).Include(z => z.User).Include(x => x.Polls).ThenInclude(x => x.Options).OrderBy(x => x.Created).FirstOrDefaultAsync();
 			return _mapper.Map<PollCollectionDTO>(pollCollection);
 		}
 
