@@ -17,11 +17,20 @@ export function PlayPage(props) {
     const getPoll = () => {
         let url = `https://localhost:7006/polls/active?sessionId=${sessionId}`
         fetch(url)
-            .then(
-                res => res.json(), 
+            .then(res => {
+                    if (!res.ok) {
+                        res.text()
+                            .then(data => {
+                                alert(data)
+                                throw new Error(data)
+                            })
+                    } else {
+                        return res.json()
+                    }
+                },
                 res => {
-                alert(res.text())
-            })
+                    alert(res.text())
+                })
             .then(data => {
                 console.log(data)
                 if (data.id !== poll.id) {
@@ -48,11 +57,20 @@ export function PlayPage(props) {
                 sessionId: sessionId
             })
         })
-            .then(
-                res => res.json(), 
+            .then(res => {
+                    if (!res.ok) {
+                        res.text()
+                            .then(data => {
+                                alert(data)
+                                throw new Error(data)
+                            })
+                    } else {
+                        return res.json()
+                    }
+                },
                 res => {
-                alert(res.text())
-            })
+                    alert(res.text())
+                })
             .then(data => {
                 console.log(data)
                 setIsAnswered(true)

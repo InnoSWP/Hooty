@@ -10,9 +10,20 @@ export default function HostQuestion (props) {
     const getResultsCallback = () => {
         let url = `https://localhost:7006/Votes/voteresult?sessionId=${props.sessionId}&pollId=${props.params.id}`
         fetch(url)
-            .then(
-                res => res.json()
-            )
+            .then(res => {
+                    if (!res.ok) {
+                        res.text()
+                            .then(data => {
+                                alert(data)
+                                throw new Error(data)
+                            })
+                    } else {
+                        return res.json()
+                    }
+                },
+                res => {
+                    alert(res.text())
+                })
             .then(data => {
                 setResults({...data.voteDistribution})
                 console.log(`${props.params.id} ${data.pollId}`)

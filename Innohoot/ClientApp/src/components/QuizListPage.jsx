@@ -98,7 +98,17 @@ export default function QuizListPage(props) {
             })
         })
             .then(
-                res => res.json(),
+                res => {
+                    if (!res.ok) {
+                        res.text()
+                            .then(data => {
+                                alert(data)
+                                throw new Error(data)
+                            })
+                    } else {
+                        return res.json()
+                    }
+                },
                 res => {
                     alert(res.text())
                 })
