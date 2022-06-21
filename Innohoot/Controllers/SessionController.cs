@@ -22,15 +22,28 @@ namespace Innohoot.Controllers
 		}
 
 		[HttpGet("{id}")]
-		public async Task<IActionResult> Get(Guid Id)
+		public async Task<IActionResult> Get(string id)
 		{
-			return Ok(await _sessionService.Get(Id));
+			try
+			{
+				var guid = new Guid(id);
+				var sessionDTO = await _sessionService.Get(guid);
+				return Ok(sessionDTO);
+			}
+			catch
+			{
+				var accessCode = id;
+				var sessionDTO = await _sessionService.GetByAccessCode(accessCode);
+				return Ok(sessionDTO);
+			}
 		}
+
 		[HttpPost]
 		public async Task<IActionResult> Create(SessionDTO sessionDTO)
 		{
 			return Ok(await _sessionService.Create(sessionDTO));
 		}
+
 		[HttpPut]
 		public async Task<IActionResult> Update(SessionDTO sessionDTO)
 		{
@@ -49,9 +62,10 @@ namespace Innohoot.Controllers
 		/// Create new Session for User in base of pollCollection
 		/// </summary>
 		/// <param name="pollCollectionId"></param>
+		/// <param name="accessCode"></param>
 		/// <returns></returns>
 		[HttpGet("start")]
-		public async Task<IActionResult> StartSession(Guid pollCollectionId)
+		public async Task<IActionResult> StartSession(Guid pollCollectionId, string? accessCode)
 		{
 			var pollCollectionDTO = await _pollCollectionService.Get(pollCollectionId);
 
@@ -60,7 +74,9 @@ namespace Innohoot.Controllers
 				var sessionId = await _sessionService.Create(new SessionDTO()
 				{
 					UserId = pollCollectionDTO.UserId,
+					AccessCode = accessCode,
 					Name = pollCollectionDTO.Name,
+					StarTime = DateTime.Now.ToUniversalTime(),
 					Created = DateTime.Now.ToUniversalTime(),
 					PollCollectionId = pollCollectionDTO.Id,
 					IsActive = true
@@ -70,6 +86,7 @@ namespace Innohoot.Controllers
 			}
 			else return Problem();
 		}
+
 		[HttpPut("{sessionId}/close")]
 		public async Task<IActionResult> CloseSession(Guid sessionId)
 		{
@@ -78,6 +95,7 @@ namespace Innohoot.Controllers
 			{
 				sessionDTO.IsActive = false;
 				sessionDTO.ActivePollId = null;
+				sessionDTO.AccessCode = null;
 				await _sessionService.Update(sessionDTO);
 				return Ok();
 			}
