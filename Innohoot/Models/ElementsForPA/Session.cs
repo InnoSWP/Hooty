@@ -19,6 +19,7 @@ namespace Innohoot.Models.Activity
 		public PollCollection? PollCollection { get; set; }
 		public List<VoteRecord> VoteRecords { get; set; } = new List<VoteRecord>();
 		public bool IsActive { get; set; } = false;
-		public Poll? ActivePoll { get; set; }
+		public Guid? ActivePollId { get; set; } 
+		public Poll? ActivePoll { get; set; } = null;
 	}
 }
