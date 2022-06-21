@@ -1,4 +1,5 @@
-﻿using Innohoot.Models.ElementsForPA;
+﻿using System.ComponentModel.DataAnnotations;
+using Innohoot.Models.ElementsForPA;
 using Innohoot.Models.Identity;
 
 namespace Innohoot.Models.Activity
@@ -9,16 +10,36 @@ namespace Innohoot.Models.Activity
 	public class Session : IEntity
 	{
 		public Guid Id { get; set; }
+		/// <summary>
+		/// Alternate key for find session in database. It's temporary and needed to be delete after cloasing of the session 
+		/// </summary>
+		public string? AccessCode { get; set; }
+
+		[Required]
 		public Guid UserId { get; set; }
 		public User User { get; set; }
+
+		[Required]
 		public string Name { get; set; }
+
+		[Required]
 		public DateTime Created { get; set; }
+
+		[Required]
 		public DateTime? StarTime { get; set; }
+
 		public TimeSpan? Duration { get; set; }
+
+		[Required]
 		public Guid PollCollectionId { get; set; }
 		public PollCollection? PollCollection { get; set; }
+
 		public List<VoteRecord> VoteRecords { get; set; } = new List<VoteRecord>();
+
+		[Required]
 		public bool IsActive { get; set; } = false;
-		public Poll? ActivePoll { get; set; }
+
+		public Guid? ActivePollId { get; set; } 
+		public Poll? ActivePoll { get; set; } = null;
 	}
 }
