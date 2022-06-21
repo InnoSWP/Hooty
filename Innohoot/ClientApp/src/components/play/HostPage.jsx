@@ -50,14 +50,8 @@ export default function HostPage(props) {
         let nextPollIndex = currentPollIndex + 1
         
         if (nextPollIndex === quiz.polls.length) {
-            let url = `https://localhost:7006/Sessions/${sessionId}/close`
-            fetch(url, {method: "PUT"})
-                .then(res => {
-                    console.log(res.json())
-                    navigate("/quizlist")
-                }, res => {
-                    alert(res.text())
-                })
+            closeSession()
+            
             
             return
         }
@@ -73,6 +67,28 @@ export default function HostPage(props) {
                 console.log(`aaa: ${currentPollIndex}  ${ currentPollIndex < 0? "-1" : quiz.polls[currentPollIndex].id}`)
             }, res => {
                 alert(res.text())
+            })
+    }
+    
+    const closeSession = () => {
+        let url = `https://localhost:7006/Sessions/${sessionId}/close`
+        fetch(url, {method: "PUT"})
+            .then(res => {
+                console.log(res.json())
+                exportResults()
+                navigate("/quizlist")
+            }, res => {
+                alert(res.text())
+            })
+    }
+    
+    const exportResults = () => {
+        let url = `https://localhost:7006/votes/excel?sessionId=${sessionId}`
+        fetch(url)
+            .then(res => {
+                console.log(res)
+            })
+            .then(data => {
             })
     }
     

@@ -74,6 +74,8 @@ export default function Quiz(props) {
     const playQuiz = (id) => {
         let url = `https://localhost:7006/Sessions/start?pollCollectionId=${props.params.uuid}&userId=${UserContext.getUserId()}`
         
+        let code = generateCode()
+        
         fetch(url)
             .then(
                 res => res.json(), 
@@ -84,6 +86,20 @@ export default function Quiz(props) {
                 console.log(data)
                 navigate(`/host/${data}#${props.params.uuid}`)
             })
+    }
+    
+    const generateCode = () => {
+        let code = ""
+        let len = 8
+
+        const arr = new Uint8Array(8)
+        crypto.getRandomValues(arr)
+
+        for (let arrElement of arr) {
+            code += (arrElement % 10).toString()
+        }
+        
+        return code
     }
     
     

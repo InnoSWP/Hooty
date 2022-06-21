@@ -11,8 +11,6 @@ export default function QuizListPage(props) {
     const userContext = React.useContext(UserContext)
     console.log(userContext)
     
-    const user = "5f7d9001-2689-4d95-9c03-f7ea475df90b"
-    
     React.useEffect(() => {
         let url = `https://localhost:7006/Users/PollCollections?Id=${UserContext.getUserId()}`
         

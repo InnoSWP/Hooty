@@ -11,8 +11,14 @@ export function PlayPage(props) {
     })
     const [isAnswered, setIsAnswered] = React.useState()
     const [currentAnswer, setCurrentAnswer] = React.useState()
-    const [participantName, setParticipantName] = React.useState(null)
-    const [participantNameBuffer, setParticipantNameBuffer] = React.useState(null)
+    const [participant, setParticipant] = React.useState({
+        name: null,
+        buffer: ""
+    })
+    const [code, setCode] = React.useState({
+        value: null,
+        buffer: ""
+    })
     
     const getPoll = () => {
         let url = `https://localhost:7006/polls/active?sessionId=${sessionId}`
@@ -51,7 +57,7 @@ export function PlayPage(props) {
                 "Content-Type": "application/json;charset=utf-8"
             },
             body: JSON.stringify({
-                participantName: participantName,
+                participantName: participant.name,
                 optionId: currentAnswer,
                 id: poll.id,
                 sessionId: sessionId
@@ -82,8 +88,25 @@ export function PlayPage(props) {
     }
     
     const handleNameChange = [
-        (event) => setParticipantNameBuffer(event.target.value),
-        () => setParticipantName(participantNameBuffer)
+        (event) => setParticipant({
+            name: participant.name,
+            buffer: event.target.value
+        }),
+        () => setParticipant({
+            name: participant.buffer,
+            buffer: participant.buffer
+        })
+    ]
+    
+    const handleCodeChange = [
+        (event) => setCode({
+            value: code.value,
+            buffer: event.target.value
+        }),
+        () => setCode({
+            value: code.buffer,
+            buffer: code.buffer
+        })
     ]
     
     const renderOptions = () => {
@@ -106,18 +129,15 @@ export function PlayPage(props) {
                         )
                     })
                 }
-                <div>
-                    <button onClick={submitAnswer}>Submit</button>
-                </div>
+                { poll.options?.length > 0 ?
+                    <div>
+                        <button onClick={submitAnswer}>Submit</button>
+                    </div> : null
+                }
             </>
             
         )
     }
-    
-    React.useEffect(() => {
-        getPoll()
-        setIsAnswered(false)
-    }, [])
     
     const renderQuestion = () => {
         return (
@@ -125,7 +145,7 @@ export function PlayPage(props) {
                 <h2>{poll.name}</h2>
                 <div>
                     {
-                        isAnswered?
+                        isAnswered ?
                             <h3>Waiting for next question...</h3> :
                             renderOptions()
                     }
@@ -141,7 +161,7 @@ export function PlayPage(props) {
                     Name: 
                     <input type="text" 
                            id="name-form"
-                           value={participantName} 
+                           value={participant.buffer} 
                            onChange={handleNameChange[0]} 
                     />
                 </label>
@@ -150,10 +170,28 @@ export function PlayPage(props) {
         )
     }
     
+    const renderCodeForm = () => {
+        return (
+            <div>
+                <label htmlFor="code-form">
+                    Code:
+                    <input type="text"
+                           id="code-form"
+                           value={code.buffer}
+                           onChange={handleCodeChange[0]}
+                    />
+                </label>
+                <button onClick={handleCodeChange[1]}>Save</button>
+            </div>
+        )
+    }
+    
     return (
-        participantName === null? 
-            renderNameForm() : 
-            renderQuestion()
+        code.value === null ? 
+            renderCodeForm() :
+            participant.name === null ? 
+                renderNameForm() : 
+                renderQuestion()
     )
 
 }
