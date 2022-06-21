@@ -24,7 +24,7 @@ namespace Innohoot.Controllers
 		[HttpGet("voteresult")]
 		public async Task<IActionResult> GetVoteResult([FromQuery] Guid sessionId, [FromQuery] Guid pollId)
 		{
-			var result = await _voteRecordServiceService.GiveVoteResult(sessionId, pollId);
+			var result = await _voteRecordService.GiveVoteResult(sessionId, pollId);
 			return Ok(result);
 		}
 
