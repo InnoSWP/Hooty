@@ -71,6 +71,9 @@ namespace Innohoot.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AccessCode")
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("ActivePollId")
                         .HasColumnType("uuid");
 
@@ -91,12 +94,16 @@ namespace Innohoot.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("StarTime")
+                        .IsRequired()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccessCode")
+                        .IsUnique();
 
                     b.HasIndex("ActivePollId");
 

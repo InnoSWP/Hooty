@@ -34,7 +34,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 		}
 		public async Task<List<VoteRecord>> GiveVotesBySessionId(Guid sessionId)
 		{
-			return await _db.Get<VoteRecord>(x => x.Session.Id == sessionId).ToListAsync();
+			return await _db.Get<VoteRecord>(x => x.Session.Id == sessionId).Include(x => x.Option).ThenInclude(y => y.Poll).ToListAsync();
 		}
 		public async Task<List<VoteRecord>> GiveVotesBySessionAndPollId(Guid sessionId, Guid pollId)
 		{
@@ -46,22 +46,23 @@ namespace Innohoot.DataLayer.Services.Implementations
 		/// <param name="userId"></param>
 		/// <param name="pollId"></param>
 		/// <returns></returns>
-		public async Task<VoteResultDTO?> GiveVoteResult(Guid userId, Guid pollId)
+		public async Task<VoteResultDTO?> GiveVoteResult(Guid sessionId, Guid pollId)
 		{
-			var activeSession = await _db.Get<Session>(x => x.User.Id == userId && x.IsActive).FirstOrDefaultAsync();
+			var activeSession = await _db.Get<Session>(sessionId).FirstOrDefaultAsync();
 			if (activeSession is not null)
 			{
-				var voteRecords = await _db.Get<VoteRecord>(x => x.Session.Id == activeSession.Id)?.ToListAsync();
-				var poll = await _db.Get<Poll>(x => x.Id == pollId).Include(x => x.Options).FirstOrDefaultAsync();
+				var activePoll = await _db.Get<Poll>(x => x.Id == pollId).Include(x => x.Options).FirstOrDefaultAsync();
+				var voteRecords = await _db.Get<VoteRecord>(x => x.Session.Id == activeSession.Id && x.Option.Poll.Id == pollId)?.ToListAsync();
 				var voteResultDTO = new VoteResultDTO();
-				voteResultDTO.VoteDistribution = poll.Options?.ToDictionary(i => i.Id, i => 0);
+
+				voteResultDTO.VoteDistribution = activePoll.Options?.ToDictionary(i => i.Id, i => 0);
 
 				foreach (var vote in voteRecords)
 				{
 					voteResultDTO.VoteDistribution[vote.Option.Id] += 1;
 				}
 
-				voteResultDTO.PollId = poll.Id;
+				voteResultDTO.PollId = activePoll.Id;
 				return voteResultDTO;
 			}
 			return null;

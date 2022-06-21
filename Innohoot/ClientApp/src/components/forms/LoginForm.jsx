@@ -13,13 +13,16 @@ export function LoginForm(props) {
 
     const [state, setState] = React.useState({
         id: ""
-    });
+    })
+    const [isProcessing, setIsProcessing] = React.useState(false)
     const navigate = useNavigate();
 
     let handleSubmit = (event) => {
         event.preventDefault()
-        let url = "https://localhost:7006/Users"
-
+        let url = `${props.url}`
+        
+        setIsProcessing(true)
+        
         fetch(url, {
             method: "POST",
             headers: {
@@ -30,13 +33,23 @@ export function LoginForm(props) {
                 "PasswordHash": sha.hex(state.password)
             })
         })
-            .then(res => res.json())
+            .then(async (res) => {
+                let text = res.text()
+                if (res.ok) {
+                    return text
+                }
+                return Promise.reject(await text)
+            })
             .then(data => {
                 console.log(data)
-                UserContext.setUserId(data)
-
+                setIsProcessing(false)
+                
+                UserContext.setUserId(data.slice(1, -1))
                 navigate("/quizlist")
                 console.log(UserContext.getUserId())
+            }).catch((reason) => {
+                setIsProcessing(false)
+                alert(reason)
             })
     }
 

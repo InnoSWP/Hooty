@@ -25,7 +25,7 @@ export function LoginPage(props) {
                         </Card.Text>
 
                         <div style={{ padding: "20px" }}>
-                            <LoginForm formName={"Login"} userContext={props.userContext} />
+                            <LoginForm formName={"Login"} userContext={props.userContext} url={"https://localhost:7006/Users/login"} />
                         </div>
                     </Card.Body>
                     <Card.Footer className="text-muted">userID: {UserContext.getUserId()}</Card.Footer>
@@ -33,4 +33,15 @@ export function LoginPage(props) {
             </Container>
         </>
     );
+
+    /*
+                <div style={{
+                padding: "20px"
+            }}>
+                <p>Your id: {UserContext.getUserId()}</p>
+                <LoginForm formName={"Login"} userContext={props.userContext} url={"https://localhost:7006/Users/login"} />
+                <LoginForm formName={"Create user"} userContext={props.userContext} url={"https://localhost:7006/Users"} />
+            </div>
+
+            */
 }

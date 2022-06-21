@@ -76,29 +76,39 @@ export default function Quiz(props) {
     }
 
     const playQuiz = (id) => {
-        let url = `https://localhost/?pollCollectionId=${props.params.uuid}&userId=${UserContext.getUserId()}`
-
+        
+        let code = generateCode()
+        let url = `https://localhost:7006/Sessions/start?pollCollectionId=${props.params.uuid}&accessCode=${code}`
+        
         fetch(url)
-            .then(res => res.json())
+            .then(
+                res => res.json(), 
+                res => {
+                    alert(res.text())
+                })
             .then(data => {
                 console.log(data)
-                navigate(`/host/${data}`)
+                navigate(`/host/${data}?id=${props.params.uuid}&code=${code}`)
             })
+    }
+
+    const generateCode = () => {
+        let code = ""
+        let len = 8
+
+        const arr = new Uint8Array(8)
+        crypto.getRandomValues(arr)
+
+        for (let arrElement of arr) {
+            code += (arrElement % 10).toString()
+        }
+        
+        return code
     }
 
     return (
         <>
             <Card className="mb-2" style={{ padding: "15px" }}>
-                {/* <div>
-                    <button onClick={() => playQuiz(props.params.uuid)}>Play</button>
-                    <button onClick={() => props.submit({
-                        quiz_name: quizName,
-                        questions: questions,
-                        uuid: props.params.uuid
-                    })}>Save</button>
-                    <button onClick={() => props.deleteHandler(props.params)}>- Quiz</button>
-                </div> */}
-
                 <InputGroup className="mb-2">
                     <InputGroup.Text></InputGroup.Text>
                     <Form.Control

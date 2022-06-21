@@ -10,4 +10,5 @@ public interface ISessionService
 	Task<SessionDTO?> Get(Guid Id);
 	Task Update(SessionDTO sessionDTO);
 	Task<Guid> Create(SessionDTO sessionDTO);
+	Task<SessionDTO?> GetByAccessCode(string accessCode);
 }

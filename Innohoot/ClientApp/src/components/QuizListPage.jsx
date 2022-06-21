@@ -15,9 +15,7 @@ export default function QuizListPage(props) {
     const [quizList, setQuizList] = React.useState([])
     const userContext = React.useContext(UserContext)
     console.log(userContext)
-
-    const user = "5f7d9001-2689-4d95-9c03-f7ea475df90b"
-
+    
     React.useEffect(() => {
         let url = `https://localhost:7006/Users/PollCollections?Id=${UserContext.getUserId()}`
 
@@ -101,7 +99,21 @@ export default function QuizListPage(props) {
                 })
             })
         })
-            .then(res => res.json())
+            .then(
+                res => {
+                    if (!res.ok) {
+                        res.text()
+                            .then(data => {
+                                alert(data)
+                                throw new Error(data)
+                            })
+                    } else {
+                        return res.json()
+                    }
+                },
+                res => {
+                    alert(res.text())
+                })
             .then(data => {
                 console.log(data)
                 newQuiz.uuid = data
@@ -124,12 +136,13 @@ export default function QuizListPage(props) {
         fetch(deleteQuizUrl, {
             method: "DELETE"
         })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data)
+            .then(res => {
+
                 newQuizList.splice(index, 1)
 
                 setQuizList([...newQuizList])
+            }, res => {
+                alert(res.text())
             })
     }
 
@@ -161,7 +174,11 @@ export default function QuizListPage(props) {
                 })
             })
         })
-            .then(res => res.json())
+            .then(
+                res => res.json(),
+                res => {
+                    alert(res.text())
+                })
             .then(data => {
                 console.log(data)
             })
