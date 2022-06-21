@@ -24,18 +24,21 @@ namespace Innohoot.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(string id)
 		{
+			SessionDTO sessionDTO = null;
 			try
 			{
 				var guid = new Guid(id);
-				var sessionDTO = await _sessionService.Get(guid);
-				return Ok(sessionDTO);
+				sessionDTO = await _sessionService.Get(guid);
 			}
 			catch
 			{
 				var accessCode = id;
-				var sessionDTO = await _sessionService.GetByAccessCode(accessCode);
-				return Ok(sessionDTO);
+				sessionDTO = await _sessionService.GetByAccessCode(accessCode);
 			}
+
+			if (sessionDTO == null)
+				return Problem("Session not found");
+			else return Ok(sessionDTO);
 		}
 
 		[HttpPost]
