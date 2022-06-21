@@ -72,9 +72,9 @@ export default function Quiz(props) {
     }
     
     const playQuiz = (id) => {
-        let url = `https://localhost:7006/Sessions/start?pollCollectionId=${props.params.uuid}&userId=${UserContext.getUserId()}`
         
         let code = generateCode()
+        let url = `https://localhost:7006/Sessions/start?pollCollectionId=${props.params.uuid}&accessCode=${code}`
         
         fetch(url)
             .then(
@@ -84,7 +84,7 @@ export default function Quiz(props) {
                 })
             .then(data => {
                 console.log(data)
-                navigate(`/host/${data}#${props.params.uuid}`)
+                navigate(`/host/${data}?id=${props.params.uuid}&code=${code}`)
             })
     }
     

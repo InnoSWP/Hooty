@@ -15,10 +15,6 @@ export function PlayPage(props) {
         name: null,
         buffer: ""
     })
-    const [code, setCode] = React.useState({
-        value: null,
-        buffer: ""
-    })
     
     const getPoll = () => {
         let url = `https://localhost:7006/polls/active?sessionId=${sessionId}`
@@ -98,17 +94,6 @@ export function PlayPage(props) {
         }
     ]
     
-    const handleCodeChange = [
-        (event) => setCode({
-            value: code.value,
-            buffer: event.target.value
-        }),
-        () => setCode({
-            value: code.buffer,
-            buffer: code.buffer
-        })
-    ]
-    
     const renderOptions = () => {
         return (
             <>
@@ -170,25 +155,7 @@ export function PlayPage(props) {
         )
     }
     
-    const renderCodeForm = () => {
-        return (
-            <div>
-                <label htmlFor="code-form">
-                    Code:
-                    <input type="text"
-                           id="code-form"
-                           value={code.buffer}
-                           onChange={handleCodeChange[0]}
-                    />
-                </label>
-                <button onClick={handleCodeChange[1]}>Save</button>
-            </div>
-        )
-    }
-    
     return (
-        code.value === null ? 
-            renderCodeForm() :
             participant.name === null ? 
                 renderNameForm() : 
                 renderQuestion()

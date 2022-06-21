@@ -5,8 +5,15 @@ import {useNavigate} from "react-router";
 
 export default function HostPage(props) {
     
-    const sessionId = document.location.pathname.replace("/host/", "")
-    const pollCollectionId = document.location.hash.substr(1)
+    const sessionURL = new URL(document.location)
+    
+    const sessionId = sessionURL.pathname.replace("/host/", "")
+    const pollCollectionId = sessionURL.searchParams.get("id")
+    const code = sessionURL.searchParams.get("code")
+
+    console.log(sessionId)
+    console.log(pollCollectionId)
+    console.log(code)
     
     const navigate = useNavigate()
     
@@ -99,7 +106,7 @@ export default function HostPage(props) {
         <>
             {
                 currentPollIndex === -1 ? 
-                    <PreQuiz code={"abcde"} nextPoll={nextPoll} debugUrl={`https://localhost:44402/play/${sessionId}`}/> : 
+                    <PreQuiz code={code} nextPoll={nextPoll} debugUrl={`https://localhost:44402/play/${sessionId}`}/> : 
                     <HostQuestion params={quiz.polls[currentPollIndex]} nextPoll={nextPoll} sessionId={sessionId} />
             }
         </>
