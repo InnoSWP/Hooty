@@ -36,6 +36,17 @@ namespace Innohoot.DataLayer.Services.Implementations
 			return result;
 		}
 
+		public async Task<SessionDTO?> GetByAccessCode(string accessCode)
+		{
+			await _db.Get<Session>(x => x.AccessCode == accessCode).LoadAsync();
+
+			var session = await _db.Get<Session>(x => x.AccessCode == accessCode).FirstOrDefaultAsync();
+			var sessionDTO = _mapper.Map<SessionDTO>(session);
+
+			_db.Context.ChangeTracker.Clear();
+			return sessionDTO;
+		}
+
 		public async Task Update(SessionDTO sessionDTO)
 		{
 			var session = _mapper.Map<Session>(sessionDTO);
