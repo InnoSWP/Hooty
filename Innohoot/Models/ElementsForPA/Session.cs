@@ -9,6 +9,10 @@ namespace Innohoot.Models.Activity
 	public class Session : IEntity
 	{
 		public Guid Id { get; set; }
+		/// <summary>
+		/// Alternate key for find session in database. It's temporary and needed to be delete after cloasing of the session 
+		/// </summary>
+		public string? AccessCode { get; set; }
 		public Guid UserId { get; set; }
 		public User User { get; set; }
 		public string Name { get; set; }
