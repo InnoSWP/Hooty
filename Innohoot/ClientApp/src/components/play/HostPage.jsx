@@ -87,8 +87,11 @@ export default function HostPage(props) {
         fetch(url)
             .then(res => {
                 console.log(res)
+                return res.blob()
             })
             .then(data => {
+                let file = window.URL.createObjectURL(data);
+                window.location.assign(file);
             })
     }
     

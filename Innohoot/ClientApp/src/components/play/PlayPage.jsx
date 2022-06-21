@@ -24,12 +24,9 @@ export function PlayPage(props) {
         let url = `https://localhost:7006/polls/active?sessionId=${sessionId}`
         fetch(url)
             .then(res => {
-                    if (!res.ok) {
-                        res.text()
-                            .then(data => {
-                                alert(data)
-                                throw new Error(data)
-                            })
+                    console.log(res)
+                    if (res.status === 204) {
+                        return res.text()
                     } else {
                         return res.json()
                     }
@@ -92,10 +89,13 @@ export function PlayPage(props) {
             name: participant.name,
             buffer: event.target.value
         }),
-        () => setParticipant({
-            name: participant.buffer,
-            buffer: participant.buffer
-        })
+        () => {
+            setParticipant({
+                name: participant.buffer,
+                buffer: participant.buffer
+            })
+            getPoll()
+        }
     ]
     
     const handleCodeChange = [
