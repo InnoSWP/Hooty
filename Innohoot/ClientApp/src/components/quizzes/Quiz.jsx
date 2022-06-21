@@ -75,7 +75,15 @@ export default function Quiz(props) {
         })
     }
 
+    const saveQuiz = () => props.submit({
+        quiz_name: quizName,
+        questions: questions,
+        uuid: props.params.uuid
+    })
+    
     const playQuiz = (id) => {
+
+        saveQuiz()
         
         let code = generateCode()
         let url = `https://localhost:7006/Sessions/start?pollCollectionId=${props.params.uuid}&accessCode=${code}`
@@ -124,11 +132,7 @@ export default function Quiz(props) {
                         variant="outline-success">Play</Button>
 
                     <Button
-                        onClick={() => props.submit({
-                            quiz_name: quizName,
-                            questions: questions,
-                            uuid: props.params.uuid
-                        })}
+                        onClick={saveQuiz}
                         variant="outline-secondary">Save</Button>
 
                     <Button

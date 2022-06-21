@@ -1,5 +1,7 @@
 ﻿import React from "react";
 
+import { v4 as uuidv4 } from 'uuid'
+
 export function PlayPage(props) {
 
     const sessionId = document.location.pathname.replace("/play/", "")
@@ -52,7 +54,7 @@ export function PlayPage(props) {
             body: JSON.stringify({
                 participantName: participant.name,
                 optionId: currentAnswer,
-                id: poll.id,
+                id: uuidv4(),
                 sessionId: sessionId
             })
         })
