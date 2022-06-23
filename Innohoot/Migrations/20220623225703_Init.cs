@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Innohoot.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -87,10 +87,11 @@ namespace Innohoot.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    AccessCode = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    StarTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    StarTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Duration = table.Column<TimeSpan>(type: "interval", nullable: true),
                     PollCollectionId = table.Column<Guid>(type: "uuid", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
@@ -158,6 +159,12 @@ namespace Innohoot.Migrations
                 name: "IX_Polls_PollCollectionId",
                 table: "Polls",
                 column: "PollCollectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sessions_AccessCode",
+                table: "Sessions",
+                column: "AccessCode",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sessions_ActivePollId",
