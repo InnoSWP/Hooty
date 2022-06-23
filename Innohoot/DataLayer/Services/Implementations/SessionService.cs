@@ -62,16 +62,21 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 			if (sessionDTO.IsActive)
 			{
-				var otherActiveSession = await _db.Get<Session>(x => x.IsActive && x.UserId == sessionDTO.UserId).ToListAsync();
-				if (otherActiveSession.Count > 0)
-					return new Guid();
+				var userActiveSessions = await _db.Get<Session>(x => x.IsActive && x.UserId == sessionDTO.UserId).ToListAsync();
+
+				foreach (var activeSession in userActiveSessions)
+				{
+					activeSession.IsActive = false;
+					activeSession.ActivePollId = null;
+					await _db.Update(activeSession);
+				}
+
+				await _db.Save();
 			}
 
 			var session = _mapper.Map<Session>(sessionDTO);
 			session.ActivePoll = null;
-
-			//session.User = new User() { Id = session.UserId };
-			//_db.Context.Entry(session.User).State = EntityState.Unchanged;
+			
 
 			await _db.Add(session);
 			await _db.Save();
