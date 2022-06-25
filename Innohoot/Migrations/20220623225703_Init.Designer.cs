@@ -12,13 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Innohoot.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-<<<<<<<< HEAD:Innohoot/Migrations/20220620083334_init.Designer.cs
-    [Migration("20220620083334_init")]
-    partial class init
-========
-    [Migration("20220621120654__48_1")]
-    partial class _48_1
->>>>>>>> master:Innohoot/Migrations/20220621120654__48_1.Designer.cs
+    [Migration("20220623225703_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
