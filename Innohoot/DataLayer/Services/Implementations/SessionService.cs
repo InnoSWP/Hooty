@@ -76,7 +76,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 			var session = _mapper.Map<Session>(sessionDTO);
 			session.ActivePoll = null;
-			
+
 
 			await _db.Add(session);
 			await _db.Save();
