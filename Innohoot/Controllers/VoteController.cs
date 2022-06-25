@@ -1,8 +1,8 @@
-﻿using Innohoot.DataLayer.Services.Implementations;
+﻿using ClosedXML.Excel;
+using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
-using ClosedXML.Excel;
 
 namespace Innohoot.Controllers
 {
@@ -56,7 +56,7 @@ namespace Innohoot.Controllers
 				using (MemoryStream stream = new MemoryStream())
 				{
 					wb.SaveAs(stream);
-				//	wb.SaveAs("Report.xlsx");
+					//	wb.SaveAs("Report.xlsx");
 					return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "VoteResult.xlsx");
 				}
 			}

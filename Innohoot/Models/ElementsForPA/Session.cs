@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Innohoot.Models.ElementsForPA;
+﻿using Innohoot.Models.ElementsForPA;
 using Innohoot.Models.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Innohoot.Models.Activity
 {
@@ -39,7 +39,7 @@ namespace Innohoot.Models.Activity
 		[Required]
 		public bool IsActive { get; set; } = false;
 
-		public Guid? ActivePollId { get; set; } 
+		public Guid? ActivePollId { get; set; }
 		public Poll? ActivePoll { get; set; } = null;
 	}
 }
