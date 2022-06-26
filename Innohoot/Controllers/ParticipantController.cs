@@ -1,8 +1,6 @@
-﻿using Constants;
-
+using Constants;
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
@@ -54,7 +52,7 @@ namespace Innohoot.Controllers
 					var particapantView = new ParticapantView();
 					particapantView.ActionEnum = ParticipantActionEnum.SubmitVote;
 
-					particapantView.Poll = await _pollService.Get((Guid)session.ActivePollId);
+					particapantView.Poll = await _pollService.Get((Guid) session.ActivePollId);
 
 
 					// to not show answer
