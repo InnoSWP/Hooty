@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Innohoot.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220625143217_ChangedPoll")]
-    partial class ChangedPoll
+    [Migration("20220626144805_Quesstion")]
+    partial class Quesstion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,6 +30,9 @@ namespace Innohoot.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("IsAnswer")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -51,15 +54,15 @@ namespace Innohoot.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<List<Guid>>("AnswerId")
-                        .HasColumnType("uuid[]");
-
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("PollCollectionId")
                         .HasColumnType("uuid");
@@ -98,6 +101,10 @@ namespace Innohoot.Migrations
 
                     b.Property<Guid>("PollCollectionId")
                         .HasColumnType("uuid");
+
+                    b.Property<List<Guid>>("ShowResultPoll")
+                        .IsRequired()
+                        .HasColumnType("uuid[]");
 
                     b.Property<DateTime?>("StarTime")
                         .IsRequired()

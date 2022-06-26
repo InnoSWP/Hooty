@@ -29,6 +29,9 @@ namespace Innohoot.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("IsAnswer")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -49,15 +52,15 @@ namespace Innohoot.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<List<Guid>>("AnswerId")
-                        .HasColumnType("uuid[]");
-
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("PollCollectionId")
                         .HasColumnType("uuid");
@@ -96,6 +99,10 @@ namespace Innohoot.Migrations
 
                     b.Property<Guid>("PollCollectionId")
                         .HasColumnType("uuid");
+
+                    b.Property<List<Guid>>("ShowResultPoll")
+                        .IsRequired()
+                        .HasColumnType("uuid[]");
 
                     b.Property<DateTime?>("StarTime")
                         .IsRequired()
