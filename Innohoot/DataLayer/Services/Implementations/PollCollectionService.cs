@@ -42,7 +42,14 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task<PollCollectionDTO?> Get(Guid Id)
 		{
-			var pollCollection = await _db.Get<PollCollection>(Id).Include(z => z.User).Include(x => x.Polls).ThenInclude(x => x.Options).OrderBy(x => x.Created).FirstOrDefaultAsync();
+			var pollCollection = await _db.Get<PollCollection>(Id)
+				.Include(z => z.User)
+				.Include(x => x.Polls.OrderBy(p => p.OrderNumber))
+				.ThenInclude(x => x.Options)
+				.OrderBy(x => x.Created)
+				.FirstOrDefaultAsync();
+
+			_db.Context.ChangeTracker.Clear();
 			return _mapper.Map<PollCollectionDTO>(pollCollection);
 		}
 
@@ -59,7 +66,8 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 			_db.Context.Entry(pollCollectionInDB).CurrentValues.SetValues(pollCollection);
 
-			var pollsInDb = pollCollectionInDB.Polls;
+			var pollsInDb = pollCollectionInDB.Polls.OrderBy( p => p.OrderNumber);
+			int counter = 0;
 			foreach (var pollInDB in pollsInDb)
 			{
 				var poll = pollCollection.Polls.FirstOrDefault(p => p.Id == pollInDB.Id);
@@ -67,6 +75,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 				if (poll is not null)
 				{
 					_db.Context.Entry(pollInDB).CurrentValues.SetValues(poll);
+					pollInDB.OrderNumber=counter++;
 
 					#region Options updating/adding/deleting
 
@@ -104,6 +113,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 			{
 				if (pollCollectionInDB.Polls.All(p => p.Id != poll.Id))
 				{
+					poll.OrderNumber = counter++;
 					await _db.Add(poll);
 					pollCollectionInDB.Polls.Add(poll);
 				}
@@ -128,7 +138,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 		public async Task<List<PollCollectionDTO>> GetAllPollCollectionByUserId(Guid userId)
 		{
 			List<PollCollection> collections = await _db.Get<PollCollection>(x => x.UserId.Equals(userId))
-			.Include(px => px.Polls)
+			.Include(px => px.Polls.OrderBy(p => p.OrderNumber))
 			.ThenInclude(p => p.Options)
 			.ToListAsync();
 

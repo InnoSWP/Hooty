@@ -1,4 +1,5 @@
-﻿using Innohoot.DataLayer.Services.Implementations;
+﻿using System.Net.WebSockets;
+using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,13 @@ namespace Innohoot.Controllers
 	{
 		private readonly IPollService _pollService;
 		private readonly ISessionService _sessionService;
+		private readonly IVoteRecordService _voteRecordService;
 
-		public PollController(IPollService pollService, ISessionService sessionService)
+		public PollController(IPollService pollService, ISessionService sessionService, IVoteRecordService voteRecordService)
 		{
 			_pollService = pollService;
 			_sessionService = sessionService;
+			_voteRecordService = voteRecordService;
 		}
 
 		[HttpGet]
@@ -55,21 +58,6 @@ namespace Innohoot.Controllers
 			{
 				return Problem("No such poll or session");
 			}
-		}
-
-		[HttpGet("active")]
-		public async Task<IActionResult> GetSessionActivePoll(Guid sessionId)
-		{
-			var session = await _sessionService.Get(sessionId);
-			var pollId = session.ActivePollId;
-
-			if (pollId is not null)
-			{
-				var poll = await _pollService.Get((Guid)pollId);
-				return Ok(poll);
-			}
-			//have no active poll
-			else return NoContent();
 		}
 	}
 }

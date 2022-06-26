@@ -41,5 +41,6 @@ namespace Innohoot.Models.Activity
 
 		public Guid? ActivePollId { get; set; }
 		public Poll? ActivePoll { get; set; } = null;
+		public List<Guid> ShowResultPoll { get; set; } = new List<Guid>();
 	}
 }

@@ -99,6 +99,7 @@ namespace Innohoot.Controllers
 				sessionDTO.IsActive = false;
 				sessionDTO.ActivePollId = null;
 				sessionDTO.AccessCode = null;
+				sessionDTO.ShowResultPoll = new List<Guid>();
 				await _sessionService.Update(sessionDTO);
 				return Ok();
 			}
