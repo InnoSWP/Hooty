@@ -13,5 +13,6 @@ namespace Innohoot.Models.Activity
 		[Required]
 		public PollCollection PollCollection { get; set; }
 		public List<Option> Options { get; set; }
+		public int OrderNumber { get; set; } = 0;
 	}
 }

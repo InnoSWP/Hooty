@@ -12,8 +12,8 @@ public interface IVoteRecordService
 	/// <returns></returns>
 	Task<Guid> AddVoteRecord(VoteRecordDTO voteRecordDTO);
 
-	Task<List<VoteRecord>> GiveVotesBySessionId(Guid sessionId);
-	Task<List<VoteRecord>> GiveVotesBySessionAndPollId(Guid sessionId, Guid pollId);
+	Task<List<VoteRecord>> GetVotesBySessionId(Guid sessionId);
+	Task<List<VoteRecord>> GetVotesBySessionAndPollId(Guid sessionId, Guid pollId);
 
 	/// <summary>
 	/// Select voteRecord by poll and active session and return data in dictionary 
@@ -21,5 +21,8 @@ public interface IVoteRecordService
 	/// <param name="userId"></param>
 	/// <param name="pollId"></param>
 	/// <returns></returns>
-	Task<VoteResultDTO?> GiveVoteResult(Guid userId, Guid pollId);
+	Task<VoteResultDTO?> GetVoteResult(Guid userId, Guid pollId);
+
+	Task<List<VoteRecord>> GetVotesByParticipant(Guid sessionId, string participantName);
+	Task<VoteRecord?> GetVoteByParticipant(Guid pollId, string participantName);
 }

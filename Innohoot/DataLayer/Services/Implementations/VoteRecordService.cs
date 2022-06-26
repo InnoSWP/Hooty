@@ -32,26 +32,59 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 			return voteRecord.Id;
 		}
-		public async Task<List<VoteRecord>> GiveVotesBySessionId(Guid sessionId)
+
+		public async Task<List<VoteRecord>> GetVotesBySessionId(Guid sessionId)
 		{
-			return await _db.Get<VoteRecord>(x => x.Session.Id == sessionId).Include(x => x.Option).ThenInclude(y => y.Poll).ToListAsync();
+			return await _db.Get<VoteRecord>(x => x.Session.Id == sessionId)
+				.Include(x => x.Option)
+				.ThenInclude(y => y.Poll)
+				.ToListAsync();
 		}
-		public async Task<List<VoteRecord>> GiveVotesBySessionAndPollId(Guid sessionId, Guid pollId)
+
+		public async Task<List<VoteRecord>> GetVotesByParticipant(Guid sessionId, string participantName)
 		{
-			return await _db.Get<VoteRecord>(x => (x.Session.Id == sessionId && x.Option.PollId == pollId)).ToListAsync();
+			var session = await _db.Get<Session>(sessionId).FirstOrDefaultAsync();
+
+			return await _db.Get<VoteRecord>(x => x.Session.Id == sessionId && x.ParticipantName == participantName)
+				.Include(x => x.Option)
+				.ThenInclude(y => y.Poll)
+				.ToListAsync();
 		}
+
+		public async Task<VoteRecord?> GetVoteByParticipant(Guid pollId, string participantName)
+		{
+			var session = await _db.Get<Poll>(pollId).FirstOrDefaultAsync();
+
+			return await _db.Get<VoteRecord>(x => x.Option.PollId == pollId && x.ParticipantName == participantName)
+				.Include(x => x.Option)
+				.ThenInclude(y => y.Poll)
+				.FirstOrDefaultAsync();
+		}
+
+		public async Task<List<VoteRecord>> GetVotesBySessionAndPollId(Guid sessionId, Guid pollId)
+		{
+			return await _db.Get<VoteRecord>(x => (x.Session.Id == sessionId && x.Option.PollId == pollId))
+				.OrderBy(o => o.Option.Poll.OrderNumber)
+				.ThenBy(v => v.ParticipantName)
+				.ToListAsync();
+		}
+
 		/// <summary>
 		/// Select voteRecord by poll and active session and return data in dictionary 
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <param name="pollId"></param>
 		/// <returns></returns>
-		public async Task<VoteResultDTO?> GiveVoteResult(Guid sessionId, Guid pollId)
+		public async Task<VoteResultDTO?> GetVoteResult(Guid sessionId, Guid pollId)
 		{
 			var activeSession = await _db.Get<Session>(sessionId).FirstOrDefaultAsync();
+
 			if (activeSession is not null)
 			{
-				var activePoll = await _db.Get<Poll>(x => x.Id == pollId).Include(x => x.Options).FirstOrDefaultAsync();
+				var activePoll = await _db.Get<Poll>(x => x.Id == pollId)
+					.Include(x => x.Options)
+					.FirstOrDefaultAsync();
+
 				var voteRecords = await _db.Get<VoteRecord>(x => x.Session.Id == activeSession.Id && x.Option.Poll.Id == pollId)?.ToListAsync();
 				var voteResultDTO = new VoteResultDTO();
 
@@ -63,8 +96,10 @@ namespace Innohoot.DataLayer.Services.Implementations
 				}
 
 				voteResultDTO.PollId = activePoll.Id;
+				_db.Context.ChangeTracker.Clear();
 				return voteResultDTO;
 			}
+			_db.Context.ChangeTracker.Clear();
 			return null;
 		}
 	}
