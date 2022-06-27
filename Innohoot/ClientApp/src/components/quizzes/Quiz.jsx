@@ -9,11 +9,13 @@ import Card from 'react-bootstrap/Card';
 import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router";
+import FetchSpinner from "../FetchSpinner";
 
 export default function Quiz(props) {
 
     const [questions, setQuestions] = React.useState(props.params.questions)
     const [quizName, setQuizName] = React.useState(props.params.quiz_name)
+    const [isProcessing, setIsProcessing] = React.useState(false)
 
     const navigate = useNavigate()
 
@@ -49,12 +51,15 @@ export default function Quiz(props) {
         let newQuestions = questions
         let index = newQuestions.findIndex((el) => el.uuid === question.uuid)
 
+        console.log(`question_text in handler: ${question.question_text}`)
+        console.log(question)
+
         if (index === -1) {
             console.log("no element found")
             return
         }
 
-        newQuestions[index] = question
+        newQuestions[index] = {...question}
 
         setQuestions([...newQuestions])
 
@@ -85,6 +90,8 @@ export default function Quiz(props) {
 
         saveQuiz()
         
+        setIsProcessing(true)
+        
         let code = generateCode()
         let url = `https://localhost:7006/Sessions/start?pollCollectionId=${props.params.uuid}&accessCode=${code}`
         
@@ -95,9 +102,13 @@ export default function Quiz(props) {
                     alert(res.text())
                 })
             .then(data => {
+                setIsProcessing(false)
                 console.log(data)
                 navigate(`/host/${data}?id=${props.params.uuid}&code=${code}`)
-            })
+            }).catch((err) => {
+                setIsProcessing(false)
+                alert(err)
+        })
     }
 
     const generateCode = () => {
@@ -116,6 +127,7 @@ export default function Quiz(props) {
 
     return (
         <>
+            <FetchSpinner status={isProcessing} />
             <Card className="mb-2" style={{ padding: "15px" }}>
                 <InputGroup className="mb-2">
                     <InputGroup.Text></InputGroup.Text>

@@ -7,6 +7,7 @@ import Hashes from 'jshashes';
 
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import FetchSpinner from "../FetchSpinner";
 
 export function LoginForm(props) {
     const sha = new Hashes.SHA256
@@ -15,7 +16,7 @@ export function LoginForm(props) {
         id: ""
     })
     const [isProcessing, setIsProcessing] = React.useState(false)
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     let handleSubmit = (event) => {
         event.preventDefault()
@@ -69,6 +70,7 @@ export function LoginForm(props) {
 
     return (
         <>
+            <FetchSpinner status={isProcessing} />
             <form action="" className={"login-form"} onSubmit={handleSubmit}>
                 <h3>{props.label}</h3>
 

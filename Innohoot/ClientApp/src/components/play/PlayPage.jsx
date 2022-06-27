@@ -44,7 +44,7 @@ export function PlayPage(props) {
                     alert(res.text())
                 })
             .then(data => {
-                console.log(data)
+                console.log(`${data.id} ${poll.id}`)
                 if (data.id !== poll.id) {
                     setIsAnswered(false)
                     setPoll({ ...data })
