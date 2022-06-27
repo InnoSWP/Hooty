@@ -1,7 +1,9 @@
 # Hooty - live polling for Google Slides 
 Hooty is a web-based application for quizzes and live polling which can be embedded within Google Slides
 
-https://user-images.githubusercontent.com/43009678/175936167-fac93d45-9ad0-4537-998a-2e2442c67f53.mp4
+[![MIT License](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
+![C#](https://img.shields.io/badge/C%23-10.0-blue.svg)
+![.NET](https://img.shields.io/badge/.net-%3E%3D6.0-blue.svg)
 
 ## How to run:
 
