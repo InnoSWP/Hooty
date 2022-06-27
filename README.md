@@ -1,3 +1,20 @@
+# Hooty - live polling for Google Slides 
+Hooty is a web-based application for quizzes and live polling which can be embedded within Google Slides
+
+## How to run:
+
+## Requirements:
+- Back-end:
+  - NET 6.0 runtime
+  - Visual Studio 2022 (or other versions compatable with NET 6.0 package)
+  - Postgresql Server application
+- Front-end:
+  - Node.js
+  - Installed dependencies from package.json
+- Plugin-intergration:
+  - Node.js
+  - Installed dependencies from package.json
+
 # This project is codenamed Hooty.
 It is analog of kahoot/mentimeter. Web-based aplication for creating interactive polls and quizes with ability integrating in presentation.
 
