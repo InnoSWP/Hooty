@@ -18,5 +18,6 @@
 		public Guid PollCollectionId { get; set; }
 		public bool IsActive { get; set; } = false;
 		public Guid? ActivePollId { get; set; }
+		public List<string>? ParticipantList { get; set; }
 	}
 }
