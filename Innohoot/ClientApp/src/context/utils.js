@@ -1,5 +1,4 @@
-﻿
-let localStorageKey = "hootyUserId"
+﻿const localStorageKey = "hootyUserId"
 
 export let UserContext = {
     getUserId: () => {

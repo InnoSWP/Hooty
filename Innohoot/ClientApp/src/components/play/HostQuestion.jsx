@@ -2,6 +2,7 @@
 
 import ProgressBar from "react-bootstrap/ProgressBar"
 import {Col, Container, Row} from "react-bootstrap";
+import {Card} from "react-bootstrap";
 
 export default function HostQuestion (props) {
     
@@ -49,18 +50,18 @@ export default function HostQuestion (props) {
         let allAnswers = countAllAnswers()
 
         return (
-            <Container>
+            <Container >
                 {
                     props.params.options.map((el) => {
                         return (
-                            <Row align="left">
-                                <Col className="w-25">
-                                    <h3>
+                            <Row align="left" className={"m-3"} >
+                                <Col xs={6}>
+                                    <span className={"fs-4"}>
                                         {el.name}:
-                                    </h3>
+                                    </span>
                                 </Col>
-                                <Col>
-                                    <ProgressBar now={ allAnswers !== 0 ? (results[el.id] / allAnswers) * 100 : 0} />
+                                <Col xs={6}>
+                                    <ProgressBar className={"h-100"} now={ allAnswers !== 0 ? (results[el.id] / allAnswers) * 100 : 0} />
                                 </Col>
                                 
                             </Row>
@@ -73,17 +74,38 @@ export default function HostQuestion (props) {
     
     const mapOptions = () => {
         let options = []
-        for (let i = 0; i < props.params.options.length - 1; i += 2) {
+        const len = props.params.options.length
+        for (let i = 0; i < len - 1; i += 2) {
             const row = <Row>
                 <Col className="m-3">
-                    {props.params.options[i].name}
+                    <Card border={"primary"} className={"p-2"}>
+                        <span className={"fs-3"}>
+                            {props.params.options[i].name}
+                        </span>
+                    </Card>
                 </Col>
                 <Col className="m-3">
-                    {props.params.options[i + 1].name}
+                    <Card border={"primary"} className={"p-2"}>
+                        <span className={"fs-3"}>
+                            {props.params.options[i + 1].name}
+                        </span>
+                    </Card>
                 </Col>
             </Row>
             
             options.push(row)
+        }
+        if (len % 2 === 1) {
+            const last = <Row>
+                <Col className="m-3">
+                    <Card border={"primary"} className={"p-2"}>
+                        <span className={"fs-3"}>
+                            {props.params.options[len - 1].name}
+                        </span>
+                    </Card>
+                </Col>
+            </Row>
+            options.push(last)
         }
         
         return (

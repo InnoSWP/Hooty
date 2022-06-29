@@ -119,16 +119,13 @@ export default function HostPage(props) {
     }
     
     const getQuizResults = (close) => {
-        const url = `https://localhost:7006/Votes/quizresult?
-                        sessionId=${sessionId}&
-                        pollOrder=${quiz.polls[currentPollIndex].pollNumber}&
-                        closeActivePoll=${close}`
+        const url = `https://localhost:7006/Votes/quizresult?sessionId=${sessionId}&pollOrder=${quiz.polls[currentPollIndex].orderNumber}&closeActivePoll=${close}`
         
         fetch(url)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
-                setQuizResults({...data})
+                setQuizResults([...data])
                 
                 setResultsModal(true)
             })
@@ -136,6 +133,7 @@ export default function HostPage(props) {
     
     const toggleCloseQuestion = (result) => {
         setCloseQuestion(result)
+        setShouldCloseQuestionModal(false)
         toggleShowResults()
     }
     
@@ -147,10 +145,11 @@ export default function HostPage(props) {
         return currentPollIndex === -1;
     }
     
+    
     const renderQuizResults = () => {
         
         return quizResults.map((_el) => {
-            const poll = quiz.polls.find((poll) => poll.id === _el.id)
+            const poll = quiz.polls.find((poll) => poll.id === _el.pollId)
 
             const allAnswers = Object.keys(_el.voteDistribution).reduce((prev, curr) => {
                     prev += _el.voteDistribution[curr]
@@ -160,21 +159,21 @@ export default function HostPage(props) {
             return (
                 <Card style={{ margin: "20px" }}>
                     <Card.Header>
-                        <h1> { poll.name } </h1>
+                        <span className={"fs-3"}> { poll.name } </span>
                     </Card.Header>
                     <Card.Body className="text-center">
                         <Container>
                             {
                                 poll.options.map((el) => {
                                     return (
-                                        <Row align="left">
-                                            <Col className="w-25">
-                                                <h3>
+                                        <Row align="left" className={"m-3"}>
+                                            <Col xs={6}>
+                                                <span className={"fs-3"}>
                                                     {el.name}:
-                                                </h3>
+                                                </span>
                                             </Col>
-                                            <Col>
-                                                <ProgressBar now={ 
+                                            <Col xs={6}>
+                                                <ProgressBar className={"h-100"} now={ 
                                                     allAnswers !== 0 ? (_el.voteDistribution[el.id] / allAnswers) * 100 : 0
                                                 } />
                                             </Col>
@@ -192,20 +191,30 @@ export default function HostPage(props) {
     
     return (
         <>
-            <Modal show={shouldCloseQuestionModal} onHide={toggleShowResults}>
+            <Modal show={shouldCloseQuestionModal} onHide={() => setShouldCloseQuestionModal(false)}>
                 <Modal.Header closeButton>
                     Stop receiving votes?
                 </Modal.Header>
                 <Modal.Body>
-                    <Button onClick={() => toggleCloseQuestion(true)} variant="success">
-                        Yes
-                    </Button>
-                    <Button onClick={() => toggleCloseQuestion(false)} variant="danger">
-                        No
-                    </Button>
+                    <Container>
+                        <Row>
+                            <Col className={"m-3"}>
+                                <Button className={"w-100"} onClick={() => toggleCloseQuestion(true)} variant="success">
+                                    Yes
+                                </Button>
+                            </Col>
+                            <Col className={"m-3"}>
+                                <Button className={"w-100"} onClick={() => toggleCloseQuestion(false)} variant="danger">
+                                    No
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Container>
+                    
+                    
                 </Modal.Body>
             </Modal>
-            <Modal show={resultsModal} onHide={() => setResultsModal(false)}>
+            <Modal fullscreen={true} show={resultsModal} onHide={() => setResultsModal(false)}>
                 <Modal.Header closeButton>
                     Quiz results
                 </Modal.Header>
@@ -215,36 +224,54 @@ export default function HostPage(props) {
                     </Stack>
                 </Modal.Body>
             </Modal>
+            
+            
             <WebNavbar message="Host Page 🦉 Hooty"></WebNavbar>
             <Container style={{ maxWidth: "1000px" }}>
                 <Card style={{ margin: "20px" }}>
                     <Card.Header>
-                        { isPreQuiz() ?
+                        <Stack direction={"horizontal"} gap={3}>
+                            { 
+                                isPreQuiz() ?
+                                    <Button
+                                        onClick={nextPoll}
+                                        variant="outline-success">Start quiz</Button>
+                                    :
+                                    <Button
+                                        onClick={nextPoll}
+                                        variant="outline-primary">
+                                        {
+                                            currentPollIndex === quiz.polls.length - 1 ?
+                                                <>Close session</>
+                                                :
+                                                <>Next question</>
+                                        }
+                                    </Button>
+                            }
+                            <div className={"vr"} />
                             <Button
-                                onClick={nextPoll}
-                                variant="outline-success">Start quiz</Button>
-                                :
-                            <Button
-                                onClick={nextPoll}
-                                variant="outline-primary">
-                                {
-                                    currentPollIndex === quiz.polls.length - 1 ? 
-                                        <>Close session</> 
+                                onClick={() => {
+                                    showResults === true ? 
+                                        toggleShowResults()
                                         :
-                                        <>Next question</>
+                                        setShouldCloseQuestionModal(true)
+                                }}
+                                variant="outline-primary"
+                            >
+                                {
+                                    showResults === true ?
+                                        "Hide results"
+                                        :
+                                        "Show results"
                                 }
                             </Button>
-                        }
-                        <Button
-                            onClick={toggleShowResults}
-                            variant="outline-primary">
-                            {
-                                showResults === true ? 
-                                    "Hide results"
-                                    :
-                                    "Show results"
-                            }
-                        </Button>
+                            <Button
+                                onClick={() => getQuizResults(false)}
+                                variant="outline-primary"
+                            >
+                                Show quiz results
+                            </Button>
+                        </Stack>
                     </Card.Header>
 
                     <Card.Body className="text-center">

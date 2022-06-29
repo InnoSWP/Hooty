@@ -98,14 +98,16 @@ export function LoginForm(props) {
                 </InputGroup>
 
                 <div className="d-grid gap-2">
-                    <SubmitButton label={
-                        isProcessing ? 
-                            <>
-                                <Spinner animation={"border"} size={"sm"} />
-                                {props.label}
-                            </>
-                            :
-                            props.label
+                    <SubmitButton
+                        disabled={isProcessing}
+                        label={
+                            isProcessing ? 
+                                <>
+                                    <Spinner animation={"border"} size={"sm"} />
+                                    {props.label}
+                                </>
+                                :
+                                props.label
                     } variant="primary" size="lg"/>
                 </div>
             </form>
