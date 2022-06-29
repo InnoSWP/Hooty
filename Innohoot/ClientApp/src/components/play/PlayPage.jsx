@@ -19,13 +19,11 @@ export function PlayPage(props) {
     const sessionId = document.location.pathname.replace("/play/", "")
     
     const [poll, setPoll] = React.useState({
-        poll: {
-            id: -1,
-            name: "mock",
-            options: []
-        }
+        poll: undefined
     })
-    const [results, setResults] = React.useState(null)
+    const [results, setResults] = React.useState({
+        poll: undefined
+    })
     const pollRef = React.useRef(null)
     const [isAnswered, setIsAnswered] = React.useState()
     const [currentAnswer, setCurrentAnswer] = React.useState()
@@ -60,7 +58,9 @@ export function PlayPage(props) {
                                 console.log("asd")
                                 setResults({...resQuestion})
                             } else {
-                                setResults(null)
+                                setResults({
+                                    poll: undefined
+                                })
                             }
                         }
 
@@ -174,6 +174,40 @@ export function PlayPage(props) {
             </>
         )
     }
+    
+    const renderResults = () => {
+        console.log("render results")
+        return (
+            <>
+                {
+                    results.poll?.options?.map((option) => {
+                        return (
+                            <>
+                                <ButtonGroup className="mb-2">
+                                    <ToggleButton
+                                        key={option.id}
+                                        id={option.id}
+                                        type="button"
+                                        name={poll.id}
+                                        variant={
+                                            option.isAnswer === true ?
+                                                "success"
+                                                :
+                                                "danger"
+                                        }
+                                        value={option.id}
+                                    >
+                                        { option.name }
+                                    </ToggleButton>
+                                </ButtonGroup>
+                                <br />
+                            </>
+                        )
+                    })
+                }
+            </>
+        )
+    }
 
     const renderQuestion = () => {
         return (
@@ -181,38 +215,51 @@ export function PlayPage(props) {
                 margin: "20px"
             }}>
                 {
-                    poll.poll === undefined ? 
-                        <Card.Header>Waiting for first question...</Card.Header>
+                    poll.poll === undefined ?
+                        results.poll === undefined ? 
+                            <Card.Header>Waiting for first question...</Card.Header>
+                            :
+                            <>
+                                <Card.Header>{results.poll?.name}</Card.Header>
+                                <Card.Body>
+                                    {renderResults()}
+                                </Card.Body>
+                            </>
                         :
-                        <>
-                            <Card.Header>{poll.poll?.name}</Card.Header>
-                            <Card.Body>
-                                {
-                                    isAnswered ?
-                                        <>
-                                            {
-                                                results !== null &&
-                                                results.poll.options.some(el => el.isAnswer === true) ?
-                                                    results.poll?.options?.find(el => el.id === results.chosenOptionId)?.isAnswer === true ?
-                                                        <Alert variant={"success"}>
-                                                            Correct
-                                                        </Alert>
-                                                        :
-                                                        <Alert variant={"danger"}>
-                                                            Wrong
-                                                        </Alert>
-                                                    :
-                                                    null
-                                                
-                                            }
-                                            <Spinner animation={"border"} />
-                                            <h3>Waiting for next question...</h3>
-                                        </> :
-                                        renderOptions()
-                                }
-                            </Card.Body>
-                        </>
-                        
+                        results.poll === undefined ?
+                            <>
+                                <Card.Header>{poll.poll?.name}</Card.Header>
+                                <Card.Body>
+                                    {
+                                        isAnswered ?
+                                            <>
+                                                <Spinner animation={"border"} />
+                                                <h3>Waiting for next question...</h3>
+                                            </>
+                                            :
+                                            <>
+                                                {renderOptions()}
+                                            </>
+                                    }
+                                </Card.Body>
+                            </>
+                            :
+                            <>
+                                <Card.Header>{poll.poll?.name}</Card.Header>
+                                <Card.Body>
+                                    {
+                                        isAnswered ?
+                                            <>
+                                                <Spinner animation={"border"} />
+                                                <h3>Waiting for next question...</h3>
+                                            </>
+                                            :
+                                            <>
+                                                {renderOptions()}
+                                            </>
+                                    }
+                                </Card.Body>
+                            </>
                 }
                 
             </Card>
