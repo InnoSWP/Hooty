@@ -181,7 +181,7 @@ export function PlayPage(props) {
                 margin: "20px"
             }}>
                 {
-                    poll.id === -1 ? 
+                    poll.poll === undefined ? 
                         <Card.Header>Waiting for first question...</Card.Header>
                         :
                         <>
@@ -216,17 +216,6 @@ export function PlayPage(props) {
                 }
                 
             </Card>
-
-            // <div>
-            //     <h2>{poll.name}</h2>
-            //     <div>
-            //         {
-            //             isAnswered ?
-            //                 <h3>Waiting for next question...</h3> :
-            //                 renderOptions()
-            //         }
-            //     </div>
-            // </div>
         )
     }
 
