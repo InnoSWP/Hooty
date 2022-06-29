@@ -53,6 +53,8 @@ namespace Innohoot.Controllers
 
 			if (session is not null)
 			{
+				session.ShowResultPoll = new List<Guid>();
+
 				var pollCollection = await _pollCollectionService.Get(session.PollCollectionId);
 
 				foreach (var poll in pollCollection.Polls)

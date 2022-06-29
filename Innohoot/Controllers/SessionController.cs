@@ -82,7 +82,8 @@ namespace Innohoot.Controllers
 					StarTime = DateTime.Now.ToUniversalTime(),
 					Created = DateTime.Now.ToUniversalTime(),
 					PollCollectionId = pollCollectionDTO.Id,
-					IsActive = true
+					IsActive = true,
+					ShowResultPoll = new List<Guid>()
 				});
 
 				return Ok(sessionId);
