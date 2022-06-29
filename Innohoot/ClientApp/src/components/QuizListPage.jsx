@@ -37,7 +37,7 @@ export default function QuizListPage(props) {
                                     return {
                                         uuid: option.id,
                                         answer_text: option.name,
-                                        correct: option.correct
+                                        correct: option.isAnswer
                                     }
                                 })
                             }
@@ -181,7 +181,7 @@ export default function QuizListPage(props) {
                                 "Name": answer.answer_text,
                                 "pollId": question.uuid,
                                 "Id": answer.uuid,
-                                "isAnswer": answer.isAnswer
+                                "isAnswer": answer.correct
                             }
                         })
                     }

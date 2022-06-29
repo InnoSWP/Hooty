@@ -12,7 +12,7 @@ import WebNavbar from "../WebNavbar";
 
 import {AnswerResponseOptions} from "../../context/utils";
 import {v4 as uuidv4} from 'uuid'
-import {Spinner} from "react-bootstrap";
+import {Alert, Spinner} from "react-bootstrap";
 
 export function PlayPage(props) {
 
@@ -25,6 +25,7 @@ export function PlayPage(props) {
             options: []
         }
     })
+    const [results, setResults] = React.useState(null)
     const pollRef = React.useRef(null)
     const [isAnswered, setIsAnswered] = React.useState()
     const [currentAnswer, setCurrentAnswer] = React.useState()
@@ -48,14 +49,30 @@ export function PlayPage(props) {
                         })
                     .then(data => {
                         console.log(pollRef)
-                        const actQuestion = data.find(el => el.actionEnum === 1) 
+                        const actQuestion = data.find(el => el.actionEnum === AnswerResponseOptions.SUBMIT_VOTE) 
+                        const resQuestion = data.find(el => el.actionEnum === AnswerResponseOptions.DISPLAY_RESULTS)
                         console.log(actQuestion)
+                        console.log(resQuestion)
+                        console.log(results)
+
+                        if (resQuestion !== undefined) {
+                            if (resQuestion.chosenOptionId !== null) {
+                                console.log("asd")
+                                setResults({...resQuestion})
+                            } else {
+                                setResults(null)
+                            }
+                        }
+
                         if (pollRef.current === null || actQuestion?.poll?.id !== pollRef.current?.poll?.id) {
                             console.log(`set to false by getpoll ${actQuestion?.poll?.id} <-> ${pollRef.current !== null ? pollRef.current?.poll?.id : null}`)
                             
                             if (timerId.current !== null) {
                                 clearTimeout(timerId)
                             }
+
+                            
+                            
 
                             setIsAnswered(false)
                             pollRef.current = {...actQuestion}
@@ -173,6 +190,21 @@ export function PlayPage(props) {
                                 {
                                     isAnswered ?
                                         <>
+                                            {
+                                                results !== null &&
+                                                results.poll.options.some(el => el.isAnswer === true) ?
+                                                    results.poll?.options?.find(el => el.id === results.chosenOptionId)?.isAnswer === true ?
+                                                        <Alert variant={"success"}>
+                                                            Correct
+                                                        </Alert>
+                                                        :
+                                                        <Alert variant={"danger"}>
+                                                            Wrong
+                                                        </Alert>
+                                                    :
+                                                    null
+                                                
+                                            }
                                             <Spinner animation={"border"} />
                                             <h3>Waiting for next question...</h3>
                                         </> :
