@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import SubmitButton from "./SubmitButton";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../../context/utils";
 import { useNavigate } from "react-router";
 
 import Hashes from 'jshashes';
@@ -8,6 +8,7 @@ import Hashes from 'jshashes';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FetchSpinner from "../FetchSpinner";
+import {Spinner} from "react-bootstrap";
 
 export function LoginForm(props) {
     const sha = new Hashes.SHA256
@@ -70,7 +71,6 @@ export function LoginForm(props) {
 
     return (
         <>
-            <FetchSpinner status={isProcessing} />
             <form action="" className={"login-form"} onSubmit={handleSubmit}>
                 <h3>{props.label}</h3>
 
@@ -98,7 +98,15 @@ export function LoginForm(props) {
                 </InputGroup>
 
                 <div className="d-grid gap-2">
-                    <SubmitButton label={props.label} variant="primary" size="lg"/>
+                    <SubmitButton label={
+                        isProcessing ? 
+                            <>
+                                <Spinner animation={"border"} size={"sm"} />
+                                {props.label}
+                            </>
+                            :
+                            props.label
+                    } variant="primary" size="lg"/>
                 </div>
             </form>
         </>

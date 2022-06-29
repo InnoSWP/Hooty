@@ -15,3 +15,8 @@ export let UserContext = {
         localStorage.setItem(localStorageKey, newUserId)
     }
 }
+
+export const AnswerResponseOptions = {
+    SUBMIT_VOTE: 1,
+    DISPLAY_RESULTS: 2
+}

@@ -2,7 +2,7 @@
 import Quiz from "./quizzes/Quiz";
 
 import { v4 as uuidv4 } from 'uuid';
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../context/utils";
 import WebNavbar from "./WebNavbar";
 
 import Container from "react-bootstrap/esm/Container";

@@ -1,7 +1,7 @@
 ﻿import React from "react";
-import {UserContext} from "../../context/UserContext";
 
 import ProgressBar from "react-bootstrap/ProgressBar"
+import {Col, Container, Row} from "react-bootstrap";
 
 export default function HostQuestion (props) {
     
@@ -10,7 +10,8 @@ export default function HostQuestion (props) {
     const [timer, setTimer] = React.useState(null)
 
     const getResultsCallback = () => {
-        let url = `https://localhost:7006/Votes/voteresult?sessionId=${props.sessionId}&pollId=${props.params.id}`
+        let url = `https://localhost:7006/Votes/voteresult?sessionId=${props.sessionId}&pollId=${props.params.id}&closeActivePoll=${props.closeQuestion}`
+        
         fetch(url)
             .then(res => {
                     if (!res.ok) {
@@ -47,14 +48,49 @@ export default function HostQuestion (props) {
     const mapResults = () => {
         let allAnswers = countAllAnswers()
 
-        return props.params.options.map((el) => {
-            return (
-                <div align="left">
-                    <h3>{el.name}: </h3>
-                    <ProgressBar now={ (results[el.id] / allAnswers) * 100} />
-                </div>
-            )
-        })
+        return (
+            <Container>
+                {
+                    props.params.options.map((el) => {
+                        return (
+                            <Row align="left">
+                                <Col className="w-25">
+                                    <h3>
+                                        {el.name}:
+                                    </h3>
+                                </Col>
+                                <Col>
+                                    <ProgressBar now={ allAnswers !== 0 ? (results[el.id] / allAnswers) * 100 : 0} />
+                                </Col>
+                                
+                            </Row>
+                        )
+                    })
+                }
+            </Container>
+        ) 
+    }
+    
+    const mapOptions = () => {
+        let options = []
+        for (let i = 0; i < props.params.options.length - 1; i += 2) {
+            const row = <Row>
+                <Col className="m-3">
+                    {props.params.options[i].name}
+                </Col>
+                <Col className="m-3">
+                    {props.params.options[i + 1].name}
+                </Col>
+            </Row>
+            
+            options.push(row)
+        }
+        
+        return (
+            <Container >
+                { options }
+            </Container>
+        )
     }
     
     React.useEffect(() => {
@@ -70,7 +106,13 @@ export default function HostQuestion (props) {
     return (
         <div>
             <h1> { props.params.name } </h1>
-            <div> { mapResults() } </div>
+            {
+                props.showResults === true ?
+                    <div> { mapResults() } </div>
+                    :
+                    <div>{ mapOptions() }</div>
+            }
+            
         </div>
     )
 }

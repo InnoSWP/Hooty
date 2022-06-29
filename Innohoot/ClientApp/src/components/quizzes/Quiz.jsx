@@ -7,9 +7,9 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
 import { v4 as uuidv4 } from 'uuid';
-import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router";
 import FetchSpinner from "../FetchSpinner";
+import {Spinner} from "react-bootstrap";
 
 export default function Quiz(props) {
 
@@ -80,11 +80,17 @@ export default function Quiz(props) {
         })
     }
 
-    const saveQuiz = () => props.submit({
-        quiz_name: quizName,
-        questions: questions,
-        uuid: props.params.uuid
-    })
+    const saveQuiz = () => {
+        setIsProcessing(true)
+        
+        props.submit({
+            quiz_name: quizName,
+            questions: questions,
+            uuid: props.params.uuid
+        })   
+        
+        setIsProcessing(false)
+    }
     
     const playQuiz = (id) => {
 
@@ -127,7 +133,6 @@ export default function Quiz(props) {
 
     return (
         <>
-            <FetchSpinner status={isProcessing} />
             <Card className="mb-2" style={{ padding: "15px" }}>
                 <InputGroup className="mb-2">
                     <InputGroup.Text></InputGroup.Text>
@@ -146,7 +151,17 @@ export default function Quiz(props) {
 
                     <Button
                         onClick={saveQuiz}
-                        variant="outline-secondary">Save</Button>
+                        variant="outline-secondary">
+                        {
+                            isProcessing ? 
+                                <>
+                                    <Spinner animation={"border"} size={"sm"} />
+                                    Save
+                                </>
+                                :
+                                <>Save</>
+                        }
+                    </Button>
 
                     <Button
                         onClick={() => props.deleteHandler(props.params)}
