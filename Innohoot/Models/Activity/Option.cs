@@ -11,5 +11,6 @@ namespace Innohoot.Models.Activity
 		public Guid PollId { get; set; }
 		[Required]
 		public Poll Poll { get; set; }
+		public bool IsAnswer { get; set; } = false;
 	}
 }

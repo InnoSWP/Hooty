@@ -95,9 +95,9 @@ export default function Question(props) {
     const handleQuestionTextChange = (event) => {
         let newState = question
         newState.question_text = event.target.value
-        setQuestion(newState)
+        setQuestion({...newState})
 
-        props.changeHandler(props.params, question)
+        props.changeHandler(newState)
     }
 
     return (

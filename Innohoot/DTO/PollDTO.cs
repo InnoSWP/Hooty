@@ -7,5 +7,6 @@
 		public string? Description { get; set; }
 		public Guid PollCollectionId { get; set; }
 		public List<OptionDTO> Options { get; set; }
+		public int OrderNumber { get; set; } = 0;
 	}
 }

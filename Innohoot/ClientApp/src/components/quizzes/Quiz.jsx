@@ -7,13 +7,15 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
 import { v4 as uuidv4 } from 'uuid';
-import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router";
+import FetchSpinner from "../FetchSpinner";
+import {Spinner} from "react-bootstrap";
 
 export default function Quiz(props) {
 
     const [questions, setQuestions] = React.useState(props.params.questions)
     const [quizName, setQuizName] = React.useState(props.params.quiz_name)
+    const [isProcessing, setIsProcessing] = React.useState(false)
 
     const navigate = useNavigate()
 
@@ -49,12 +51,15 @@ export default function Quiz(props) {
         let newQuestions = questions
         let index = newQuestions.findIndex((el) => el.uuid === question.uuid)
 
+        console.log(`question_text in handler: ${question.question_text}`)
+        console.log(question)
+
         if (index === -1) {
             console.log("no element found")
             return
         }
 
-        newQuestions[index] = question
+        newQuestions[index] = {...question}
 
         setQuestions([...newQuestions])
 
@@ -75,15 +80,23 @@ export default function Quiz(props) {
         })
     }
 
-    const saveQuiz = () => props.submit({
-        quiz_name: quizName,
-        questions: questions,
-        uuid: props.params.uuid
-    })
+    const saveQuiz = () => {
+        setIsProcessing(true)
+        
+        props.submit({
+            quiz_name: quizName,
+            questions: questions,
+            uuid: props.params.uuid
+        })   
+        
+        setIsProcessing(false)
+    }
     
     const playQuiz = (id) => {
 
         saveQuiz()
+        
+        setIsProcessing(true)
         
         let code = generateCode()
         let url = `https://localhost:7006/Sessions/start?pollCollectionId=${props.params.uuid}&accessCode=${code}`
@@ -95,9 +108,13 @@ export default function Quiz(props) {
                     alert(res.text())
                 })
             .then(data => {
+                setIsProcessing(false)
                 console.log(data)
                 navigate(`/host/${data}?id=${props.params.uuid}&code=${code}`)
-            })
+            }).catch((err) => {
+                setIsProcessing(false)
+                alert(err)
+        })
     }
 
     const generateCode = () => {
@@ -134,7 +151,17 @@ export default function Quiz(props) {
 
                     <Button
                         onClick={saveQuiz}
-                        variant="outline-secondary">Save</Button>
+                        variant="outline-secondary">
+                        {
+                            isProcessing ? 
+                                <>
+                                    <Spinner animation={"border"} size={"sm"} />
+                                    Save
+                                </>
+                                :
+                                <>Save</>
+                        }
+                    </Button>
 
                     <Button
                         onClick={() => props.deleteHandler(props.params)}

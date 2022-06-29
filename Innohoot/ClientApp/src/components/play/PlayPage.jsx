@@ -6,53 +6,80 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
-
 import Button from "react-bootstrap/Button"
 
 import WebNavbar from "../WebNavbar";
 
-import { v4 as uuidv4 } from 'uuid'
+import {AnswerResponseOptions} from "../../context/utils";
+import {v4 as uuidv4} from 'uuid'
+import {Alert, Spinner} from "react-bootstrap";
 
 export function PlayPage(props) {
 
     const sessionId = document.location.pathname.replace("/play/", "")
-
+    
     const [poll, setPoll] = React.useState({
-        id: 0,
-        name: "",
-        options: []
+        poll: {
+            id: -1,
+            name: "mock",
+            options: []
+        }
     })
+    const [results, setResults] = React.useState(null)
+    const pollRef = React.useRef(null)
     const [isAnswered, setIsAnswered] = React.useState()
     const [currentAnswer, setCurrentAnswer] = React.useState()
-    const [participant, setParticipant] = React.useState({
-        name: null,
-        buffer: ""
-    })
+    const timerId = React.useRef(null)
+    const [participant, setParticipant] = React.useState(null)
+    const participantName = React.useRef(null)
 
-    const getPoll = () => {
-        let url = `https://localhost:7006/polls/active?sessionId=${sessionId}`
-        fetch(url)
-            .then(res => {
-                console.log(res)
-                if (res.status === 204) {
-                    return res.text()
-                } else {
-                    return res.json()
-                }
-            },
-                res => {
-                    alert(res.text())
-                })
-            .then(data => {
-                console.log(data)
-                if (data.id !== poll.id) {
-                    setIsAnswered(false)
-                    setPoll({ ...data })
-                }
-                setTimeout(getPoll, 1000)
-            })
+    const getPollCallback = () => {
+                let url = `https://localhost:7006/participants/${sessionId}/${participantName.current}`
+                fetch(url)
+                    .then(res => {
+                            console.log(res)
+                            if (res.status === 204) {
+                                return res.text()
+                            } else {
+                                return res.json()
+                            }
+                        },
+                        res => {
+                            alert(res.text())
+                        })
+                    .then(data => {
+                        console.log(pollRef)
+                        const actQuestion = data.find(el => el.actionEnum === AnswerResponseOptions.SUBMIT_VOTE) 
+                        const resQuestion = data.find(el => el.actionEnum === AnswerResponseOptions.DISPLAY_RESULTS)
+                        console.log(actQuestion)
+                        console.log(resQuestion)
+                        console.log(results)
 
+                        if (resQuestion !== undefined) {
+                            if (resQuestion.chosenOptionId !== null) {
+                                console.log("asd")
+                                setResults({...resQuestion})
+                            } else {
+                                setResults(null)
+                            }
+                        }
 
+                        if (pollRef.current === null || actQuestion?.poll?.id !== pollRef.current?.poll?.id) {
+                            console.log(`set to false by getpoll ${actQuestion?.poll?.id} <-> ${pollRef.current !== null ? pollRef.current?.poll?.id : null}`)
+                            
+                            if (timerId.current !== null) {
+                                clearTimeout(timerId)
+                            }
+
+                            
+                            
+
+                            setIsAnswered(false)
+                            pollRef.current = {...actQuestion}
+                            setPoll({...actQuestion})
+                        }
+                        timerId.current = setTimeout(getPollCallback, 1000)
+                    })
     }
 
     const submitAnswer = () => {
@@ -63,7 +90,7 @@ export function PlayPage(props) {
                 "Content-Type": "application/json;charset=utf-8"
             },
             body: JSON.stringify({
-                participantName: participant.name,
+                participantName: participantName.current,
                 optionId: currentAnswer,
                 id: uuidv4(),
                 sessionId: sessionId
@@ -85,6 +112,7 @@ export function PlayPage(props) {
                 })
             .then(data => {
                 console.log(data)
+                console.log(`set to true by submitanswer`)
                 setIsAnswered(true)
             })
     }
@@ -94,16 +122,12 @@ export function PlayPage(props) {
     }
 
     const handleNameChange = [
-        (event) => setParticipant({
-            name: participant.name,
-            buffer: event.target.value
-        }),
+        (event) => setParticipant(event.target.value),
         () => {
-            setParticipant({
-                name: participant.buffer,
-                buffer: participant.buffer
-            })
-            getPoll()
+            participantName.current = participant
+            if (getPollCallback !== null) {
+                getPollCallback()
+            }
         }
     ]
 
@@ -111,7 +135,7 @@ export function PlayPage(props) {
         return (
             <>
                 {
-                    poll.options?.map((option) => {
+                    poll.poll?.options?.map((option) => {
                         return (
                             <>
                                 <ButtonGroup className="mb-2">
@@ -120,7 +144,15 @@ export function PlayPage(props) {
                                         id={option.id}
                                         type="radio"
                                         name={poll.id}
-                                        variant="outline-primary"
+                                        variant={
+                                            poll.actionEnum === AnswerResponseOptions.DISPLAY_RESULTS ? 
+                                                option.isAnswer === true ? 
+                                                    "success"
+                                                    :
+                                                    "danger"
+                                                : 
+                                                "outline-primary"
+                                        }
                                         value={option.id}
                                         checked={currentAnswer === option.id}
                                         onChange={handleChange}
@@ -134,7 +166,7 @@ export function PlayPage(props) {
                     })
                 }
 
-                { poll.options?.length > 0 ?
+                { poll.poll?.options?.length > 0 ?
                     <Button variant="outline-success" onClick={submitAnswer}>
                         Submit answer
                     </Button> : null
@@ -148,26 +180,42 @@ export function PlayPage(props) {
             <Card className="text-center" style={{
                 margin: "20px"
             }}>
-                <Card.Header>{poll.name}</Card.Header>
-                <Card.Body>
-                    {
-                        isAnswered ?
-                            <h3>Waiting for next question...</h3> :
-                            renderOptions()
-                    }
-                </Card.Body>
+                {
+                    poll.poll === undefined ? 
+                        <Card.Header>Waiting for first question...</Card.Header>
+                        :
+                        <>
+                            <Card.Header>{poll.poll?.name}</Card.Header>
+                            <Card.Body>
+                                {
+                                    isAnswered ?
+                                        <>
+                                            {
+                                                results !== null &&
+                                                results.poll.options.some(el => el.isAnswer === true) ?
+                                                    results.poll?.options?.find(el => el.id === results.chosenOptionId)?.isAnswer === true ?
+                                                        <Alert variant={"success"}>
+                                                            Correct
+                                                        </Alert>
+                                                        :
+                                                        <Alert variant={"danger"}>
+                                                            Wrong
+                                                        </Alert>
+                                                    :
+                                                    null
+                                                
+                                            }
+                                            <Spinner animation={"border"} />
+                                            <h3>Waiting for next question...</h3>
+                                        </> :
+                                        renderOptions()
+                                }
+                            </Card.Body>
+                        </>
+                        
+                }
+                
             </Card>
-
-            // <div>
-            //     <h2>{poll.name}</h2>
-            //     <div>
-            //         {
-            //             isAnswered ?
-            //                 <h3>Waiting for next question...</h3> :
-            //                 renderOptions()
-            //         }
-            //     </div>
-            // </div>
         )
     }
 
@@ -183,7 +231,7 @@ export function PlayPage(props) {
                         <Form.Control
                             id="name-form"
                             type="text"
-                            value={participant.buffer}
+                            value={participant}
                             onChange={handleNameChange[0]}
                             placeholder="aboba"
                             aria-label="aboba"
@@ -206,7 +254,7 @@ export function PlayPage(props) {
         <>
             <WebNavbar message="🦉 Welcome to Hooty!"></WebNavbar>
             <Container style={{ maxWidth: "1000px" }}>
-                {participant.name === null ?
+                {participantName.current === null ?
                     renderNameForm() :
                     renderQuestion()
                 }

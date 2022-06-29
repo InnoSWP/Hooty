@@ -1,12 +1,14 @@
 ﻿import React from "react";
 import SubmitButton from "./SubmitButton";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../../context/utils";
 import { useNavigate } from "react-router";
 
 import Hashes from 'jshashes';
 
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import FetchSpinner from "../FetchSpinner";
+import {Spinner} from "react-bootstrap";
 
 export function LoginForm(props) {
     const sha = new Hashes.SHA256
@@ -15,7 +17,7 @@ export function LoginForm(props) {
         id: ""
     })
     const [isProcessing, setIsProcessing] = React.useState(false)
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     let handleSubmit = (event) => {
         event.preventDefault()
@@ -96,7 +98,17 @@ export function LoginForm(props) {
                 </InputGroup>
 
                 <div className="d-grid gap-2">
-                    <SubmitButton label={props.label} variant="primary" size="lg"/>
+                    <SubmitButton
+                        disabled={isProcessing}
+                        label={
+                            isProcessing ? 
+                                <>
+                                    <Spinner animation={"border"} size={"sm"} />
+                                    {props.label}
+                                </>
+                                :
+                                props.label
+                    } variant="primary" size="lg"/>
                 </div>
             </form>
         </>
