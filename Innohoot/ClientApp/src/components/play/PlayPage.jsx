@@ -17,20 +17,20 @@ import {Spinner} from "react-bootstrap";
 export function PlayPage(props) {
 
     const sessionId = document.location.pathname.replace("/play/", "")
-
-    const poll = React.useRef({
-        id: -1,
-        name: "",
-        options: []
+    
+    const [poll, setPoll] = React.useState({
+        poll: {
+            id: -1,
+            name: "mock",
+            options: []
+        }
     })
+    const pollRef = React.useRef(null)
     const [isAnswered, setIsAnswered] = React.useState()
     const [currentAnswer, setCurrentAnswer] = React.useState()
     const timerId = React.useRef(null)
     const [participant, setParticipant] = React.useState(null)
     const participantName = React.useRef(null)
-        
-    console.log(poll)
-    console.log(`isAnswered in render: ${isAnswered}`)
 
     const getPollCallback = () => {
                 let url = `https://localhost:7006/participants/${sessionId}/${participantName.current}`
@@ -47,17 +47,19 @@ export function PlayPage(props) {
                             alert(res.text())
                         })
                     .then(data => {
-                        if (data.id !== poll.current.id) {
-                            console.log(`set to false by getpoll ${data.id} <-> ${poll.current.id}`)
+                        console.log(pollRef)
+                        const actQuestion = data.find(el => el.actionEnum === 1) 
+                        console.log(actQuestion)
+                        if (pollRef.current === null || actQuestion?.poll?.id !== pollRef.current?.poll?.id) {
+                            console.log(`set to false by getpoll ${actQuestion?.poll?.id} <-> ${pollRef.current !== null ? pollRef.current?.poll?.id : null}`)
                             
                             if (timerId.current !== null) {
                                 clearTimeout(timerId)
                             }
 
-                            console.log(data)
                             setIsAnswered(false)
-                            poll.current = {...data}
-                            console.log(poll)
+                            pollRef.current = {...actQuestion}
+                            setPoll({...actQuestion})
                         }
                         timerId.current = setTimeout(getPollCallback, 1000)
                     })
@@ -71,7 +73,7 @@ export function PlayPage(props) {
                 "Content-Type": "application/json;charset=utf-8"
             },
             body: JSON.stringify({
-                participantName: participant.name,
+                participantName: participantName.current,
                 optionId: currentAnswer,
                 id: uuidv4(),
                 sessionId: sessionId
@@ -116,7 +118,7 @@ export function PlayPage(props) {
         return (
             <>
                 {
-                    poll.options?.map((option) => {
+                    poll.poll?.options?.map((option) => {
                         return (
                             <>
                                 <ButtonGroup className="mb-2">
@@ -147,7 +149,7 @@ export function PlayPage(props) {
                     })
                 }
 
-                { poll.options?.length > 0 ?
+                { poll.poll?.options?.length > 0 ?
                     <Button variant="outline-success" onClick={submitAnswer}>
                         Submit answer
                     </Button> : null
@@ -166,7 +168,7 @@ export function PlayPage(props) {
                         <Card.Header>Waiting for first question...</Card.Header>
                         :
                         <>
-                            <Card.Header>{poll.name}</Card.Header>
+                            <Card.Header>{poll.poll?.name}</Card.Header>
                             <Card.Body>
                                 {
                                     isAnswered ?

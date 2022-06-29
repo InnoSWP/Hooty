@@ -239,7 +239,7 @@ export default function HostPage(props) {
                                     :
                                     <Button
                                         onClick={nextPoll}
-                                        variant="outline-primary">
+                                        variant="outline-success ">
                                         {
                                             currentPollIndex === quiz.polls.length - 1 ?
                                                 <>Close session</>
