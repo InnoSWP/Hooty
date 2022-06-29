@@ -1,6 +1,8 @@
 ﻿using Constants;
+
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
@@ -52,7 +54,7 @@ namespace Innohoot.Controllers
 					var particapantView = new ParticapantView();
 					particapantView.ActionEnum = ParticipantActionEnum.SubmitVote;
 
-					particapantView.Poll = await _pollService.Get((Guid) session.ActivePollId);
+					particapantView.Poll = await _pollService.Get((Guid)session.ActivePollId);
 
 
 					// to not show answer
@@ -70,6 +72,33 @@ namespace Innohoot.Controllers
 			}
 
 			return Problem("Session is not active");
+		}
+
+		/// <summary>
+		/// Checks if the name of a particular session is not occupied.
+		/// If it is not occupied, then writes it to the list of participants of the session.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		[HttpPost("{sessionId}")]
+		public async Task<IActionResult> SubmitName([FromRoute] Guid sessionId, [FromBody] object? name)
+		{
+			string participantName;
+			if (name is not null && name is string)
+				participantName = name.ToString();
+			else
+				return BadRequest("Name is not string");
+
+			var session = await _sessionService.Get(sessionId);
+
+			if (!session.ParticipantList.Contains(participantName))
+			{
+				session.ParticipantList.Add(participantName);
+				await _sessionService.Update(session);
+				return Ok();
+			}
+			else
+				return BadRequest("Name is occupied");
 		}
 
 	}
