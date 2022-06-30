@@ -104,5 +104,27 @@ namespace Innohoot.DataLayer.Services.Implementations
 			_db.Context.ChangeTracker.Clear();
 			return null;
 		}
+
+		public async Task<Dictionary<string, int>> GetTopParticipants(Guid sessionId)
+		{
+			//participantName and score
+			var top = new Dictionary<string, int>();
+			var session = await _db.Get<Session>(sessionId).FirstOrDefaultAsync();
+
+			foreach (var participant in session.ParticipantList)
+			{
+				top.Add(participant, 0);
+
+				var votes = await _db.Get<VoteRecord>(y => y.SessionId == sessionId && y.ParticipantName == participant).ToListAsync();
+
+				foreach (var vote in votes)
+				{
+					if (vote.Option.IsAnswer)
+						top[participant]++;
+				}
+			}
+
+			return top;
+		}
 	}
 }

@@ -25,4 +25,5 @@ public interface IVoteRecordService
 
 	Task<List<VoteRecord>> GetVotesByParticipant(Guid sessionId, string participantName);
 	Task<VoteRecord?> GetVoteByParticipant(Guid pollId, string participantName);
+	Task<Dictionary<string, int>> GetTopParticipants(Guid sessionId);
 }
