@@ -66,7 +66,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 			_db.Context.Entry(pollCollectionInDB).CurrentValues.SetValues(pollCollection);
 
-			var pollsInDb = pollCollectionInDB.Polls.OrderBy( p => p.OrderNumber);
+			var pollsInDb = pollCollectionInDB.Polls.OrderBy(p => p.OrderNumber);
 			int counter = 0;
 			foreach (var pollInDB in pollsInDb)
 			{
@@ -75,7 +75,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 				if (poll is not null)
 				{
 					_db.Context.Entry(pollInDB).CurrentValues.SetValues(poll);
-					pollInDB.OrderNumber=counter++;
+					pollInDB.OrderNumber = counter++;
 
 					#region Options updating/adding/deleting
 

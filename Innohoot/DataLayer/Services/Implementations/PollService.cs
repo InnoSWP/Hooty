@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+
 using Innohoot.DTO;
 using Innohoot.Models.Activity;
 using Innohoot.Models.ElementsForPA;
+
 using Microsoft.EntityFrameworkCore;
+
 using System.Linq.Expressions;
 
 namespace Innohoot.DataLayer.Services.Implementations

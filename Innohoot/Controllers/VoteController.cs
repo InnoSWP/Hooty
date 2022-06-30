@@ -1,7 +1,10 @@
 ﻿using ClosedXML.Excel;
+
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
+
 using Microsoft.AspNetCore.Mvc;
+
 using System.Data;
 
 namespace Innohoot.Controllers
@@ -46,7 +49,7 @@ namespace Innohoot.Controllers
 		}
 
 		[HttpGet("quizResult")]
-		public async Task<IActionResult> GetVoteResultForQuiz([FromQuery] Guid sessionId, int pollOrder,[FromQuery] bool closeActivePoll = true)
+		public async Task<IActionResult> GetVoteResultForQuiz([FromQuery] Guid sessionId, int pollOrder, [FromQuery] bool closeActivePoll = true)
 		{
 			var results = new List<VoteResultDTO>();
 			var session = await _sessionService.Get(sessionId);

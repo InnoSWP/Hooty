@@ -1,5 +1,4 @@
 ﻿using Constants;
-using Innohoot.Models.Activity;
 
 namespace Innohoot.DTO
 {
