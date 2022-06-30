@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Specialized;
+using AutoMapper;
 
 using Innohoot.DTO;
 using Innohoot.Models.Activity;
@@ -105,26 +106,33 @@ namespace Innohoot.DataLayer.Services.Implementations
 			return null;
 		}
 
-		public async Task<Dictionary<string, int>> GetTopParticipants(Guid sessionId)
+		public async Task<SortedDictionary<string, int>> GetTopParticipants(Guid sessionId)
 		{
 			//participantName and score
 			var top = new Dictionary<string, int>();
 			var session = await _db.Get<Session>(sessionId).FirstOrDefaultAsync();
 
-			foreach (var participant in session.ParticipantList)
+			if (session?.ParticipantList is not null)
 			{
-				top.Add(participant, 0);
-
-				var votes = await _db.Get<VoteRecord>(y => y.SessionId == sessionId && y.ParticipantName == participant).ToListAsync();
-
-				foreach (var vote in votes)
+				foreach (var participant in session.ParticipantList)
 				{
-					if (vote.Option.IsAnswer)
-						top[participant]++;
+					top.Add(participant, 0);
+
+					var votes = await _db
+						.Get<VoteRecord>(y => y.SessionId == sessionId && y.ParticipantName == participant)
+						.ToListAsync();
+
+					foreach (var vote in votes)
+					{ 
+						if (vote.Option.IsAnswer)
+							top[participant]++;
+					}
 				}
 			}
 
-			return top;
+			SortedDictionary<string, int> sortedTop = new SortedDictionary<string, int>(top);
+
+			return sortedTop;
 		}
 	}
 }
