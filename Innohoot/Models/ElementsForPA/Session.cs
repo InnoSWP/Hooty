@@ -1,5 +1,6 @@
 ﻿using Innohoot.Models.ElementsForPA;
 using Innohoot.Models.Identity;
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Innohoot.Models.Activity
@@ -43,7 +44,7 @@ namespace Innohoot.Models.Activity
 		public Poll? ActivePoll { get; set; } = null;
 
 		public List<string>? ParticipantList { get; set; }
-		
+
 		public List<Guid> ShowResultPoll { get; set; } = new List<Guid>();
 	}
 }

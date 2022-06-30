@@ -1,6 +1,8 @@
 using Constants;
+
 using Innohoot.DataLayer.Services.Implementations;
 using Innohoot.DTO;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Innohoot.Controllers
@@ -52,7 +54,7 @@ namespace Innohoot.Controllers
 					var particapantView = new ParticapantView();
 					particapantView.ActionEnum = ParticipantActionEnum.SubmitVote;
 
-					particapantView.Poll = await _pollService.Get((Guid) session.ActivePollId);
+					particapantView.Poll = await _pollService.Get((Guid)session.ActivePollId);
 
 
 					// to not show answer
@@ -78,8 +80,8 @@ namespace Innohoot.Controllers
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		[HttpPost("{sessionId}")]
-		public async Task<IActionResult> SubmitName([FromRoute] Guid sessionId, [FromBody] object? name)
+		[HttpPost("/Sessions/{sessionId}/newparticipant")]
+		public async Task<IActionResult> SubmitName([FromRoute] Guid sessionId, [FromBody] object name)
 		{
 			string participantName;
 			if (name is not null && name is string)
