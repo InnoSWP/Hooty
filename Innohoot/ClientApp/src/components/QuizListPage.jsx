@@ -2,7 +2,7 @@
 import Quiz from "./quizzes/Quiz";
 
 import { v4 as uuidv4 } from 'uuid';
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../context/utils";
 import WebNavbar from "./WebNavbar";
 
 import Container from "react-bootstrap/esm/Container";
@@ -10,14 +10,16 @@ import Card from "react-bootstrap/esm/Card";
 import Button from "react-bootstrap/esm/Button";
 
 import "../css/App.css";
+import FetchSpinner from "./FetchSpinner";
 
 export default function QuizListPage(props) {
     const [quizList, setQuizList] = React.useState([])
-    const userContext = React.useContext(UserContext)
-    console.log(userContext)
+    const [isProcessing, setIsProcessing] = React.useState(false)
     
     React.useEffect(() => {
         let url = `https://localhost:7006/Users/PollCollections?Id=${UserContext.getUserId()}`
+        
+        setIsProcessing(true)
 
         fetch(url)
             .then(res => res.json())
@@ -35,15 +37,16 @@ export default function QuizListPage(props) {
                                     return {
                                         uuid: option.id,
                                         answer_text: option.name,
-                                        correct: true
+                                        correct: option.isAnswer
                                     }
                                 })
                             }
                         })
                     }
                 })
-
+                setIsProcessing(false)
                 setQuizList([...mappedQuizList])
+                
             })
     }, [])
 
@@ -75,6 +78,7 @@ export default function QuizListPage(props) {
         }
 
         const createQuizUrl = "https://localhost:7006/PollCollections"
+        setIsProcessing(true)
 
         fetch(createQuizUrl, {
             method: "POST",
@@ -92,7 +96,8 @@ export default function QuizListPage(props) {
                             return {
                                 "Name": answer.answer_text,
                                 "pollId": question.uuid,
-                                "Id": answer.uuid
+                                "Id": answer.uuid,
+                                "isAnswer": false
                             }
                         })
                     }
@@ -102,6 +107,7 @@ export default function QuizListPage(props) {
             .then(
                 res => {
                     if (!res.ok) {
+                        setIsProcessing(false)
                         res.text()
                             .then(data => {
                                 alert(data)
@@ -117,6 +123,7 @@ export default function QuizListPage(props) {
             .then(data => {
                 console.log(data)
                 newQuiz.uuid = data
+                setIsProcessing(false)
 
                 setQuizList([newQuiz, ...newQuizList])
             })
@@ -130,6 +137,8 @@ export default function QuizListPage(props) {
             console.log("no element found")
             return
         }
+        
+        setIsProcessing(true)
 
         let deleteQuizUrl = `https://localhost:7006/PollCollections?Id=${quiz.uuid}`
 
@@ -137,17 +146,21 @@ export default function QuizListPage(props) {
             method: "DELETE"
         })
             .then(res => {
+                setIsProcessing(false)
 
                 newQuizList.splice(index, 1)
 
                 setQuizList([...newQuizList])
             }, res => {
+                setIsProcessing(false)
                 alert(res.text())
             })
     }
 
     const submitUpdate = (quiz) => {
         const updateQuizUrl = "https://localhost:7006/PollCollections"
+        
+        setIsProcessing(true)
 
         fetch(updateQuizUrl, {
             method: "PUT",
@@ -167,7 +180,8 @@ export default function QuizListPage(props) {
                             return {
                                 "Name": answer.answer_text,
                                 "pollId": question.uuid,
-                                "Id": answer.uuid
+                                "Id": answer.uuid,
+                                "isAnswer": answer.correct
                             }
                         })
                     }
@@ -177,15 +191,18 @@ export default function QuizListPage(props) {
             .then(
                 res => res.json(),
                 res => {
+                    setIsProcessing(false)
                     alert(res.text())
                 })
             .then(data => {
+                setIsProcessing(false)
                 console.log(data)
             })
     }
 
     return (
         <>
+            <FetchSpinner status={isProcessing} />
             <WebNavbar message="Quiz List 🦉 Hooty"></WebNavbar>
             <Container style={{ maxWidth: "1000px" }}>
                 <Card style={{ margin: "20px" }}>

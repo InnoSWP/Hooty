@@ -40,7 +40,7 @@ namespace Innohoot.Controllers
 						particapantView.Poll = await _pollService.Get(showPollId);
 
 						var vote = await _voteRecordService.GetVoteByParticipant(showPollId, participantName);
-						particapantView.ChosenOptionId = vote.OptionId;
+						particapantView.ChosenOptionId = vote?.OptionId;
 
 						particapantViews.Add(particapantView);
 					}

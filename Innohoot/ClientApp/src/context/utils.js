@@ -1,5 +1,4 @@
-﻿
-let localStorageKey = "hootyUserId"
+﻿const localStorageKey = "hootyUserId"
 
 export let UserContext = {
     getUserId: () => {
@@ -14,4 +13,9 @@ export let UserContext = {
     setUserId: (newUserId) => {
         localStorage.setItem(localStorageKey, newUserId)
     }
+}
+
+export const AnswerResponseOptions = {
+    SUBMIT_VOTE: 1,
+    DISPLAY_RESULTS: 2
 }
