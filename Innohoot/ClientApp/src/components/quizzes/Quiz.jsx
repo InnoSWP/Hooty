@@ -9,7 +9,7 @@ import Card from 'react-bootstrap/Card';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router";
 import FetchSpinner from "../FetchSpinner";
-import {Spinner} from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 
 export default function Quiz(props) {
 
@@ -59,7 +59,7 @@ export default function Quiz(props) {
             return
         }
 
-        newQuestions[index] = {...question}
+        newQuestions[index] = { ...question }
 
         setQuestions([...newQuestions])
 
@@ -82,28 +82,26 @@ export default function Quiz(props) {
 
     const saveQuiz = () => {
         setIsProcessing(true)
-        
+
         props.submit({
             quiz_name: quizName,
             questions: questions,
             uuid: props.params.uuid
-        })   
-        
+        })
+
         setIsProcessing(false)
     }
-    
-    const playQuiz = (id) => {
 
+    const playQuiz = (id) => {
         saveQuiz()
-        
         setIsProcessing(true)
-        
+
         let code = generateCode()
         let url = `https://localhost:7006/Sessions/start?pollCollectionId=${props.params.uuid}&accessCode=${code}`
-        
+
         fetch(url)
             .then(
-                res => res.json(), 
+                res => res.json(),
                 res => {
                     alert(res.text())
                 })
@@ -114,7 +112,7 @@ export default function Quiz(props) {
             }).catch((err) => {
                 setIsProcessing(false)
                 alert(err)
-        })
+            })
     }
 
     const generateCode = () => {
@@ -127,7 +125,7 @@ export default function Quiz(props) {
         for (let arrElement of arr) {
             code += (arrElement % 10).toString()
         }
-        
+
         return code
     }
 
@@ -136,6 +134,24 @@ export default function Quiz(props) {
             <Card className="mb-2" style={{ padding: "15px" }}>
                 <InputGroup className="mb-2">
                     <InputGroup.Text></InputGroup.Text>
+
+                    <Button
+                        onClick={() => playQuiz(props.params.uuid)}
+                        variant="outline-success">Play</Button>
+
+                    <Button
+                        onClick={saveQuiz}
+                        variant="outline-secondary">
+                        {
+                            isProcessing ?
+                                <>
+                                    <Spinner animation={"border"} size={"sm"} />
+                                </>
+                                :
+                                <>Save</>
+                        }
+                    </Button>
+
                     <Form.Control
                         placeholder="New quiz name"
                         aria-label="New quiz name"
@@ -146,28 +162,10 @@ export default function Quiz(props) {
                     />
 
                     <Button
-                        onClick={() => playQuiz(props.params.uuid)}
-                        variant="outline-success">Play</Button>
-
-                    <Button
-                        onClick={saveQuiz}
-                        variant="outline-secondary">
-                        {
-                            isProcessing ? 
-                                <>
-                                    <Spinner animation={"border"} size={"sm"} />
-                                    Save
-                                </>
-                                :
-                                <>Save</>
-                        }
-                    </Button>
-
-                    <Button
                         onClick={() => props.deleteHandler(props.params)}
                         variant="outline-danger">Delete</Button>
                 </InputGroup>
-                
+
                 <div>
                     {renderQuestionList()}
                 </div>
@@ -175,7 +173,7 @@ export default function Quiz(props) {
                 <Button
                     className="mt-2"
                     onClick={addQuestion}
-                    variant="outline-primary">Add a question...</Button>
+                    variant="outline-primary">Add a question</Button>
             </Card>
         </>
     )
