@@ -10,14 +10,14 @@ import Button from "react-bootstrap/Button"
 
 import WebNavbar from "../WebNavbar";
 
-import {AnswerResponseOptions} from "../../context/utils";
-import {v4 as uuidv4} from 'uuid'
-import {Alert, Spinner} from "react-bootstrap";
+import { AnswerResponseOptions } from "../../context/utils";
+import { v4 as uuidv4 } from 'uuid'
+import { Alert, Spinner } from "react-bootstrap";
 
 export function PlayPage(props) {
 
     const sessionId = document.location.pathname.replace("/play/", "")
-    
+
     const [poll, setPoll] = React.useState({
         poll: undefined
     })
@@ -32,54 +32,54 @@ export function PlayPage(props) {
     const participantName = React.useRef(null)
 
     const getPollCallback = () => {
-                let url = `https://localhost:7006/participants/${sessionId}/${participantName.current}`
-                fetch(url)
-                    .then(res => {
-                            console.log(res)
-                            if (res.status === 204) {
-                                return res.text()
-                            } else {
-                                return res.json()
-                            }
-                        },
-                        res => {
-                            alert(res.text())
+        let url = `https://localhost:7006/participants/${sessionId}/${participantName.current}`
+        fetch(url)
+            .then(res => {
+                console.log(res)
+                if (res.status === 204) {
+                    return res.text()
+                } else {
+                    return res.json()
+                }
+            },
+                res => {
+                    alert(res.text())
+                })
+            .then(data => {
+                console.log(pollRef)
+                const actQuestion = data.find(el => el.actionEnum === AnswerResponseOptions.SUBMIT_VOTE)
+                const resQuestion = data.find(el => el.actionEnum === AnswerResponseOptions.DISPLAY_RESULTS)
+                console.log(actQuestion)
+                console.log(resQuestion)
+                console.log(results)
+
+                if (resQuestion !== undefined) {
+                    if (resQuestion.chosenOptionId !== null) {
+                        console.log("asd")
+                        setResults({ ...resQuestion })
+                    } else {
+                        setResults({
+                            poll: undefined
                         })
-                    .then(data => {
-                        console.log(pollRef)
-                        const actQuestion = data.find(el => el.actionEnum === AnswerResponseOptions.SUBMIT_VOTE) 
-                        const resQuestion = data.find(el => el.actionEnum === AnswerResponseOptions.DISPLAY_RESULTS)
-                        console.log(actQuestion)
-                        console.log(resQuestion)
-                        console.log(results)
+                    }
+                }
 
-                        if (resQuestion !== undefined) {
-                            if (resQuestion.chosenOptionId !== null) {
-                                console.log("asd")
-                                setResults({...resQuestion})
-                            } else {
-                                setResults({
-                                    poll: undefined
-                                })
-                            }
-                        }
+                if (pollRef.current === null || actQuestion?.poll?.id !== pollRef.current?.poll?.id) {
+                    console.log(`set to false by getpoll ${actQuestion?.poll?.id} <-> ${pollRef.current !== null ? pollRef.current?.poll?.id : null}`)
 
-                        if (pollRef.current === null || actQuestion?.poll?.id !== pollRef.current?.poll?.id) {
-                            console.log(`set to false by getpoll ${actQuestion?.poll?.id} <-> ${pollRef.current !== null ? pollRef.current?.poll?.id : null}`)
-                            
-                            if (timerId.current !== null) {
-                                clearTimeout(timerId)
-                            }
+                    if (timerId.current !== null) {
+                        clearTimeout(timerId)
+                    }
 
-                            
-                            
 
-                            setIsAnswered(false)
-                            pollRef.current = {...actQuestion}
-                            setPoll({...actQuestion})
-                        }
-                        timerId.current = setTimeout(getPollCallback, 1000)
-                    })
+
+
+                    setIsAnswered(false)
+                    pollRef.current = { ...actQuestion }
+                    setPoll({ ...actQuestion })
+                }
+                timerId.current = setTimeout(getPollCallback, 1000)
+            })
     }
 
     const submitAnswer = () => {
@@ -145,19 +145,19 @@ export function PlayPage(props) {
                                         type="radio"
                                         name={poll.id}
                                         variant={
-                                            poll.actionEnum === AnswerResponseOptions.DISPLAY_RESULTS ? 
-                                                option.isAnswer === true ? 
+                                            poll.actionEnum === AnswerResponseOptions.DISPLAY_RESULTS ?
+                                                option.isAnswer === true ?
                                                     "success"
                                                     :
                                                     "danger"
-                                                : 
+                                                :
                                                 "outline-primary"
                                         }
                                         value={option.id}
                                         checked={currentAnswer === option.id}
                                         onChange={handleChange}
                                     >
-                                        { option.name }
+                                        {option.name}
                                     </ToggleButton>
                                 </ButtonGroup>
                                 <br />
@@ -166,7 +166,7 @@ export function PlayPage(props) {
                     })
                 }
 
-                { poll.poll?.options?.length > 0 ?
+                {poll.poll?.options?.length > 0 ?
                     <Button variant="outline-success" onClick={submitAnswer}>
                         Submit answer
                     </Button> : null
@@ -174,7 +174,7 @@ export function PlayPage(props) {
             </>
         )
     }
-    
+
     const renderResults = () => {
         console.log("render results")
         return (
@@ -197,7 +197,7 @@ export function PlayPage(props) {
                                         }
                                         value={option.id}
                                     >
-                                        { option.name }
+                                        {option.name}
                                     </ToggleButton>
                                 </ButtonGroup>
                                 <br />
@@ -216,7 +216,7 @@ export function PlayPage(props) {
             }}>
                 {
                     poll.poll === undefined ?
-                        results.poll === undefined ? 
+                        results.poll === undefined ?
                             <Card.Header>Waiting for first question...</Card.Header>
                             :
                             <>
@@ -261,7 +261,7 @@ export function PlayPage(props) {
                                 </Card.Body>
                             </>
                 }
-                
+
             </Card>
         )
     }
@@ -280,8 +280,8 @@ export function PlayPage(props) {
                             type="text"
                             value={participant}
                             onChange={handleNameChange[0]}
-                            placeholder="aboba"
-                            aria-label="aboba"
+                            placeholder="Enter your name"
+                            aria-label="Enter your name"
                         />
                     </InputGroup>
 
