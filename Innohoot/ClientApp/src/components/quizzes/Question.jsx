@@ -31,8 +31,8 @@ export default function Question(props) {
                 <Button
                     onClick={() => deleteAnswer(el)}
                     variant="outline-danger">
-                        <IconBin />
-                    </Button>
+                    <IconBin />
+                </Button>
             </InputGroup>
         ))
     }
@@ -61,6 +61,12 @@ export default function Question(props) {
         setQuestion({ ...newQuestion })
     }
 
+    const clearChoices = () => {
+        question.answers.map((el) => {
+            el.correct = false
+        })
+    }
+
     const handleAnswerChange = [
         (event, answer) => {
             let newState = question
@@ -70,6 +76,11 @@ export default function Question(props) {
                 console.log("no element found")
                 return
             }
+
+            // Radio
+            question.answers.map((el) => {
+                el.correct = false
+            })
 
             question.answers[index].correct = event.target.checked
             setQuestion(newState)
@@ -95,7 +106,7 @@ export default function Question(props) {
     const handleQuestionTextChange = (event) => {
         let newState = question
         newState.question_text = event.target.value
-        setQuestion({...newState})
+        setQuestion({ ...newState })
 
         props.changeHandler(newState)
     }
@@ -119,11 +130,11 @@ export default function Question(props) {
                         <Button
                             onClick={() => props.deleteHandler(props.params)}
                             variant="outline-danger">
-                                <IconBin/>
-                            </Button>
+                            <IconBin />
+                        </Button>
                     </InputGroup>
 
-                    { renderAnswers() }
+                    {renderAnswers()}
                 </Card.Text>
             </Card.Body>
             <Card.Footer className="text-muted"></Card.Footer>

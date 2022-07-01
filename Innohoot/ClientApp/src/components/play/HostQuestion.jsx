@@ -116,9 +116,14 @@ export default function HostQuestion (props) {
     }
     
     React.useEffect(() => {
-        
-        getResultsCallback(props.params.id)
-    }, [props.params.id])
+         if (props.showResults === true) {
+             getResultsCallback(props.params.id)   
+         }
+         
+         return () => {
+             clearTimeout(timer)
+         }
+    }, [props.params.id, props.showResults])
 
     if (props.params.id !== currentPollId && timer !== null) {
         clearTimeout(timer)
