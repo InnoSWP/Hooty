@@ -32,7 +32,7 @@ export function PlayPage(props) {
     const participantName = React.useRef(null)
 
     const getPollCallback = () => {
-        let url = `https://localhost:7006/participants/${sessionId}/${participantName.current}`
+        let url = `/participants/${sessionId}/${participantName.current}`
         fetch(url)
             .then(res => {
                 console.log(res)
@@ -83,7 +83,7 @@ export function PlayPage(props) {
     }
 
     const submitAnswer = () => {
-        let url = `https://localhost:7006/Votes`
+        let url = `/Votes`
         fetch(url, {
             method: "PUT",
             headers: {

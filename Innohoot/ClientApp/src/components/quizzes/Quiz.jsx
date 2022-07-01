@@ -97,7 +97,7 @@ export default function Quiz(props) {
         setIsProcessing(true)
 
         let code = generateCode()
-        let url = `https://localhost:7006/Sessions/start?pollCollectionId=${props.params.uuid}&accessCode=${code}`
+        let url = `/Sessions/start?pollCollectionId=${props.params.uuid}&accessCode=${code}`
 
         fetch(url)
             .then(

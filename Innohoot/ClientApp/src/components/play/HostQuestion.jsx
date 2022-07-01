@@ -11,7 +11,7 @@ export default function HostQuestion (props) {
     const [timer, setTimer] = React.useState(null)
 
     const getResultsCallback = () => {
-        let url = `https://localhost:7006/Votes/voteresult?sessionId=${props.sessionId}&pollId=${props.params.id}&closeActivePoll=${props.closeQuestion}`
+        let url = `/Votes/voteresult?sessionId=${props.sessionId}&pollId=${props.params.id}&closeActivePoll=${props.closeQuestion}`
         
         fetch(url)
             .then(res => {

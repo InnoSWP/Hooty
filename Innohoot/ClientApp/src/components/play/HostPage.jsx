@@ -40,7 +40,7 @@ export default function HostPage(props) {
     }, [])
     
     const fetchQuiz = () => {
-        let url = `https://localhost:7006/PollCollections?Id=${pollCollectionId}`
+        let url = `/PollCollections?Id=${pollCollectionId}`
         fetch(url)
             .then(
                 res => res.json()
@@ -54,7 +54,7 @@ export default function HostPage(props) {
     }
     
     const fetchActiveSession = () => {
-        let url = `https://localhost:7006/Sessions/${sessionId}`
+        let url = `/Sessions/${sessionId}`
         fetch(url)
             .then(
                 res => res.json(),
@@ -83,7 +83,7 @@ export default function HostPage(props) {
         let nextPollId = quiz.polls[nextPollIndex].id
         console.log(nextPollId)
         
-        let url = `https://localhost:7006/Polls/${nextPollId}/active`
+        let url = `/Polls/${nextPollId}/active`
         fetch(url, {method: "PUT"})
             .then(res => {
                 setCurrentPollIndex(nextPollIndex)
@@ -94,7 +94,7 @@ export default function HostPage(props) {
     }
     
     const closeSession = () => {
-        let url = `https://localhost:7006/Sessions/${sessionId}/close`
+        let url = `/Sessions/${sessionId}/close`
         fetch(url, {method: "PUT"})
             .then(res => {
                 console.log(res.json())
@@ -106,7 +106,7 @@ export default function HostPage(props) {
     }
     
     const exportResults = () => {
-        let url = `https://localhost:7006/votes/excel?sessionId=${sessionId}`
+        let url = `/votes/excel?sessionId=${sessionId}`
         fetch(url)
             .then(res => {
                 console.log(res)
@@ -119,7 +119,7 @@ export default function HostPage(props) {
     }
     
     const getQuizResults = (close) => {
-        const url = `https://localhost:7006/Votes/quizresult?sessionId=${sessionId}&pollOrder=${quiz.polls[currentPollIndex].orderNumber}&closeActivePoll=${close}`
+        const url = `/Votes/quizresult?sessionId=${sessionId}&pollOrder=${quiz.polls[currentPollIndex].orderNumber}&closeActivePoll=${close}`
         
         fetch(url)
             .then(res => res.json())
@@ -276,7 +276,7 @@ export default function HostPage(props) {
 
                     <Card.Body className="text-center">
                         { isPreQuiz() ?
-                            <a href={`https://localhost:44402/play/${sessionId}`}>
+                            <a href={`/play/${sessionId}`}>
                                 { <h1>Code: {code}</h1> }
                             </a>
                             :

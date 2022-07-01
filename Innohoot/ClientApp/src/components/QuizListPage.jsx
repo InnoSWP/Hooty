@@ -17,7 +17,7 @@ export default function QuizListPage(props) {
     const [isProcessing, setIsProcessing] = React.useState(false)
     
     React.useEffect(() => {
-        let url = `https://localhost:7006/Users/PollCollections?Id=${UserContext.getUserId()}`
+        let url = `/Users/PollCollections?Id=${UserContext.getUserId()}`
         
         setIsProcessing(true)
 
@@ -77,7 +77,7 @@ export default function QuizListPage(props) {
             questions: []
         }
 
-        const createQuizUrl = "https://localhost:7006/PollCollections"
+        const createQuizUrl = "/PollCollections"
         setIsProcessing(true)
 
         fetch(createQuizUrl, {
@@ -140,7 +140,7 @@ export default function QuizListPage(props) {
         
         setIsProcessing(true)
 
-        let deleteQuizUrl = `https://localhost:7006/PollCollections?Id=${quiz.uuid}`
+        let deleteQuizUrl = `/PollCollections?Id=${quiz.uuid}`
 
         fetch(deleteQuizUrl, {
             method: "DELETE"
@@ -158,7 +158,7 @@ export default function QuizListPage(props) {
     }
 
     const submitUpdate = (quiz) => {
-        const updateQuizUrl = "https://localhost:7006/PollCollections"
+        const updateQuizUrl = "/PollCollections"
         
         setIsProcessing(true)
 

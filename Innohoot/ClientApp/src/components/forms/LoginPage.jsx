@@ -29,11 +29,11 @@ export function LoginPage(props) {
 
                         <ListGroup className="d-flex justify-content-center" horizontal>
                             <ListGroup.Item>
-                                <LoginForm label="Log In" formName={"Login"} userContext={props.userContext} url={"https://localhost:7006/Users/login"} />
+                                <LoginForm label="Log In" formName={"Login"} userContext={props.userContext} url={"/Users/login"} />
                             </ListGroup.Item>
 
                             <ListGroup.Item style={{ backgroundColor: "#f2f2f2" }} >
-                                <RegisterForm label="Sign Up" formName={"Create user"} userContext={props.userContext} url={"https://localhost:7006/Users"} />
+                                <RegisterForm label="Sign Up" formName={"Create user"} userContext={props.userContext} url={"/Users"} />
                             </ListGroup.Item>
                         </ListGroup>
 
