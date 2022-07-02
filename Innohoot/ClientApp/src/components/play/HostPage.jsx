@@ -341,7 +341,7 @@ export default function HostPage(props) {
                                 renderTopParticipants()
                                 :
                                 isPreQuiz() ?
-                                    <a href={(DEBUG ? `https://localhost:7006` : ``) + `/play/${sessionId}`}>
+                                    <a href={`/play/${sessionId}`}>
                                         {<h1>Code: {code}</h1>}
                                     </a>
                                     :
