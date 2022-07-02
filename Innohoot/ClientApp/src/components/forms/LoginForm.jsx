@@ -7,8 +7,7 @@ import Hashes from 'jshashes';
 
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import FetchSpinner from "../FetchSpinner";
-import {Spinner} from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 
 export function LoginForm(props) {
     const sha = new Hashes.SHA256
@@ -22,9 +21,9 @@ export function LoginForm(props) {
     let handleSubmit = (event) => {
         event.preventDefault()
         let url = `${props.url}`
-        
+
         setIsProcessing(true)
-        
+
         fetch(url, {
             method: "POST",
             headers: {
@@ -45,7 +44,7 @@ export function LoginForm(props) {
             .then(data => {
                 console.log(data)
                 setIsProcessing(false)
-                
+
                 UserContext.setUserId(data.slice(1, -1))
                 navigate("/quizlist")
                 console.log(UserContext.getUserId())
@@ -101,14 +100,13 @@ export function LoginForm(props) {
                     <SubmitButton
                         disabled={isProcessing}
                         label={
-                            isProcessing ? 
+                            isProcessing ?
                                 <>
                                     <Spinner animation={"border"} size={"sm"} />
-                                    {props.label}
                                 </>
                                 :
                                 props.label
-                    } variant="primary" size="lg"/>
+                        } variant="primary" size="lg" />
                 </div>
             </form>
         </>

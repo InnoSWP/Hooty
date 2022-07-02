@@ -3,6 +3,7 @@
 import ProgressBar from "react-bootstrap/ProgressBar"
 import {Col, Container, Row} from "react-bootstrap";
 import {Card} from "react-bootstrap";
+import {DEBUG} from "../../context/utils";
 
 export default function HostQuestion (props) {
     
@@ -11,7 +12,7 @@ export default function HostQuestion (props) {
     const [timer, setTimer] = React.useState(null)
 
     const getResultsCallback = () => {
-        let url = `https://localhost:7006/Votes/voteresult?sessionId=${props.sessionId}&pollId=${props.params.id}&closeActivePoll=${props.closeQuestion}`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/Votes/voteresult?sessionId=${props.sessionId}&pollId=${props.params.id}&closeActivePoll=${props.closeQuestion}`
         
         fetch(url)
             .then(res => {
@@ -116,9 +117,14 @@ export default function HostQuestion (props) {
     }
     
     React.useEffect(() => {
-        
-        getResultsCallback(props.params.id)
-    }, [props.params.id])
+         if (props.showResults === true) {
+             getResultsCallback(props.params.id)   
+         }
+         
+         return () => {
+             clearTimeout(timer)
+         }
+    }, [props.params.id, props.showResults])
 
     if (props.params.id !== currentPollId && timer !== null) {
         clearTimeout(timer)

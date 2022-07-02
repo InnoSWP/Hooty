@@ -1,6 +1,7 @@
 ﻿import React from "react";
-import { UserContext } from "../../context/utils";
+import {DEBUG, UserContext} from "../../context/utils";
 import { LoginForm } from "./LoginForm";
+import { RegisterForm } from "./RegisterForm";
 
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
@@ -21,18 +22,18 @@ export function LoginPage(props) {
                 }}>
                     <Card.Header><br /></Card.Header>
                     <Card.Body>
-                        <Card.Title>Sign in or Sign up to Hooty</Card.Title>
+                        <Card.Title>Welcome to Hooty!</Card.Title>
                         <Card.Text>
-                            To sign in to your Hooty dashboard, please enter your username and password in the fields below.
+                            To Log In to your Hooty dashboard or Sign Up to Hotty account, please enter your username and password in the fields below.
                         </Card.Text>
 
                         <ListGroup className="d-flex justify-content-center" horizontal>
                             <ListGroup.Item>
-                                <LoginForm label="Sign in" formName={"Login"} userContext={props.userContext} url={"https://localhost:7006/Users/login"} />
+                                <LoginForm label="Log In" formName={"Login"} userContext={props.userContext} url={(DEBUG ? `https://localhost:7006` : ``) + "/Users/login"} />
                             </ListGroup.Item>
 
-                            <ListGroup.Item>
-                                <LoginForm label="Sign up" formName={"Create user"} userContext={props.userContext} url={"https://localhost:7006/Users"} />
+                            <ListGroup.Item style={{ backgroundColor: "#f2f2f2" }} >
+                                <RegisterForm label="Sign Up" formName={"Create user"} userContext={props.userContext} url={(DEBUG ? `https://localhost:7006` : ``) + "/Users"} />
                             </ListGroup.Item>
                         </ListGroup>
 
