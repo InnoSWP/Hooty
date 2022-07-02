@@ -230,7 +230,7 @@ export default function HostPage(props) {
                                 </Col>
                                 <Col xs={6}>
                                     <ProgressBar className={"h-100"} now={
-                                        quiz.polls?.length !== 0 ? (el.value - 1 / quiz.polls?.length) * 100 : 0
+                                        quiz.polls?.length !== 0 ? (el.value/ quiz.polls?.length) * 100 : 0
                                     } />
                                 </Col>
 
