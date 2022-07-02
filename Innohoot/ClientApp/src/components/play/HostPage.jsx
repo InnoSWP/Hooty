@@ -3,15 +3,15 @@ import HostQuestion from "./HostQuestion";
 import { useNavigate } from "react-router";
 
 import WebNavbar from "../WebNavbar"
-
 import Container from "react-bootstrap/esm/Container";
 import Card from "react-bootstrap/esm/Card";
 import Button from "react-bootstrap/esm/Button";
-
-import "../../css/App.css";
 import { Col, Modal, Row, Stack } from "react-bootstrap";
 import ProgressBar from "react-bootstrap/ProgressBar";
+
 import { DEBUG } from "../../context/utils";
+import "../../css/App.css";
+import { QRCodeSVG } from 'qrcode.react'
 
 export default function HostPage(props) {
 
@@ -338,12 +338,24 @@ export default function HostPage(props) {
                     <Card.Body className="text-center">
                         {
                             showTop === true ?
-                                renderTopParticipants()
+                                <>
+                                    <h1>Top</h1>
+                                    {renderTopParticipants()}
+                                </>
                                 :
                                 isPreQuiz() ?
-                                    <a href={`/play/${sessionId}`}>
-                                        {<h1>Code: {code}</h1>}
-                                    </a>
+                                    <>
+                                        <a href={`/play/${sessionId}`}>
+                                            {<h1>Code: {code}</h1>}
+                                        </a>
+                                        <QRCodeSVG value={
+                                            (DEBUG ? 
+                                                `https://localhost:44402/` 
+                                                :
+                                                `https://hootywebapp.azurewebsites.net/`) + `/play/${sessionId}`
+                                        } />
+                                    </>
+                                    
                                     :
                                     <HostQuestion showResults={showResults} closeQuestion={closeQuestion} params={quiz.polls[currentPollIndex]} sessionId={sessionId} />
                         }

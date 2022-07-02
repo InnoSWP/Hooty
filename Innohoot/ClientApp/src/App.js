@@ -9,6 +9,7 @@ import HostPage from "./components/play/HostPage";
 import { LoginPage } from "./components/forms/LoginPage";
 import PlayCodePage from "./components/play/PlayCodePage";
 import { UserContext } from './context/utils';
+import HistoryPage from "./components/HistoryPage";
 
 export default function App(props) {
     return (
@@ -21,6 +22,7 @@ export default function App(props) {
                 <Route path='/login' element={<LoginPage />} />
                 <Route path='/play' element={<PlayCodePage />} />
                 <Route path='/play/*' element={<PlayPage />} />
+                <Route path='/history' element={<HistoryPage />} />
                 <Route path='/host/*' element={<HostPage />} />
                 <Route path='/quizlist' element={<QuizListPage />} />
             </Routes>
