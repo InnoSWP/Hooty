@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import HostQuestion from "./HostQuestion";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 
 import WebNavbar from "../WebNavbar"
 
@@ -9,14 +9,14 @@ import Card from "react-bootstrap/esm/Card";
 import Button from "react-bootstrap/esm/Button";
 
 import "../../css/App.css";
-import {Col, Modal, Row, Stack} from "react-bootstrap";
+import { Col, Modal, Row, Stack } from "react-bootstrap";
 import ProgressBar from "react-bootstrap/ProgressBar";
-import {DEBUG} from "../../context/utils";
+import { DEBUG } from "../../context/utils";
 
 export default function HostPage(props) {
-    
+
     const sessionURL = new URL(document.location)
-    
+
     const sessionId = sessionURL.pathname.replace("/host/", "")
     const pollCollectionId = sessionURL.searchParams.get("id")
     const code = sessionURL.searchParams.get("code")
@@ -24,9 +24,9 @@ export default function HostPage(props) {
     console.log(sessionId)
     console.log(pollCollectionId)
     console.log(code)
-    
+
     const navigate = useNavigate()
-    
+
     const [quiz, setQuiz] = React.useState()
     const [shouldCloseQuestionModal, setShouldCloseQuestionModal] = React.useState(false)
     const [resultsModal, setResultsModal] = React.useState(false)
@@ -36,12 +36,12 @@ export default function HostPage(props) {
     const [quizResults, setQuizResults] = React.useState([])
     const [topParticipants, setTopParticipants] = React.useState([])
     const [showTop, setShowTop] = React.useState(false)
-    
+
     React.useEffect(() => {
         console.log("aboba")
         fetchQuiz()
     }, [])
-    
+
     const fetchQuiz = () => {
         let url = (DEBUG ? `https://localhost:7006` : ``) + `/PollCollections?Id=${pollCollectionId}`
         fetch(url)
@@ -50,12 +50,12 @@ export default function HostPage(props) {
             )
             .then(data => {
                 console.log(data)
-                setQuiz({...data})
-                
+                setQuiz({ ...data })
+
                 fetchActiveSession()
             })
     }
-    
+
     const fetchActiveSession = () => {
         let url = (DEBUG ? `https://localhost:7006` : ``) + `/Sessions/${sessionId}`
         fetch(url)
@@ -69,10 +69,10 @@ export default function HostPage(props) {
                 setCurrentPollIndex(quiz.polls.findIndex((poll) => poll.id === data.activePoll))
             })
     }
-    
+
     const nextPoll = () => {
         let nextPollIndex = currentPollIndex + 1
-        
+
         if (nextPollIndex === quiz.polls.length) {
             closeSession()
             return
@@ -81,24 +81,24 @@ export default function HostPage(props) {
         setCloseQuestion(false)
         setShowResults(false)
         setShouldCloseQuestionModal(false)
-        
+
         console.log(quiz)
         let nextPollId = quiz.polls[nextPollIndex].id
         console.log(nextPollId)
-        
+
         let url = (DEBUG ? `https://localhost:7006` : ``) + `/Polls/${nextPollId}/active`
-        fetch(url, {method: "PUT"})
+        fetch(url, { method: "PUT" })
             .then(res => {
                 setCurrentPollIndex(nextPollIndex)
-                console.log(`aaa: ${currentPollIndex}  ${ currentPollIndex < 0? "-1" : quiz.polls[currentPollIndex].id}`)
+                console.log(`aaa: ${currentPollIndex}  ${currentPollIndex < 0 ? "-1" : quiz.polls[currentPollIndex].id}`)
             }, res => {
                 alert(res.text())
             })
     }
-    
+
     const getTopParticipants = () => {
         const url = (DEBUG ? `https://localhost:7006` : ``) + `/Votes/Top?sessionId=${sessionId}`
-        
+
         fetch(url)
             .then(res => {
                 if (res.ok) {
@@ -115,10 +115,10 @@ export default function HostPage(props) {
                 alert(res)
             })
     }
-    
+
     const closeSession = () => {
         let url = (DEBUG ? `https://localhost:7006` : ``) + `/Sessions/${sessionId}/close`
-        fetch(url, {method: "PUT"})
+        fetch(url, { method: "PUT" })
             .then(res => {
                 console.log(res.json())
                 exportResults()
@@ -127,7 +127,7 @@ export default function HostPage(props) {
                 alert(res.text())
             })
     }
-    
+
     const exportResults = () => {
         let url = (DEBUG ? `https://localhost:7006` : ``) + `/votes/excel?sessionId=${sessionId}`
         fetch(url)
@@ -140,49 +140,53 @@ export default function HostPage(props) {
                 window.open(file);
             })
     }
-    
+
     const getQuizResults = (close) => {
         const url = (DEBUG ? `https://localhost:7006` : ``) + `/Votes/quizresult?sessionId=${sessionId}&pollOrder=${quiz.polls[currentPollIndex].orderNumber}&closeActivePoll=${close}`
-        
+
         fetch(url)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
                 setQuizResults([...data])
-                
+
                 setResultsModal(true)
             })
     }
-    
+
     const toggleCloseQuestion = (result) => {
         setCloseQuestion(result)
         setShouldCloseQuestionModal(false)
         toggleShowResults()
     }
-    
+
     const toggleShowResults = () => {
         setShowResults(!showResults)
     }
-    
+
     const isPreQuiz = () => {
         return currentPollIndex === -1;
     }
-    
-    
+
+    const isPostQuiz = () => {
+        return currentPollIndex === quiz.polls.length - 1;
+    }
+
+
     const renderQuizResults = () => {
-        
+
         return quizResults.map((_el) => {
             const poll = quiz.polls.find((poll) => poll.id === _el.pollId)
 
             const allAnswers = Object.keys(_el.voteDistribution).reduce((prev, curr) => {
-                    prev += _el.voteDistribution[curr]
-                    return prev
-                }, 0)
-            
+                prev += _el.voteDistribution[curr]
+                return prev
+            }, 0)
+
             return (
                 <Card style={{ margin: "20px" }}>
                     <Card.Header>
-                        <span className={"fs-3"}> { poll.name } </span>
+                        <span className={"fs-3"}> {poll.name} </span>
                     </Card.Header>
                     <Card.Body className="text-center">
                         <Container>
@@ -196,7 +200,7 @@ export default function HostPage(props) {
                                                 </span>
                                             </Col>
                                             <Col xs={6}>
-                                                <ProgressBar className={"h-100"} variant={el.isAnswer ? "success" : "danger"} now={ 
+                                                <ProgressBar className={"h-100"} variant={el.isAnswer ? "success" : "danger"} now={
                                                     allAnswers !== 0 ? (_el.voteDistribution[el.id] / allAnswers) * 100 : 0
                                                 } />
                                             </Col>
@@ -211,18 +215,18 @@ export default function HostPage(props) {
             )
         })
     }
-    
+
     const renderTopParticipants = () => {
-        return(
+        return (
             <Container>
                 {
                     topParticipants.map(el => {
                         return (
                             <Row align="left" className={"m-3"}>
                                 <Col xs={6}>
-                        <span className={"fs-3"}>
-                            {el.key}:
-                        </span>
+                                    <span className={"fs-3"}>
+                                        {el.key}:
+                                    </span>
                                 </Col>
                                 <Col xs={6}>
                                     <ProgressBar className={"h-100"} now={
@@ -237,7 +241,7 @@ export default function HostPage(props) {
             </Container>
         )
     }
-    
+
     return (
         <>
             <Modal show={shouldCloseQuestionModal} onHide={() => setShouldCloseQuestionModal(false)}>
@@ -259,8 +263,8 @@ export default function HostPage(props) {
                             </Col>
                         </Row>
                     </Container>
-                    
-                    
+
+
                 </Modal.Body>
             </Modal>
             <Modal fullscreen={true} show={resultsModal} onHide={() => setResultsModal(false)}>
@@ -269,18 +273,18 @@ export default function HostPage(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Stack>
-                        { renderQuizResults() }
+                        {renderQuizResults()}
                     </Stack>
                 </Modal.Body>
             </Modal>
-            
-            
-            <WebNavbar message="Host Page 🦉 Hooty"/>
+
+
+            <WebNavbar show={true} message="Host Page 🦉 Hooty" />
             <Container style={{ maxWidth: "1000px" }}>
                 <Card style={{ margin: "20px" }}>
                     <Card.Header>
                         <Stack direction={"horizontal"} gap={3}>
-                            { 
+                            {
                                 isPreQuiz() ?
                                     <Button
                                         onClick={nextPoll}
@@ -290,36 +294,44 @@ export default function HostPage(props) {
                                         onClick={nextPoll}
                                         variant="outline-success">
                                         {
-                                            currentPollIndex === quiz.polls.length - 1 ?
+                                            isPostQuiz() ?
                                                 <>Close session</>
                                                 :
                                                 <>Next question</>
                                         }
                                     </Button>
                             }
-                            <div className={"vr"} />
-                            <Button
-                                onClick={() => {
-                                    showResults === true ? 
-                                        toggleShowResults()
-                                        :
-                                        setShouldCloseQuestionModal(true)
-                                }}
-                                variant="outline-primary"
-                            >
-                                {
-                                    showResults === true ?
-                                        "Hide results"
-                                        :
-                                        "Show results"
-                                }
-                            </Button>
-                            <Button
-                                onClick={() => getQuizResults(false)}
-                                variant="outline-primary"
-                            >
-                                Show quiz results
-                            </Button>
+
+                            {
+                                isPreQuiz() ?
+                                    <></>
+                                    :
+                                    <>
+                                        <div className={"vr"} />
+                                        <Button
+                                            onClick={() => {
+                                                showResults === true ?
+                                                    toggleShowResults()
+                                                    :
+                                                    setShouldCloseQuestionModal(true)
+                                            }}
+                                            variant="outline-primary"
+                                        >
+                                            {
+                                                showResults === true ?
+                                                    "Hide results"
+                                                    :
+                                                    "Show results"
+                                            }
+                                        </Button>
+
+                                        <Button
+                                            onClick={() => getQuizResults(false)}
+                                            variant="outline-primary"
+                                        >
+                                            Show quiz results
+                                        </Button></>
+                            }
                         </Stack>
                     </Card.Header>
 
@@ -330,13 +342,13 @@ export default function HostPage(props) {
                                 :
                                 isPreQuiz() ?
                                     <a href={(DEBUG ? `https://localhost:7006` : ``) + `/play/${sessionId}`}>
-                                        { <h1>Code: {code}</h1> }
+                                        {<h1>Code: {code}</h1>}
                                     </a>
                                     :
                                     <HostQuestion showResults={showResults} closeQuestion={closeQuestion} params={quiz.polls[currentPollIndex]} sessionId={sessionId} />
                         }
                     </Card.Body>
-                    
+
                     <Card.Footer className="text-center text-muted" />
                 </Card>
             </Container>

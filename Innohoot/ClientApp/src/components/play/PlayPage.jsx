@@ -10,7 +10,7 @@ import Button from "react-bootstrap/Button"
 
 import WebNavbar from "../WebNavbar";
 
-import {AnswerResponseOptions, DEBUG} from "../../context/utils";
+import { AnswerResponseOptions, DEBUG } from "../../context/utils";
 import { v4 as uuidv4 } from 'uuid'
 import { Alert, Spinner } from "react-bootstrap";
 
@@ -318,7 +318,7 @@ export function PlayPage(props) {
                             aria-labelledby={"name-describe-text"}
                         />
                     </InputGroup>
-                    <InputGroup  className="mb-2">
+                    <InputGroup className="mb-2">
                         <Form.Text id={"name-describe-text"} muted>
                             must be at least 3 symbols
                         </Form.Text>
@@ -338,7 +338,7 @@ export function PlayPage(props) {
 
     return (
         <>
-            <WebNavbar message="🦉 Welcome to Hooty!"></WebNavbar>
+            <WebNavbar show={true} message="🦉 Welcome to Hooty!"></WebNavbar>
             <Container style={{ maxWidth: "1000px" }}>
                 {participantName.current === null ?
                     renderNameForm() :

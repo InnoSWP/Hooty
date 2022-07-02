@@ -201,7 +201,7 @@ export default function QuizListPage(props) {
 
     return (
         <>
-            <WebNavbar message="Quiz List 🦉 Hooty"></WebNavbar>
+            <WebNavbar show={true} message="Quiz List 🦉 Hooty"></WebNavbar>
             <Container style={{ maxWidth: "1000px" }}>
                 <Card style={{ margin: "20px" }}>
                     <Card.Header >
