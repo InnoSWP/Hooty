@@ -9,6 +9,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from "react-bootstrap/Button"
 
 import WebNavbar from "../WebNavbar";
+import {DEBUG} from "../../context/utils";
 
 export default function PlayCodePage() {
 
@@ -20,7 +21,7 @@ export default function PlayCodePage() {
     }
 
     const getSessionId = () => {
-        let url = `https://localhost:7006/Sessions/${code}`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/Sessions/${code}`
 
         fetch(url)
             .then(res => res.json(), res => alert(res))

@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { UserContext } from "../../context/utils";
+import {DEBUG, UserContext} from "../../context/utils";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
 
@@ -29,11 +29,11 @@ export function LoginPage(props) {
 
                         <ListGroup className="d-flex justify-content-center" horizontal>
                             <ListGroup.Item>
-                                <LoginForm label="Log In" formName={"Login"} userContext={props.userContext} url={"/Users/login"} />
+                                <LoginForm label="Log In" formName={"Login"} userContext={props.userContext} url={(DEBUG ? `https://localhost:7006` : ``) + "/Users/login"} />
                             </ListGroup.Item>
 
                             <ListGroup.Item style={{ backgroundColor: "#f2f2f2" }} >
-                                <RegisterForm label="Sign Up" formName={"Create user"} userContext={props.userContext} url={"/Users"} />
+                                <RegisterForm label="Sign Up" formName={"Create user"} userContext={props.userContext} url={(DEBUG ? `https://localhost:7006` : ``) + "/Users"} />
                             </ListGroup.Item>
                         </ListGroup>
 

@@ -2,7 +2,7 @@
 import Quiz from "./quizzes/Quiz";
 
 import { v4 as uuidv4 } from 'uuid';
-import { UserContext } from "../context/utils";
+import { UserContext, DEBUG } from "../context/utils";
 import WebNavbar from "./WebNavbar";
 
 import Container from "react-bootstrap/esm/Container";
@@ -17,7 +17,7 @@ export default function QuizListPage(props) {
     const [isProcessing, setIsProcessing] = React.useState(false)
     
     React.useEffect(() => {
-        let url = `/Users/PollCollections?Id=${UserContext.getUserId()}`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/Users/PollCollections?Id=${UserContext.getUserId()}`
         
         setIsProcessing(true)
 
@@ -76,8 +76,9 @@ export default function QuizListPage(props) {
             quiz_name: "New quiz name",
             questions: []
         }
-
-        const createQuizUrl = "/PollCollections"
+        
+        
+        const createQuizUrl = (DEBUG ? `https://localhost:7006` : ``) + "/PollCollections"
         setIsProcessing(true)
 
         fetch(createQuizUrl, {
@@ -140,7 +141,7 @@ export default function QuizListPage(props) {
         
         setIsProcessing(true)
 
-        let deleteQuizUrl = `/PollCollections?Id=${quiz.uuid}`
+        let deleteQuizUrl = (DEBUG ? `https://localhost:7006` : ``) + `/PollCollections?Id=${quiz.uuid}`
 
         fetch(deleteQuizUrl, {
             method: "DELETE"
@@ -158,7 +159,7 @@ export default function QuizListPage(props) {
     }
 
     const submitUpdate = (quiz) => {
-        const updateQuizUrl = "/PollCollections"
+        const updateQuizUrl = (DEBUG ? `https://localhost:7006` : ``) + "/PollCollections"
         
         setIsProcessing(true)
 
