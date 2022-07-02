@@ -27,7 +27,7 @@ export function PlayPage(props) {
     const pollRef = React.useRef(null)
     const [isAnswered, setIsAnswered] = React.useState()
     const [isValidName, setIsValidName] = React.useState(true)
-    const [currentAnswer, setCurrentAnswer] = React.useState()
+    const [currentAnswer, setCurrentAnswer] = React.useState(null)
     const timerId = React.useRef(null)
     const [participant, setParticipant] = React.useState(null)
     const participantName = React.useRef(null)
@@ -76,6 +76,7 @@ export function PlayPage(props) {
 
 
                     setIsAnswered(false)
+                    setCurrentAnswer(null)
                     pollRef.current = { ...actQuestion }
                     setPoll({ ...actQuestion })
                 }
@@ -84,6 +85,9 @@ export function PlayPage(props) {
     }
 
     const submitAnswer = () => {
+        if (currentAnswer === null) {
+            return
+        }
         let url = (DEBUG ? `https://localhost:7006` : ``) + `/Votes`
         fetch(url, {
             method: "PUT",
@@ -196,7 +200,7 @@ export function PlayPage(props) {
                 }
 
                 {poll.poll?.options?.length > 0 ?
-                    <Button variant="outline-success" onClick={submitAnswer}>
+                    <Button variant="outline-success" onClick={submitAnswer} disabled={currentAnswer === null}>
                         Submit answer
                     </Button> : null
                 }
