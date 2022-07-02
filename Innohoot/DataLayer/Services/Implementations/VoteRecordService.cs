@@ -106,7 +106,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 			return null;
 		}
 
-		public async Task<SortedDictionary<string, int>> GetTopParticipants(Guid sessionId)
+		public async Task<IOrderedEnumerable<KeyValuePair<string, int>>> GetTopParticipants(Guid sessionId)
 		{
 			//participantName and score
 			var top = new Dictionary<string, int>();
@@ -131,7 +131,10 @@ namespace Innohoot.DataLayer.Services.Implementations
 				}
 			}
 
-			SortedDictionary<string, int> sortedTop = new SortedDictionary<string, int>(top);
+			var sortedTop = from entry in top orderby entry.Value descending select entry;
+
+			//SortedDictionary<string, int> sortedTop = new SortedDictionary<string, int>(top);
+		
 
 			return sortedTop;
 		}
