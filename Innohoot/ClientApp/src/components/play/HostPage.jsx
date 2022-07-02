@@ -11,6 +11,7 @@ import Button from "react-bootstrap/esm/Button";
 import "../../css/App.css";
 import {Col, Modal, Row, Stack} from "react-bootstrap";
 import ProgressBar from "react-bootstrap/ProgressBar";
+import {DEBUG} from "../../context/utils";
 
 export default function HostPage(props) {
     
@@ -33,6 +34,8 @@ export default function HostPage(props) {
     const [showResults, setShowResults] = React.useState(false)
     const [currentPollIndex, setCurrentPollIndex] = React.useState(-1)
     const [quizResults, setQuizResults] = React.useState([])
+    const [topParticipants, setTopParticipants] = React.useState([])
+    const [showTop, setShowTop] = React.useState(false)
     
     React.useEffect(() => {
         console.log("aboba")
@@ -40,7 +43,7 @@ export default function HostPage(props) {
     }, [])
     
     const fetchQuiz = () => {
-        let url = `https://localhost:7006/PollCollections?Id=${pollCollectionId}`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/PollCollections?Id=${pollCollectionId}`
         fetch(url)
             .then(
                 res => res.json()
@@ -54,7 +57,7 @@ export default function HostPage(props) {
     }
     
     const fetchActiveSession = () => {
-        let url = `https://localhost:7006/Sessions/${sessionId}`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/Sessions/${sessionId}`
         fetch(url)
             .then(
                 res => res.json(),
@@ -83,7 +86,7 @@ export default function HostPage(props) {
         let nextPollId = quiz.polls[nextPollIndex].id
         console.log(nextPollId)
         
-        let url = `https://localhost:7006/Polls/${nextPollId}/active`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/Polls/${nextPollId}/active`
         fetch(url, {method: "PUT"})
             .then(res => {
                 setCurrentPollIndex(nextPollIndex)
@@ -93,20 +96,40 @@ export default function HostPage(props) {
             })
     }
     
+    const getTopParticipants = () => {
+        const url = (DEBUG ? `https://localhost:7006` : ``) + `/Votes/Top?sessionId=${sessionId}`
+        
+        fetch(url)
+            .then(res => {
+                if (res.ok) {
+                    return res.json()
+                } else {
+                    return Promise.reject(res.text())
+                }
+            })
+            .then(data => {
+                setTopParticipants([...data])
+                setShowTop(true)
+            })
+            .catch(res => {
+                alert(res)
+            })
+    }
+    
     const closeSession = () => {
-        let url = `https://localhost:7006/Sessions/${sessionId}/close`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/Sessions/${sessionId}/close`
         fetch(url, {method: "PUT"})
             .then(res => {
                 console.log(res.json())
                 exportResults()
-                navigate("/quizlist")
+                getTopParticipants()
             }, res => {
                 alert(res.text())
             })
     }
     
     const exportResults = () => {
-        let url = `https://localhost:7006/votes/excel?sessionId=${sessionId}`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/votes/excel?sessionId=${sessionId}`
         fetch(url)
             .then(res => {
                 console.log(res)
@@ -114,12 +137,12 @@ export default function HostPage(props) {
             })
             .then(data => {
                 let file = window.URL.createObjectURL(data);
-                window.location.assign(file);
+                window.open(file);
             })
     }
     
     const getQuizResults = (close) => {
-        const url = `https://localhost:7006/Votes/quizresult?sessionId=${sessionId}&pollOrder=${quiz.polls[currentPollIndex].orderNumber}&closeActivePoll=${close}`
+        const url = (DEBUG ? `https://localhost:7006` : ``) + `/Votes/quizresult?sessionId=${sessionId}&pollOrder=${quiz.polls[currentPollIndex].orderNumber}&closeActivePoll=${close}`
         
         fetch(url)
             .then(res => res.json())
@@ -173,7 +196,7 @@ export default function HostPage(props) {
                                                 </span>
                                             </Col>
                                             <Col xs={6}>
-                                                <ProgressBar className={"h-100"} now={ 
+                                                <ProgressBar className={"h-100"} variant={el.isAnswer ? "success" : "danger"} now={ 
                                                     allAnswers !== 0 ? (_el.voteDistribution[el.id] / allAnswers) * 100 : 0
                                                 } />
                                             </Col>
@@ -187,6 +210,32 @@ export default function HostPage(props) {
                 </Card>
             )
         })
+    }
+    
+    const renderTopParticipants = () => {
+        return(
+            <Container>
+                {
+                    topParticipants.map(el => {
+                        return (
+                            <Row align="left" className={"m-3"}>
+                                <Col xs={6}>
+                        <span className={"fs-3"}>
+                            {el.key}:
+                        </span>
+                                </Col>
+                                <Col xs={6}>
+                                    <ProgressBar className={"h-100"} now={
+                                        quiz.polls?.length !== 0 ? (el.value - 1 / quiz.polls?.length) * 100 : 0
+                                    } />
+                                </Col>
+
+                            </Row>
+                        )
+                    })
+                }
+            </Container>
+        )
     }
     
     return (
@@ -226,7 +275,7 @@ export default function HostPage(props) {
             </Modal>
             
             
-            <WebNavbar message="Host Page 🦉 Hooty"></WebNavbar>
+            <WebNavbar message="Host Page 🦉 Hooty"/>
             <Container style={{ maxWidth: "1000px" }}>
                 <Card style={{ margin: "20px" }}>
                     <Card.Header>
@@ -275,16 +324,20 @@ export default function HostPage(props) {
                     </Card.Header>
 
                     <Card.Body className="text-center">
-                        { isPreQuiz() ?
-                            <a href={`https://localhost:44402/play/${sessionId}`}>
-                                { <h1>Code: {code}</h1> }
-                            </a>
-                            :
-                            <HostQuestion showResults={showResults} closeQuestion={closeQuestion} params={quiz.polls[currentPollIndex]} sessionId={sessionId} />
+                        {
+                            showTop === true ?
+                                renderTopParticipants()
+                                :
+                                isPreQuiz() ?
+                                    <a href={(DEBUG ? `https://localhost:7006` : ``) + `/play/${sessionId}`}>
+                                        { <h1>Code: {code}</h1> }
+                                    </a>
+                                    :
+                                    <HostQuestion showResults={showResults} closeQuestion={closeQuestion} params={quiz.polls[currentPollIndex]} sessionId={sessionId} />
                         }
                     </Card.Body>
                     
-                    <Card.Footer className="text-center text-muted"></Card.Footer>
+                    <Card.Footer className="text-center text-muted" />
                 </Card>
             </Container>
         </>

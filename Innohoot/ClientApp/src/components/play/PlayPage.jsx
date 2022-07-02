@@ -10,7 +10,7 @@ import Button from "react-bootstrap/Button"
 
 import WebNavbar from "../WebNavbar";
 
-import { AnswerResponseOptions } from "../../context/utils";
+import {AnswerResponseOptions, DEBUG} from "../../context/utils";
 import { v4 as uuidv4 } from 'uuid'
 import { Alert, Spinner } from "react-bootstrap";
 
@@ -33,7 +33,7 @@ export function PlayPage(props) {
     const participantName = React.useRef(null)
 
     const getPollCallback = () => {
-        let url = `https://localhost:7006/participants/${sessionId}/${participantName.current}`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/participants/${sessionId}/${participantName.current}`
         fetch(url)
             .then(res => {
                 console.log(res)
@@ -84,7 +84,7 @@ export function PlayPage(props) {
     }
 
     const submitAnswer = () => {
-        let url = `https://localhost:7006/Votes`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/Votes`
         fetch(url, {
             method: "PUT",
             headers: {
@@ -136,7 +136,7 @@ export function PlayPage(props) {
                 setIsValidName(false)
                 return
             }
-            const url = `https://localhost:7006/Sessions/${sessionId}/newparticipant`
+            const url = (DEBUG ? `https://localhost:7006` : ``) + `/Sessions/${sessionId}/newparticipant`
             fetch(url, {
                 method: 'POST',
                 headers: {
