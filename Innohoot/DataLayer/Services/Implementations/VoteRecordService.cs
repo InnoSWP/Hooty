@@ -120,6 +120,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 					var votes = await _db
 						.Get<VoteRecord>(y => y.SessionId == sessionId && y.ParticipantName == participant)
+						.Include(v => v.Option)
 						.ToListAsync();
 
 					foreach (var vote in votes)
