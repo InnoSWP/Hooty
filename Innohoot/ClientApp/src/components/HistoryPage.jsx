@@ -48,7 +48,7 @@ export default function HistoryPage(props) {
                                 <Accordion.Body>
                                     <Stack gap={2}>
                                         <div>
-                                            <span className={"fs-4"}>Created: `${date.toLocaleDateString()} ${data.toLocaleTimeString()}`</span>
+                                            <span className={"fs-4"}>Created: `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`</span>
                                         </div>
                                         <div>
                                             <span className={"fs-4"}>Duration: {el.duration}</span>
