@@ -1,5 +1,5 @@
-﻿import React from "react";
-import {DEBUG, UserContext} from "../../context/utils";
+﻿import { React, useEffect } from "react";
+import { DEBUG, UserContext } from "../../context/utils";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
 
@@ -15,7 +15,7 @@ import "../../css/App.css";
 export function LoginPage(props) {
     return (
         <>
-            <WebNavbar message="🦉 Welcome to Hooty!"></WebNavbar>
+            <WebNavbar show={false} message="🦉 Welcome to Hooty!"></WebNavbar>
             <Container style={{ maxWidth: "1000px" }}>
                 <Card className="text-center" style={{
                     margin: "20px"

@@ -8,7 +8,6 @@ import Card from 'react-bootstrap/Card';
 
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router";
-import FetchSpinner from "../FetchSpinner";
 import { Spinner } from "react-bootstrap";
 import {DEBUG} from "../../context/utils";
 

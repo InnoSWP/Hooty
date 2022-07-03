@@ -62,7 +62,9 @@ export default function HostQuestion (props) {
                                     </span>
                                 </Col>
                                 <Col xs={6}>
-                                    <ProgressBar className={"h-100"} now={ allAnswers !== 0 ? (results[el.id] / allAnswers) * 100 : 0} />
+                                    <ProgressBar className={"h-100"} variant={el.isAnswer ? "success" : "danger"} now={ 
+                                        allAnswers !== 0 ? (results[el.id] / allAnswers) * 100 : 0} 
+                                    />
                                 </Col>
                                 
                             </Row>

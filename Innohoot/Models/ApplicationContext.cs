@@ -27,6 +27,8 @@ namespace Innohoot.DataLayer
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Session>().HasIndex(s => s.AccessCode).IsUnique();
+			modelBuilder.Entity<User>().HasIndex(s => s.Login).IsUnique();
+
 		}
 
 		public DbSet<T> DbSet<T>() where T : class
