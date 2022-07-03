@@ -111,6 +111,7 @@ namespace Innohoot.Controllers
 				sessionDTO.ActivePollId = null;
 				sessionDTO.AccessCode = null;
 				sessionDTO.ShowResultPoll = new List<Guid>();
+				sessionDTO.Duration = TimeSpan.FromMilliseconds(DateTime.Now.Millisecond - sessionDTO.Created.Millisecond);
 				await _sessionService.Update(sessionDTO);
 				return Ok();
 			}
