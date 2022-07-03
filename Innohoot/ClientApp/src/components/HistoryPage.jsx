@@ -50,7 +50,7 @@ export default function HistoryPage(props) {
                     history.map(el => {
 
                         const date = new Date(el.created)
-                        const start = new Date(el.starTime)
+                        const start = new Date(el.starTime) 
                         
                         return (
                             <Accordion.Item eventKey={el.id}>
@@ -76,7 +76,7 @@ export default function HistoryPage(props) {
                                             <span className={"fs-5"}>Created: {date.toLocaleDateString()} {date.toLocaleTimeString()}</span>
                                         </div>
                                         <div>
-                                            <span className={"fs-5"}>Duration: {el.duration.split('.')[0]}</span>
+                                            <span className={"fs-5"}>Duration: {el.duration}</span>
                                         </div>
                                         
                                         <div>
