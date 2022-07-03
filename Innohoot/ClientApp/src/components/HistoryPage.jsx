@@ -2,7 +2,7 @@
 import {DEBUG, UserContext} from "../context/utils";
 import WebNavbar from "./WebNavbar";
 import Card from "react-bootstrap/Card";
-import {Accordion, ListGroup, Stack} from "react-bootstrap";
+import {Accordion, Button, ListGroup, Stack} from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 
 export default function HistoryPage(props) {
@@ -27,6 +27,19 @@ export default function HistoryPage(props) {
                 alert(res)
             })
     }, [])
+
+    const exportResults = (sessionId) => {
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/votes/excel?sessionId=${sessionId}`
+        fetch(url)
+            .then(res => {
+                console.log(res)
+                return res.blob()
+            })
+            .then(data => {
+                let file = window.URL.createObjectURL(data);
+                window.open(file);
+            })
+    }
     
     const renderHistory = () => {
         
@@ -37,7 +50,7 @@ export default function HistoryPage(props) {
                     history.map(el => {
 
                         const date = new Date(el.created)
-                        const start = new Date(el.starTime)
+                        const start = new Date(el.starTime) 
                         
                         return (
                             <Accordion.Item eventKey={el.id}>
@@ -45,6 +58,11 @@ export default function HistoryPage(props) {
                                     {
                                         `${el.name} - ${start.toLocaleDateString()} ${start.toLocaleTimeString()}`
                                     }
+                                    <Button 
+                                        onClick={() => exportResults(el.id)} 
+                                        variant={"success"}>
+                                        Export results
+                                    </Button>
                                 </Accordion.Header>
                                 <Accordion.Body>
                                     <Stack gap={2}>
