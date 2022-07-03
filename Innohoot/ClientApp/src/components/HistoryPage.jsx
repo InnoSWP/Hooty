@@ -36,13 +36,7 @@ export default function HistoryPage(props) {
                 {
                     history.map(el => {
 
-                        const dur = new Date(Date.UTC(0,0,0,0,0,0,el.duration))
-                        const parts = [
-                                dur.getUTCHours(),
-                                dur.getUTCMinutes(),
-                                dur.getUTCSeconds()
-                            ]
-                        const formattedDuration = parts.map(s => String(s).padStart(2,'0')).join(':');
+                        const date = new Date(el.created)
                         
                         return (
                             <Accordion.Item eventKey={el.id}>
@@ -54,10 +48,10 @@ export default function HistoryPage(props) {
                                 <Accordion.Body>
                                     <Stack gap={2}>
                                         <div>
-                                            <span className={"fs-4"}>Created: {new Date(el.created).toString()}</span>
+                                            <span className={"fs-4"}>Created: `${date.toLocaleDateString()} ${data.toLocaleTimeString()}`</span>
                                         </div>
                                         <div>
-                                            <span className={"fs-4"}>Duration: {formattedDuration}</span>
+                                            <span className={"fs-4"}>Duration: {el.duration}</span>
                                         </div>
                                         
                                         <div>
