@@ -2,7 +2,7 @@
 import Quiz from "./quizzes/Quiz";
 
 import { v4 as uuidv4 } from 'uuid';
-import { UserContext, DEBUG } from "../context/utils";
+import {DEBUG, UserContext} from "../context/utils";
 import WebNavbar from "./WebNavbar";
 
 import Container from "react-bootstrap/esm/Container";
@@ -10,7 +10,6 @@ import Card from "react-bootstrap/esm/Card";
 import Button from "react-bootstrap/esm/Button";
 
 import "../css/App.css";
-import FetchSpinner from "./FetchSpinner";
 
 export default function QuizListPage(props) {
     const [quizList, setQuizList] = React.useState([])
@@ -76,8 +75,6 @@ export default function QuizListPage(props) {
             quiz_name: "New quiz name",
             questions: []
         }
-        
-        
         const createQuizUrl = (DEBUG ? `https://localhost:7006` : ``) + "/PollCollections"
         setIsProcessing(true)
 
@@ -203,8 +200,7 @@ export default function QuizListPage(props) {
 
     return (
         <>
-            <FetchSpinner status={isProcessing} />
-            <WebNavbar message="Quiz List 🦉 Hooty"></WebNavbar>
+            <WebNavbar show={true} message="Quiz List 🦉 Hooty"></WebNavbar>
             <Container style={{ maxWidth: "1000px" }}>
                 <Card style={{ margin: "20px" }}>
                     <Card.Header >

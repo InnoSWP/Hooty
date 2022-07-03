@@ -13,14 +13,21 @@ export function LoginForm(props) {
     const sha = new Hashes.SHA256
 
     const [state, setState] = React.useState({
-        id: ""
+        name: "",
+        password: ""
     })
     const [isProcessing, setIsProcessing] = React.useState(false)
+    const [isValid, setIsValid] = React.useState(true)
     const navigate = useNavigate()
 
     let handleSubmit = (event) => {
         event.preventDefault()
         let url = `${props.url}`
+
+        if (!isValid || state.name.length === 0 || state.password.length === 0) {
+            setIsValid(false)
+            return
+        }
 
         setIsProcessing(true)
 
@@ -44,6 +51,7 @@ export function LoginForm(props) {
             .then(data => {
                 console.log(data)
                 setIsProcessing(false)
+                setIsValid(true)
 
                 UserContext.setUserId(data.slice(1, -1))
                 navigate("/quizlist")
@@ -78,6 +86,7 @@ export function LoginForm(props) {
                     <Form.Control
                         placeholder="Username"
                         aria-label="Username"
+                        isInvalid={!isValid}
                         aria-describedby="basic-addon1"
                         onChange={handleNameChange}
                         state={state.name}
@@ -89,6 +98,7 @@ export function LoginForm(props) {
                     <Form.Control
                         placeholder="Password"
                         aria-label="Password"
+                        isInvalid={!isValid}
                         type="password"
                         aria-describedby="basic-addon1"
                         onChange={handlePasswordChange}

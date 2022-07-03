@@ -10,7 +10,7 @@ import Button from "react-bootstrap/Button"
 
 import WebNavbar from "../WebNavbar";
 
-import {AnswerResponseOptions, DEBUG} from "../../context/utils";
+import { AnswerResponseOptions, DEBUG } from "../../context/utils";
 import { v4 as uuidv4 } from 'uuid'
 import { Alert, Spinner } from "react-bootstrap";
 
@@ -26,7 +26,8 @@ export function PlayPage(props) {
     })
     const pollRef = React.useRef(null)
     const [isAnswered, setIsAnswered] = React.useState()
-    const [currentAnswer, setCurrentAnswer] = React.useState()
+    const [isValidName, setIsValidName] = React.useState(true)
+    const [currentAnswer, setCurrentAnswer] = React.useState(null)
     const timerId = React.useRef(null)
     const [participant, setParticipant] = React.useState(null)
     const participantName = React.useRef(null)
@@ -75,6 +76,7 @@ export function PlayPage(props) {
 
 
                     setIsAnswered(false)
+                    setCurrentAnswer(null)
                     pollRef.current = { ...actQuestion }
                     setPoll({ ...actQuestion })
                 }
@@ -83,6 +85,9 @@ export function PlayPage(props) {
     }
 
     const submitAnswer = () => {
+        if (currentAnswer === null) {
+            return
+        }
         let url = (DEBUG ? `https://localhost:7006` : ``) + `/Votes`
         fetch(url, {
             method: "PUT",
@@ -122,12 +127,40 @@ export function PlayPage(props) {
     }
 
     const handleNameChange = [
-        (event) => setParticipant(event.target.value),
-        () => {
-            participantName.current = participant
-            if (getPollCallback !== null) {
-                getPollCallback()
+        (event) => {
+            setParticipant(event.target.value)
+            if (event.target.value.length < 3) {
+                setIsValidName(false)
+            } else {
+                setIsValidName(true)
             }
+        },
+        () => {
+            if (!isValidName || participant.length < 3) {
+                setIsValidName(false)
+                return
+            }
+            const url = (DEBUG ? `https://localhost:7006` : ``) + `/Sessions/${sessionId}/newparticipant`
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(participant)
+            })
+                .then(res => {
+                    if (res.ok) {
+                        participantName.current = participant
+                        if (getPollCallback !== null) {
+                            getPollCallback()
+                        }
+                    } else {
+                        res.text()
+                            .then(data => {
+                                alert(data)
+                            })
+                    }
+                })
         }
     ]
 
@@ -167,7 +200,7 @@ export function PlayPage(props) {
                 }
 
                 {poll.poll?.options?.length > 0 ?
-                    <Button variant="outline-success" onClick={submitAnswer}>
+                    <Button variant="outline-success" onClick={submitAnswer} disabled={currentAnswer === null}>
                         Submit answer
                     </Button> : null
                 }
@@ -273,16 +306,22 @@ export function PlayPage(props) {
             }}>
                 <Card.Header>Enter the name to enter</Card.Header>
                 <Card.Body>
-                    <InputGroup className="mb-2">
+                    <InputGroup>
                         <InputGroup.Text>Name: </InputGroup.Text>
                         <Form.Control
                             id="name-form"
                             type="text"
+                            isInvalid={!isValidName}
                             value={participant}
                             onChange={handleNameChange[0]}
                             placeholder="Enter your name"
-                            aria-label="Enter your name"
+                            aria-labelledby={"name-describe-text"}
                         />
+                    </InputGroup>
+                    <InputGroup className="mb-2">
+                        <Form.Text id={"name-describe-text"} muted>
+                            must be at least 3 symbols
+                        </Form.Text>
                     </InputGroup>
 
                     <div className="d-grid gap-2">
@@ -299,7 +338,7 @@ export function PlayPage(props) {
 
     return (
         <>
-            <WebNavbar message="🦉 Welcome to Hooty!"></WebNavbar>
+            <WebNavbar show={true} message="🦉 Welcome to Hooty!"></WebNavbar>
             <Container style={{ maxWidth: "1000px" }}>
                 {participantName.current === null ?
                     renderNameForm() :

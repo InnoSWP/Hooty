@@ -32,7 +32,7 @@ export default function PlayCodePage() {
 
     return (
         <>
-            <WebNavbar message="🦉 Welcome to Hooty!"></WebNavbar>
+            <WebNavbar show={true} message="🦉 Welcome to Hooty!"></WebNavbar>
             <Container style={{ maxWidth: "1000px" }}>
                 <Card className="text-center" style={{
                     margin: "20px"

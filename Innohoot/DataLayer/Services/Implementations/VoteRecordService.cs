@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Specialized;
+using AutoMapper;
 
 using Innohoot.DTO;
 using Innohoot.Models.Activity;
@@ -103,6 +104,39 @@ namespace Innohoot.DataLayer.Services.Implementations
 			}
 			_db.Context.ChangeTracker.Clear();
 			return null;
+		}
+
+		public async Task<IOrderedEnumerable<KeyValuePair<string, int>>> GetTopParticipants(Guid sessionId)
+		{
+			//participantName and score
+			var top = new Dictionary<string, int>();
+			var session = await _db.Get<Session>(sessionId).FirstOrDefaultAsync();
+
+			if (session?.ParticipantList is not null)
+			{
+				foreach (var participant in session.ParticipantList)
+				{
+					top.Add(participant, 0);
+
+					var votes = await _db
+						.Get<VoteRecord>(y => y.SessionId == sessionId && y.ParticipantName == participant)
+						.Include(v => v.Option)
+						.ToListAsync();
+
+					foreach (var vote in votes)
+					{ 
+						if (vote.Option.IsAnswer)
+							top[participant]++;
+					}
+				}
+			}
+
+			var sortedTop = from entry in top orderby entry.Value descending select entry;
+
+			//SortedDictionary<string, int> sortedTop = new SortedDictionary<string, int>(top);
+		
+
+			return sortedTop;
 		}
 	}
 }

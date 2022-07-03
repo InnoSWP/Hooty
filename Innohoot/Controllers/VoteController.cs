@@ -115,5 +115,13 @@ namespace Innohoot.Controllers
 				}
 			}
 		}
+
+		[HttpGet("Top")]
+		public async Task<IActionResult> GetTopParticipant(Guid sessionId)
+		{
+			var top = await _voteRecordService.GetTopParticipants(sessionId);
+
+			return Ok(top);
+		}
 	}
 }
