@@ -29,10 +29,21 @@ export default function HistoryPage(props) {
     }, [])
     
     const renderHistory = () => {
+        
+        
         return (
             <Accordion alwaysOpen>
                 {
                     history.map(el => {
+
+                        const dur = new Date(Date.UTC(0,0,0,0,0,0,el.duration))
+                        const parts = [
+                                dur.getUTCHours(),
+                                dur.getUTCMinutes(),
+                                dur.getUTCSeconds()
+                            ]
+                        const formattedDuration = parts.map(s => String(s).padStart(2,'0')).join(':');
+                        
                         return (
                             <Accordion.Item eventKey={el.id}>
                                 <Accordion.Header>
@@ -43,13 +54,14 @@ export default function HistoryPage(props) {
                                 <Accordion.Body>
                                     <Stack gap={2}>
                                         <div>
-                                            <span className={"fs-4"}>Created: {el.created}</span>
+                                            <span className={"fs-4"}>Created: {new Date(el.created)}</span>
                                         </div>
                                         <div>
-                                            <span className={"fs-4"}>Duration: {el.duration}</span>
+                                            <span className={"fs-4"}>Duration: {formattedDuration}</span>
                                         </div>
                                         
                                         <div>
+                                            <span className={"fs-4"}>Participants: </span>
                                             <ListGroup>
                                                 {
                                                     el.participantList.map(par => {
