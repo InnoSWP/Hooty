@@ -12,7 +12,8 @@ import WebNavbar from "../WebNavbar";
 
 import { AnswerResponseOptions, DEBUG } from "../../context/utils";
 import { v4 as uuidv4 } from 'uuid'
-import { Alert, Spinner } from "react-bootstrap";
+import {Alert, Badge, Spinner} from "react-bootstrap";
+import {IconTick} from "../Icons";
 
 export function PlayPage(props) {
 
@@ -228,15 +229,17 @@ export function PlayPage(props) {
                                                 :
                                                 "danger"
                                         }
-                                        size={
-                                            results.chosenOptionId === option.id ?
-                                                "lg"
-                                                :
-                                                null
-                                        }
                                         value={option.id}
                                     >
                                         {option.name}
+                                        {
+                                            results.chosenOptionId === option.id ?
+                                                <Badge bg={"secondary"}>
+                                                    <IconTick></IconTick>
+                                                </Badge>
+                                                :
+                                                null
+                                        }
                                     </ToggleButton>
                                 </ButtonGroup>
                                 <br />
@@ -300,7 +303,7 @@ export function PlayPage(props) {
                                 </Card.Body>
                             </>
                 }
-
+                <Card.Footer className="text-center text-muted" >If you have any feedback: <a href="mailto:z.galyautdinova@innopolis.university">z.galyautdinova@innopolis.university</a></Card.Footer>
             </Card>
         )
     }
@@ -338,6 +341,7 @@ export function PlayPage(props) {
                         >Enter</Button>
                     </div>
                 </Card.Body>
+                <Card.Footer className="text-center text-muted" >If you have any feedback: <a href="mailto:z.galyautdinova@innopolis.university">z.galyautdinova@innopolis.university</a></Card.Footer>
             </Card>
         )
     }

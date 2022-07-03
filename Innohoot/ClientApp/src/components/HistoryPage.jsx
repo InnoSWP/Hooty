@@ -115,7 +115,7 @@ export default function HistoryPage(props) {
                         {renderHistory()}
                     </Card.Body>
                         
-                    <Card.Footer className="text-center text-muted" />
+                    <Card.Footer className="text-center text-muted" >If you have any feedback: <a href="mailto:z.galyautdinova@innopolis.university">z.galyautdinova@innopolis.university</a></Card.Footer>
                 </Card>
             </Container>
         </>

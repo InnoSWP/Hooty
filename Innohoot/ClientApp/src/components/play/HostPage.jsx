@@ -228,6 +228,7 @@ export default function HostPage(props) {
                                     </span>
                                 </Col>
                                 <Col xs={6}>
+                                    <span>{el.value}/quiz.polls?.length</span>
                                     <ProgressBar className={"h-100"} now={
                                         quiz.polls?.length !== 0 ? (el.value/ quiz.polls?.length) * 100 : 0
                                     } />
@@ -329,7 +330,8 @@ export default function HostPage(props) {
                                             variant="outline-primary"
                                         >
                                             Show quiz results
-                                        </Button></>
+                                        </Button>
+                                    </>
                             }
                         </Stack>
                     </Card.Header>
@@ -360,7 +362,7 @@ export default function HostPage(props) {
                         }
                     </Card.Body>
 
-                    <Card.Footer className="text-center text-muted" />
+                    <Card.Footer className="text-center text-muted" >If you have any feedback: <a href="mailto:z.galyautdinova@innopolis.university">z.galyautdinova@innopolis.university</a></Card.Footer>
                 </Card>
             </Container>
         </>

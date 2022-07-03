@@ -8,3 +8,12 @@ export default function IconBin() {
         </svg>
     )
 }
+
+export function IconTick() {
+    return (
+        <svg width="15px" height="15px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 7L5.5 11.5L14 3" stroke="black" stroke-linecap="square"/>
+        </svg>
+
+    )
+}

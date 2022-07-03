@@ -38,7 +38,7 @@ export function LoginPage(props) {
                         </ListGroup>
 
                     </Card.Body>
-                    <Card.Footer className="text-muted">userID: {UserContext.getUserId()}</Card.Footer>
+                    <Card.Footer className="text-muted">If you have any feedback: <a href="mailto:z.galyautdinova@innopolis.university">z.galyautdinova@innopolis.university</a></Card.Footer>
                 </Card>
             </Container>
         </>

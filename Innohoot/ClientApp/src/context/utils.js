@@ -26,4 +26,4 @@ export const AnswerResponseOptions = {
     DISPLAY_RESULTS: 2
 }
 
-export const DEBUG = false
+export const DEBUG = true
