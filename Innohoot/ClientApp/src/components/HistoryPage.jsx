@@ -55,14 +55,20 @@ export default function HistoryPage(props) {
                         return (
                             <Accordion.Item eventKey={el.id}>
                                 <Accordion.Header>
-                                    {
-                                        `${el.name} - ${start.toLocaleDateString()} ${start.toLocaleTimeString()}`
-                                    }
-                                    <Button 
-                                        onClick={() => exportResults(el.id)} 
-                                        variant={"success"}>
-                                        Export results
-                                    </Button>
+                                    <Stack direction={"horizontal"}>
+                                        <div>
+                                            {
+                                                `${el.name} - ${start.toLocaleDateString()} ${start.toLocaleTimeString()}`
+                                            }
+                                        </div>
+                                        <div className={"ms-auto"}>
+                                            <Button
+                                                onClick={() => exportResults(el.id)}
+                                                variant={"success"}>
+                                                Export results
+                                            </Button>
+                                        </div>
+                                    </Stack>
                                 </Accordion.Header>
                                 <Accordion.Body>
                                     <Stack gap={2}>
