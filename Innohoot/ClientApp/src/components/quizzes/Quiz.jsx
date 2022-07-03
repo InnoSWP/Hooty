@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router";
 import FetchSpinner from "../FetchSpinner";
 import { Spinner } from "react-bootstrap";
+import {DEBUG} from "../../context/utils";
 
 export default function Quiz(props) {
 
@@ -97,7 +98,7 @@ export default function Quiz(props) {
         setIsProcessing(true)
 
         let code = generateCode()
-        let url = `https://localhost:7006/Sessions/start?pollCollectionId=${props.params.uuid}&accessCode=${code}`
+        let url = (DEBUG ? `https://localhost:7006` : ``) + `/Sessions/start?pollCollectionId=${props.params.uuid}&accessCode=${code}`
 
         fetch(url)
             .then(

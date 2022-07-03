@@ -42,6 +42,15 @@ namespace Innohoot.Controllers
 			else return Ok(sessionDTO);
 		}
 
+
+		[HttpGet("/Users/{userId}/Sessions")]
+		public async Task<IActionResult> GetAllSessionByUserId(Guid userId)
+		{
+			var sessions = await _sessionService.GetAllSessionsByUserId(userId);
+
+			return Ok(sessions);
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> Create(SessionDTO sessionDTO)
 		{

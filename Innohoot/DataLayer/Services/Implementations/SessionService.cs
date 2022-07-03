@@ -20,7 +20,7 @@ namespace Innohoot.DataLayer.Services.Implementations
 
 		public async Task<List<Session>?> GetAllSessionsByUserId(Guid userId)
 		{
-			return await _db.Get<Session>(session => session.UserId.Equals(userId)).ToListAsync();
+			return await _db.Get<Session>(session => session.UserId == userId).Include(s => s.PollCollection).OrderBy(x => x.StarTime).ToListAsync();
 		}
 
 		public async Task Delete(Guid Id)
