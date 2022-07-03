@@ -55,7 +55,7 @@ export default function HistoryPage(props) {
                         return (
                             <Accordion.Item eventKey={el.id}>
                                 <Accordion.Header>
-                                    <Stack direction={"horizontal"} gap={5}>
+                                    <Stack direction={"horizontal"} gap={1}>
                                         <div className={"mr-3"}>
                                             {
                                                 `${el.name} - ${start.toLocaleDateString()} ${start.toLocaleTimeString()}`
