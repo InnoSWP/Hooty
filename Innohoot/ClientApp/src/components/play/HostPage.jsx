@@ -10,7 +10,6 @@ import { Col, Modal, Row, Stack } from "react-bootstrap";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import {DEBUG} from "../../context/utils";
 
-import { DEBUG } from "../../context/utils";
 import "../../css/App.css";
 import { QRCodeSVG } from 'qrcode.react'
 
