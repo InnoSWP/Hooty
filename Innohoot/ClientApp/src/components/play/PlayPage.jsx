@@ -231,7 +231,7 @@ export function PlayPage(props) {
                                         }
                                         value={option.id}
                                     >
-                                        {option.name} {" "}
+                                        {option.name} {"    "}
                                         {
                                             results.chosenOptionId === option.id ?
                                                 <Badge className={"ml-2"} bg={"white"}>
