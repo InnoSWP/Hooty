@@ -61,7 +61,8 @@ builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {
-	options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
+	//options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
+	options.UseNpgsql("Server=hootydb.postgres.database.azure.com;Database=postgres;Port=5432;User Id=hooty_admin@hootydb;Password=FBZ4rm$2;Ssl Mode=VerifyCA;");
 });
 
 var app = builder.Build();

@@ -17,7 +17,9 @@ namespace Innohoot.DataLayer
 
 		public ApplicationContext(DbContextOptions options) : base(options)
 		{
-			//	Database.Migrate();
+				//Database.Migrate();
+			//Database.EnsureDeleted();
+			//Database.EnsureCreated();
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

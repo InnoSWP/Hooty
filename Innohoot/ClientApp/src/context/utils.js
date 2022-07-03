@@ -19,3 +19,5 @@ export const AnswerResponseOptions = {
     SUBMIT_VOTE: 1,
     DISPLAY_RESULTS: 2
 }
+
+export const DEBUG = false
