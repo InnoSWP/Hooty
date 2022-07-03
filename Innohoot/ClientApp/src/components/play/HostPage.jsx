@@ -350,9 +350,9 @@ export default function HostPage(props) {
                                         </a>
                                         <QRCodeSVG value={
                                             (DEBUG ? 
-                                                `https://localhost:44402/` 
+                                                `https://localhost:44402` 
                                                 :
-                                                `https://hootywebapp.azurewebsites.net/`) + `/play/${sessionId}`
+                                                `https://hootywebapp.azurewebsites.net`) + `/play/${sessionId}`
                                         } />
                                     </>
                                     
