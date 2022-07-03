@@ -228,6 +228,12 @@ export function PlayPage(props) {
                                                 :
                                                 "danger"
                                         }
+                                        size={
+                                            results.chosenOptionId === option.id ?
+                                                "lg"
+                                                :
+                                                null
+                                        }
                                         value={option.id}
                                     >
                                         {option.name}
