@@ -17,7 +17,10 @@ export default function WebNavbar(props) {
                 <Navbar.Brand>{props.message}</Navbar.Brand>
 
                 {props.show ?
-                    <><Button variant=''>Dashboard</Button>
+                    <>
+                        <Button 
+                            onClick={() => {navigate("/history")}} 
+                            variant=''>History</Button>
                         <Button
                             onClick={() => { navigate("/quizlist") }}
                             variant=''>Quiz Page</Button>
