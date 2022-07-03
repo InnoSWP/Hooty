@@ -10,7 +10,7 @@ export default function HistoryPage(props) {
     const [history, setHistory] = React.useState([])
     
     React.useEffect(() => {
-        const url = (DEBUG ? `https://localhost:7006/` : ``) + `/Users/${UserContext.getUserId()}/Sessions`
+        const url = (DEBUG ? `https://localhost:7006` : ``) + `/Users/${UserContext.getUserId()}/Sessions`
         
         fetch(url)
             .then(res => {
