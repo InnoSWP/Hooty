@@ -37,25 +37,26 @@ export default function HistoryPage(props) {
                     history.map(el => {
 
                         const date = new Date(el.created)
+                        const start = new Date(el.starTime)
                         
                         return (
                             <Accordion.Item eventKey={el.id}>
                                 <Accordion.Header>
                                     {
-                                        `${el.name} - ${el.starTime}`
+                                        `${el.name} - ${start.toLocaleDateString()} ${start.toLocaleTimeString()}`
                                     }
                                 </Accordion.Header>
                                 <Accordion.Body>
                                     <Stack gap={2}>
                                         <div>
-                                            <span className={"fs-4"}>Created: {date.toLocaleDateString()} {date.toLocaleTimeString()}</span>
+                                            <span className={"fs-5"}>Created: {date.toLocaleDateString()} {date.toLocaleTimeString()}</span>
                                         </div>
                                         <div>
-                                            <span className={"fs-4"}>Duration: {el.duration}</span>
+                                            <span className={"fs-5"}>Duration: {el.duration}</span>
                                         </div>
                                         
                                         <div>
-                                            <span className={"fs-4"}>Participants: </span>
+                                            <span className={"fs-5"}>Participants: </span>
                                             <ListGroup>
                                                 {
                                                     el.participantList.map(par => {
